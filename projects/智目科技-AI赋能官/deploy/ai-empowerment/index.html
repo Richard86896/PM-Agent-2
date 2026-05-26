@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 赋能官岗位规划书 · 张也 Richard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --header-bg: #0f172a;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --accent-mid: #93c5fd;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --amber: #d97706;
+      --amber-light: #fef3c7;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.05);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Header ─────────────────────────────────────────── */
+    .header {
+      background: var(--header-bg);
+      padding: 44px 48px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 80% -10%, rgba(37,99,235,.35) 0%, transparent 70%),
+        radial-gradient(ellipse 300px 300px at 10% 110%, rgba(37,99,235,.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .header-avatar {
+      flex-shrink: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-top: 4px;
+    }
+
+    .header-content { flex: 1; min-width: 0; }
+
+    .header-meta {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 30px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 4px;
+      letter-spacing: -.02em;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      color: var(--accent-mid);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .header-tagline {
+      font-size: 14.5px;
+      color: #94a3b8;
+      font-weight: 500;
+      max-width: 600px;
+      line-height: 1.65;
+    }
+
+    .header-tagline strong { color: #e2e8f0; font-weight: 600; }
+
+    .header-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .header-stat {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .header-stat strong {
+      color: #f1f5f9;
+      font-weight: 700;
+    }
+
+    .header-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 16px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+      background: rgba(255,255,255,.06);
+      border: 1px solid #334155;
+      text-decoration: none;
+      transition: background .15s;
+    }
+
+    .header-link:hover { background: rgba(255,255,255,.1); }
+
+    /* ── Main ────────────────────────────────────────────── */
+    .main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 48px 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+
+    /* ── Card ────────────────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Stats row ───────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 22px 24px 18px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .stat-number {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -.03em;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .stat-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Pain points table ───────────────────────────────── */
+    .pain-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .pain-table thead tr { border-bottom: 2px solid var(--border); }
+
+    .pain-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 12px 10px 0;
+    }
+
+    .pain-table th:last-child { padding-right: 0; }
+
+    .pain-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background .15s;
+    }
+
+    .pain-table tbody tr:last-child { border-bottom: none; }
+    .pain-table tbody tr:hover { background: #f8fafc; }
+
+    .pain-table td {
+      padding: 11px 12px 11px 0;
+      font-size: 13.5px;
+      vertical-align: middle;
+    }
+
+    .pain-table td:last-child { padding-right: 0; }
+    .pain-name { font-weight: 600; color: var(--text-primary); }
+    .pain-scope { color: var(--text-secondary); font-size: 13px; }
+    .pain-cost { color: var(--text-secondary); font-size: 13px; }
+
+    /* ── Timeline ────────────────────────────────────────── */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: calc(100% / 6);
+      right: calc(100% / 6);
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-mid) 100%);
+      z-index: 0;
+    }
+
+    .phase {
+      position: relative;
+      padding: 0 12px;
+      text-align: center;
+    }
+
+    .phase:first-child { padding-left: 0; }
+    .phase:last-child { padding-right: 0; }
+
+    .phase-dot {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--accent-mid);
+      line-height: 1.2;
+    }
+
+    .phase-dot span { font-size: 9px; opacity: .85; }
+
+    .phase-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .phase-items {
+      list-style: none;
+      text-align: left;
+      display: inline-block;
+    }
+
+    .phase-items li {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      padding: 3px 0 3px 16px;
+      position: relative;
+    }
+
+    .phase-items li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 11px;
+    }
+
+    /* ── Compare grid ────────────────────────────────────── */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .compare-col {
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+    }
+
+    .compare-col.mine {
+      background: var(--accent-light);
+      border: 1.5px solid var(--accent-mid);
+    }
+
+    .compare-col.it {
+      background: #f8fafc;
+      border: 1.5px solid var(--border);
+    }
+
+    .compare-heading {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .compare-col.mine .compare-heading { color: var(--accent); }
+    .compare-col.it .compare-heading { color: var(--text-secondary); }
+
+    .compare-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .compare-list li {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .compare-list li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .compare-col.mine .compare-list li::before { background: var(--accent); }
+    .compare-col.it .compare-list li::before { background: #cbd5e1; }
+
+    /* ── Cases ───────────────────────────────────────────── */
+    .case-block {
+      background: #f8fafc;
+      border-left: 3px solid var(--green);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 16px 20px;
+    }
+
+    .case-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      background: var(--green);
+      color: #fff;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      letter-spacing: .04em;
+    }
+
+    .case-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .case-result {
+      font-size: 13px;
+      color: var(--green);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .case-detail {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .case-detail li {
+      padding: 2px 0;
+    }
+
+    .case-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* ── Budget table ────────────────────────────────────── */
+    .budget-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .budget-table thead tr { border-bottom: 2px solid var(--border); }
+
+    .budget-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 16px 10px 0;
+    }
+
+    .budget-table tbody tr { border-bottom: 1px solid var(--border); }
+    .budget-table tbody tr:last-child { border-bottom: none; }
+
+    .budget-table td {
+      padding: 11px 16px 11px 0;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+
+    .budget-table td:first-child {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ── Two-col layout ──────────────────────────────────── */
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* ── Management summary ──────────────────────────────── */
+    .mgmt-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      border: 2px solid var(--accent);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mgmt-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), #7c3aed);
+    }
+
+    .mgmt-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .mgmt-item-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+    }
+
+    .mgmt-item-text {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* ── Commitment card ─────────────────────────────────── */
+    .commit-card {
+      background: var(--green-light);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      border: 2px solid #6ee7b7;
+      text-align: center;
+    }
+
+    .commit-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .commit-sub {
+      font-size: 13.5px;
+      color: #065f46;
+      line-height: 1.65;
+    }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    .footer {
+      background: var(--header-bg);
+      padding: 20px 48px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-note {
+      font-size: 12.5px;
+      color: #64748b;
+    }
+
+    .footer-tags {
+      display: flex;
+      gap: 8px;
+    }
+
+    .footer-tag {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: #1e293b;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+
+    /* ── Org principles ──────────────────────────────────── */
+    .principle-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .principle-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .principle-num {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    .principle-text {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .principle-text strong { color: var(--text-primary); }
+
+    /* ── Lightbox ────────────────────────────────────────── */
+    .lightbox-trigger {
+      cursor: zoom-in;
+      display: block;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .lightbox-trigger::after {
+      content: '点击放大查看';
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      background: rgba(0,0,0,.55);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.88);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .lightbox-overlay.open {
+      display: flex;
+    }
+
+    .lightbox-overlay img {
+      max-width: 92vw;
+      max-height: 92vh;
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0,0,0,.6);
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      color: #fff;
+      font-size: 28px;
+      font-weight: 300;
+      cursor: pointer;
+      line-height: 1;
+      opacity: .8;
+    }
+
+    .lightbox-close:hover { opacity: 1; }
+
+    /* ── Print ───────────────────────────────────────────── */
+    @media print {
+      body { background: #fff; }
+      .header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .stat-card, .card, .mgmt-card, .commit-card { box-shadow: none !important; }
+      .main { padding: 20px 32px 32px; }
+    }
+
+    @media (max-width: 760px) {
+      .header-inner { flex-direction: column; gap: 16px; }
+      .stats-row, .timeline, .compare-grid, .row-2, .mgmt-grid { grid-template-columns: 1fr; }
+      .timeline::before { display: none; }
+      .header, .main, .footer { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-avatar">张</div>
+      <div class="header-content">
+        <div class="header-meta">深圳市智目科技有限公司 · AI 赋能官岗位规划书 · 2026年5月</div>
+        <h1>张也 Richard</h1>
+        <div class="header-subtitle">复合型产品负责人 · AI 落地实践者</div>
+        <p class="header-tagline">
+          智目的业务结构（跨境电商 + 无人机制造 + 全球售后）天然存在大量重复流程、多语言沟通和数据孤岛——AI 落地价值极高。
+          <strong>目标不是让员工"用上 AI 工具"，而是让 AI 进入业务流程并产生可量化 ROI。</strong>
+        </p>
+        <div class="header-stats">
+          <span class="header-stat"><strong>8 年</strong>产品经验</span>
+          <span class="header-stat">跨境 GMV <strong>3.23 亿</strong></span>
+          <span class="header-stat">AI 客服满意度 <strong>90%</strong></span>
+          <span class="header-stat">平台年 GMV <strong>352 亿</strong></span>
+        </div>
+        <a class="header-link" href="https://me.yx11.fun/" target="_blank" rel="noreferrer">个人主页 →</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- 60秒摘要 -->
+    <div class="mgmt-card">
+      <div class="section-label" style="color:var(--accent)">给管理层的 60 秒摘要</div>
+      <div class="mgmt-grid">
+        <div>
+          <div class="mgmt-item-label">做什么</div>
+          <div class="mgmt-item-text">设立 AI 赋能官岗位，把 AI 从「个人工具」变成「业务流程的一部分」</div>
+        </div>
+        <div>
+          <div class="mgmt-item-label">怎么做</div>
+          <div class="mgmt-item-text">90 天跑通 5 个试点（售后客服、内容生产、库存预测、WhatsApp 助手、报关 OCR），用数据证明 ROI</div>
+        </div>
+        <div>
+          <div class="mgmt-item-label">花多少</div>
+          <div class="mgmt-item-text">第一个月 2,000–5,000 元起步（API 测试 + 工具搭建），成本随 ROI 同步增长，不达标随时停</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 关键指标 -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-number">12</div>
+        <div class="stat-label">个部门全覆盖</div>
+        <div class="stat-desc">数据倒推、问卷调查、焦点访谈、影子跟访多维并行发现场景</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">5</div>
+        <div class="stat-label">个场景分阶推进</div>
+        <div class="stat-desc">2 个核心试点跑通流程 + 3 个轻量验证快速出数据</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">5K</div>
+        <div class="stat-label">元内第一个月起步</div>
+        <div class="stat-desc">API 测试 + 工具搭建，成本随 ROI 同步增长</div>
+      </div>
+    </div>
+
+    <!-- 作战地图 -->
+    <div class="card" style="padding:16px">
+      <div class="section-label" style="margin-bottom:10px;margin-left:8px">企业 AI 赋能作战总览图</div>
+      <div class="lightbox-trigger" onclick="openLightbox(this)">
+        <img src="./diagram/image%20(2).png" alt="企业 AI 赋能作战总览图" style="width:100%;display:block">
+      </div>
+    </div>
+
+    <!-- 5大痛点 -->
+    <div class="card">
+      <div class="section-label">当前最值得解决的 5 个痛点</div>
+      <table class="pain-table">
+        <thead>
+          <tr>
+            <th style="width:32%">痛点</th>
+            <th style="width:30%">影响范围</th>
+            <th>当前代价</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="pain-name">多平台 Listing 重复撰写</span></td>
+            <td><span class="pain-scope">亚马逊 / eBay / 速卖通 / 淘宝 / 独立站运营</span></td>
+            <td><span class="pain-cost">每款新品上线耗时 2–5 天</span></td>
+          </tr>
+          <tr>
+            <td><span class="pain-name">售后重复问题占 70%+</span></td>
+            <td><span class="pain-scope">售后客服团队</span></td>
+            <td><span class="pain-cost">人力持续消耗，国际客户等待时间长</span></td>
+          </tr>
+          <tr>
+            <td><span class="pain-name">跨境长周期补货，人工预测难以系统化</span></td>
+            <td><span class="pain-scope">采购计划部门</span></td>
+            <td><span class="pain-cost">30–45 天海运周期叠加多品类季节波动，积压与断货并存</span></td>
+          </tr>
+          <tr>
+            <td><span class="pain-name">展会名片 / 询盘线索丢失</span></td>
+            <td><span class="pain-scope">国际销售团队</span></td>
+            <td><span class="pain-cost">展会后跟进率低，线索流失</span></td>
+          </tr>
+          <tr>
+            <td><span class="pain-name">选品依赖人工调研，竞品动态难持续跟踪</span></td>
+            <td><span class="pain-scope">运营团队</span></td>
+            <td><span class="pain-cost">调研周期长，竞品降价或新爆款出现时反应滞后</span></td>
+          </tr>
+          <tr>
+            <td><span class="pain-name">AI 工具靠翻墙 + 个人账号</span></td>
+            <td><span class="pain-scope">全员</span></td>
+            <td><span class="pain-cost">随时封号、数据泄露风险、无法统一管控</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 90天路线图 -->
+    <div class="card">
+      <div class="section-label">90 天执行路线图</div>
+      <div class="timeline">
+        <div class="phase">
+          <div class="phase-dot">第1–30天<span>打地基</span></div>
+          <div class="phase-title">夯实基础·摸清场景</div>
+          <ul class="phase-items">
+            <li>部署统一 AI 网关，废弃翻墙账号</li>
+            <li><strong>主动发现</strong>：数据倒推 + 员工自建工具排查 + 跟着一单走 + 同行对标</li>
+            <li><strong>主动收集</strong>：问卷调查 + 焦点访谈 + Demo 激发需求</li>
+            <li><strong>深度验证</strong>：影子跟访（5–6 个关键岗位）</li>
+            <li>输出《AI 场景优先级矩阵》，确认试点</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-dot">第31–60天<span>5个场景</span></div>
+          <div class="phase-title">启动试点·完成轻量验证</div>
+          <ul class="phase-items">
+            <li><strong>启动核心试点</strong>：售后 AI 客服、库存智能预测（需 IT 配合，跑通流程）</li>
+            <li><strong>完成轻量验证</strong>：内容流水线、WhatsApp 助手、报关 OCR、竞品监控（独立完成，1–2 周见效）</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-dot">第61–90天<span>出数据</span></div>
+          <div class="phase-title">跑出 ROI·推广扩散</div>
+          <ul class="phase-items">
+            <li>核心试点 ROI 数据量化（效率提升 / 成本节省）</li>
+            <li>5 个场景前后效率对比报告</li>
+            <li>启动全员 AI 培训（4 个层级）</li>
+            <li>上线内部 AI 最佳实践知识库</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 部门AI工具全景图 -->
+    <div class="card" style="padding:16px">
+      <div class="section-label" style="margin-bottom:10px;margin-left:8px">部门 AI 工具全景图</div>
+      <div class="lightbox-trigger" onclick="openLightbox(this)">
+        <img src="./diagram/image%20(1).png" alt="部门 AI 工具全景图" style="width:100%;display:block">
+      </div>
+    </div>
+
+    <!-- 能力边界 + 组织推进 -->
+    <div class="row-2">
+
+      <div class="card">
+        <div class="section-label">能力边界</div>
+        <div class="compare-grid">
+          <div class="compare-col mine">
+            <div class="compare-heading">我能直接推进</div>
+            <ul class="compare-list">
+              <li>工作流搭建（Dify / Coze / n8n / Make）</li>
+              <li>AI 辅助编程（Python 脚本、API 对接、自动化工具开发）</li>
+              <li>Prompt 工程设计与优化</li>
+              <li>RAG 向量知识库构建</li>
+              <li>OCR 流程配置</li>
+              <li>One API 网关部署</li>
+            </ul>
+          </div>
+          <div class="compare-col it">
+            <div class="compare-heading">ROI 验证后·与 IT 共建</div>
+            <ul class="compare-list">
+              <li>金蝶 ERP 深度 API 集成</li>
+              <li>私有化 GPU 服务器部署</li>
+              <li>企业权限系统改造</li>
+              <li>多系统数据库打通</li>
+              <li>多租户 SaaS 架构</li>
+              <li>核心系统安全审计</li>
+            </ul>
+          </div>
+        </div>
+        <p style="margin-top:14px;font-size:12.5px;color:var(--text-muted);border-top:1px solid var(--border);padding-top:12px">以上为典型能力范围，实际边界视项目复杂度灵活判断；试点阶段优先不触碰核心系统，有量化 ROI 后再与 IT 团队评估深度集成的必要性。</p>
+      </div>
+
+      <div class="card">
+        <div class="section-label">组织推进原则</div>
+        <div class="principle-list">
+          <div class="principle-item">
+            <div class="principle-num">1</div>
+            <div class="principle-text"><strong>先找明星员工，不铺全员</strong>——选 1–2 个最愿意折腾的人先跑通，让他们带动周围同事</div>
+          </div>
+          <div class="principle-item">
+            <div class="principle-num">2</div>
+            <div class="principle-text"><strong>前 3 个月不碰绩效</strong>——不让员工觉得 AI 是来"监控"或"替代"他们的，消除抵触</div>
+          </div>
+          <div class="principle-item">
+            <div class="principle-num">3</div>
+            <div class="principle-text"><strong>AI 输出必须人工确认</strong>——所有 AI 生成内容，发出前必须有人过目，不绕过人的判断</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 技术架构图 -->
+    <div class="card" style="padding:16px">
+      <div class="section-label" style="margin-bottom:10px;margin-left:8px">企业 AI 技术架构图</div>
+      <div class="lightbox-trigger" onclick="openLightbox(this)">
+        <img src="../../prd/diagram/image%20(1).png" alt="企业 AI 技术架构图" style="width:100%;display:block">
+      </div>
+    </div>
+
+    <!-- 真实验证案例 -->
+    <div class="card">
+      <div class="section-label">个人实践验证（非理论）</div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <div class="case-block">
+          <div class="case-badge">已验证</div>
+          <div class="case-title">Dify + DeepSeek / Claude · 多平台 Listing 生成工作流</div>
+          <div class="case-result">单产品文案时间：2 小时 → 20 分钟，覆盖 5 平台</div>
+          <div class="case-note">不同平台语气需人工微调（已知问题，下一步加风格模板解决）</div>
+        </div>
+
+        <div class="case-block">
+          <div class="case-badge">已验证</div>
+          <div class="case-title">n8n + WhatsApp API · B2B 外贸询盘智能跟进助手</div>
+          <div class="case-result">收到询盘后 5 分钟内，自动生成回复草稿推送给对应销售，平均响应从 2–4 小时压缩至当天回复</div>
+          <div class="case-note">草稿结合产品库和询盘意图生成，销售确认后发送——不自动回复，AI 辅助人判断，不替代人决策</div>
+        </div>
+
+        <div class="case-block">
+          <div class="case-badge">已设计</div>
+          <div class="case-title">AI 补货算法设计（跨境供应链 ERP 项目）</div>
+          <div class="case-detail">
+            <ul style="padding-left:18px;margin-top:4px">
+              <li>中墨跨境海运周期 30–45 天，计划部门靠经验补货，积压与断货并存</li>
+              <li>按历史数据量自动切换三种模式：冷启动（&lt;30天）→ 过渡期（30–90天）→ 算法期（≥90天，乘法季节性系数）</li>
+              <li style="color:var(--green);font-weight:600">目标：库存积压率 ↓20%，资金占用 ↓30%，从拍脑袋到可审计的算法决策</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="case-block">
+          <div class="case-badge">已设计</div>
+          <div class="case-title">AI 幻觉治理系统（智能客服 SaaS 项目）</div>
+          <div class="case-detail">
+            <ul style="padding-left:18px;margin-top:4px">
+              <li>电商客服 AI 频繁捏造退款承诺、编造发货时间，引发投诉</li>
+              <li>三层防护：RAG 强制召回 → 越权检测（20 条规则引擎）→ 置信度色标（绿 ≥85 / 橙 60–84 / 红 &lt;60）</li>
+              <li style="color:var(--green);font-weight:600">将「AI 乱承诺」从业务风险转变为可量化、可干预的工程问题</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 预算 -->
+    <div class="card">
+      <div class="section-label">预算：从极低成本起步</div>
+      <table class="budget-table">
+        <thead>
+          <tr>
+            <th style="width:30%">阶段</th>
+            <th style="width:28%">月支出参考</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>第 1 个月（测试验证）</td>
+            <td>约 2,000 – 5,000 元</td>
+            <td>API 测试 + 工具订阅 + 环境搭建</td>
+          </tr>
+          <tr>
+            <td>第 2–3 个月（试点运行）</td>
+            <td>约 5,000 – 15,000 元</td>
+            <td>5 个场景日常跑量，实际成本随客服消息量和选品数据采购浮动</td>
+          </tr>
+          <tr>
+            <td>6 个月后</td>
+            <td>按 ROI 动态扩容</td>
+            <td>用量越大说明 ROI 越高，成本与价值同步增长；不达标的场景随时停</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px;font-size:13px;color:var(--text-muted)">核心原则：先"外挂"验证效果，有 ROI 再"内嵌"开发。不先花大钱。</p>
+    </div>
+
+    <!-- 核心承诺 -->
+    <div class="commit-card">
+      <div class="commit-text">90 天内交出可量化效率数据。如果 2 个核心试点没有跑出正向 ROI，我愿意接受考核。</div>
+      <div class="commit-sub">我希望 AI 在智目不是停留在"试用工具"，而是真正成为业务流程的一部分——每个部门都有自己的工具包，每个效率提升都有数据支撑。</div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-note">张也 Richard · d913389778@gmail.com · <a href="https://me.yx11.fun/" target="_blank" rel="noreferrer" style="color:#475569">me.yx11.fun</a></div>
+      <div class="footer-tags">
+        <span class="footer-tag">各部门工具包</span>
+        <span class="footer-tag">技术架构</span>
+        <span class="footer-tag">完整预算规划</span>
+        <span class="footer-tag">全员培训体系</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">×</span>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
+  <script>
+    function openLightbox(el) {
+      const img = el.querySelector('img');
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
+
+</body>
+</html>

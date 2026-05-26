@@ -91,6 +91,41 @@
       font-weight: 600;
     }
 
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .hero-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s, background .15s, border-color .15s;
+    }
+
+    .hero-link.primary {
+      background: var(--accent);
+      color: #fff;
+      border: 1px solid var(--accent);
+    }
+
+    .hero-link.secondary {
+      background: rgba(255,255,255,.03);
+      color: #e2e8f0;
+      border: 1px solid #334155;
+    }
+
+    .hero-link:hover {
+      transform: translateY(-1px);
+    }
+
     /* ── Main content ────────────────────────────────────── */
     .main {
       max-width: 1100px;
@@ -481,11 +516,66 @@
         智目的业务结构（跨境电商 + 无人机制造 + 全球售后）天然存在大量重复流程、多语言沟通和数据孤岛——AI落地价值极高。
         <strong>目标不是让员工"用上AI工具"，而是让AI进入业务流程并产生可量化ROI。</strong>
       </p>
+      <div class="hero-links">
+        <a class="hero-link primary" href="#overview">先看总览</a>
+        <a class="hero-link secondary" href="./AI赋能官岗位规划书.md">完整规划书</a>
+        <a class="hero-link secondary" href="./AI赋能官岗位规划书_精简版.md">精简版</a>
+        <a class="hero-link secondary" href="./diagram/脑图总览@2x.png">脑图总览</a>
+        <a class="hero-link secondary" href="./diagram/技术架构@2x.png">技术架构</a>
+        <a class="hero-link secondary" href="https://me.yx11.fun/" target="_blank" rel="noreferrer">我的主页</a>
+      </div>
     </div>
   </header>
 
   <!-- Main -->
-  <div class="main">
+  <div class="main" id="overview">
+
+    <!-- Personal intro -->
+    <div class="card" style="display:flex;align-items:center;gap:28px;padding:28px 32px">
+      <div style="flex-shrink:0;width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:800;letter-spacing:-.02em">张</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:22px;font-weight:800;color:var(--text-primary);margin-bottom:4px">张也 Richard</div>
+        <div style="font-size:14px;color:var(--accent);font-weight:600;margin-bottom:10px">复合型产品负责人 · AI 落地实践者</div>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--text-secondary)">
+          <span><strong style="color:var(--text-primary)">8 年</strong> 产品经验</span>
+          <span>跨境 GMV <strong style="color:var(--text-primary)">3.23 亿</strong></span>
+          <span>AI 客服满意度 <strong style="color:var(--green)">90%</strong></span>
+          <span>平台年 GMV <strong style="color:var(--text-primary)">352 亿</strong></span>
+        </div>
+      </div>
+      <a class="hero-link secondary" href="https://me.yx11.fun/" target="_blank" rel="noreferrer" style="flex-shrink:0">查看完整主页 →</a>
+    </div>
+
+    <!-- Reading path -->
+    <div class="card">
+      <div class="section-label">推荐阅读顺序</div>
+      <div class="timeline">
+        <div class="phase">
+          <div class="phase-dot">01<span>先看</span></div>
+          <div class="phase-title">一页展示</div>
+          <ul class="phase-items">
+            <li>先看结论、痛点、路线图</li>
+            <li>适合面试官快速扫完</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-dot">02<span>再看</span></div>
+          <div class="phase-title">脑图总览</div>
+          <ul class="phase-items">
+            <li>看整体结构和分支关系</li>
+            <li>给老板看时更直观</li>
+          </ul>
+        </div>
+        <div class="phase">
+          <div class="phase-dot">03<span>展开</span></div>
+          <div class="phase-title">完整规划书</div>
+          <ul class="phase-items">
+            <li>看细节、边界、预算与案例</li>
+            <li>适合复试和内部转发</li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
     <!-- Stats -->
     <div class="stats-row">
@@ -634,12 +724,67 @@
 
     </div>
 
+    <!-- File map -->
+    <div class="card">
+      <div class="section-label">文件夹内容串联</div>
+      <div class="cases-row">
+        <div class="case-card" style="background:#eff6ff;border-color:#93c5fd">
+          <div class="case-badge" style="background:#2563eb">主入口</div>
+          <div class="case-title">AI赋能官_一页展示.html</div>
+          <div class="case-note">面试官第一眼看到的版本，负责讲清楚“你是谁、要做什么、怎么做”。</div>
+        </div>
+        <div class="case-card" style="background:#f0fdf4;border-color:#86efac">
+          <div class="case-badge" style="background:#059669">证据包</div>
+          <div class="case-title">AI赋能官岗位规划书.md / 精简版.md</div>
+          <div class="case-note">一个给深看，一个给老板快看。前者承接细节，后者承接决策。</div>
+        </div>
+        <div class="case-card" style="background:#fff7ed;border-color:#fdba74">
+          <div class="case-badge" style="background:#ea580c">图形页</div>
+          <div class="case-title">脑图总览 / 技术架构</div>
+          <div class="case-note" style="margin-bottom:10px">把抽象内容变成一眼能扫懂的结构图，适合钉钉转发。</div>
+          <div style="display:flex;gap:10px">
+            <a href="./diagram/脑图总览@2x.png" target="_blank" style="flex:1;display:block;border-radius:6px;overflow:hidden;border:1px solid var(--border)">
+              <img src="./diagram/脑图总览@2x.png" alt="脑图总览" style="width:100%;height:100px;object-fit:cover;display:block">
+            </a>
+            <a href="./diagram/技术架构@2x.png" target="_blank" style="flex:1;display:block;border-radius:6px;overflow:hidden;border:1px solid var(--border)">
+              <img src="./diagram/技术架构@2x.png" alt="技术架构" style="width:100%;height:100px;object-fit:cover;display:block">
+            </a>
+          </div>
+        </div>
+        <div class="case-card" style="background:#f5f3ff;border-color:#c4b5fd">
+          <div class="case-badge" style="background:#7c3aed">个人背书</div>
+          <div class="case-title">me.yx11.fun</div>
+          <div class="case-note">放你的个人主页，用来承接信任和过往作品，形成完整个人入口。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Management summary -->
+    <div class="card" style="border:2px solid var(--accent);border-radius:var(--radius);position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),#7c3aed)"></div>
+      <div class="section-label" style="color:var(--accent)">给管理层的 60 秒摘要</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:8px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">做什么</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text-primary);line-height:1.5">设立 AI 赋能官岗位，把 AI 从「个人工具」变成「业务流程的一部分」</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">怎么做</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text-primary);line-height:1.5">90 天跑通 5 个试点（售后客服、内容生产、库存预测、WhatsApp 助手、报关 OCR），用数据证明 ROI</div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">花多少</div>
+          <div style="font-size:15px;font-weight:600;color:var(--text-primary);line-height:1.5">第一个月 ≤ 2,000 元（API 测试 + 开源工具），ROI 不达标随时停</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-note">复试中可展开详细方案 →</div>
+      <div class="footer-note">建议发给面试官的顺序：主页入口 → 一页展示 → 脑图 → 完整规划书</div>
       <div class="footer-tags">
         <span class="footer-tag">各部门工具包</span>
         <span class="footer-tag">技术架构</span>
