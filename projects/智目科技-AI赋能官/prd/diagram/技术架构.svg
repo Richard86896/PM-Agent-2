@@ -1,0 +1,234 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 780">
+  <defs>
+    <!-- Google Fonts -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap');
+      text { font-family: 'JetBrains Mono', 'Noto Sans SC', 'PingFang SC', sans-serif; }
+      .title { font-size: 18px; font-weight: 700; fill: #1e293b; }
+      .subtitle { font-size: 10px; font-weight: 400; fill: #64748b; }
+      .component-title { font-size: 12px; font-weight: 600; fill: #1e293b; }
+      .component-desc { font-size: 9px; font-weight: 400; fill: #64748b; }
+      .layer-label { font-size: 10px; font-weight: 600; fill: #94a3b8; letter-spacing: 1px; }
+    </style>
+    
+    <!-- Subtle dot pattern -->
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#e2e8f0" opacity="0.5"/>
+    </pattern>
+    
+    <!-- Arrow Markers -->
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrow-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#0891b2"/>
+    </marker>
+    <marker id="arrow-emerald" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#059669"/>
+    </marker>
+    <marker id="arrow-violet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    
+    <!-- Shadow filter -->
+    <filter id="shadow" x="-8%" y="-8%" width="116%" height="124%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.06"/>
+    </filter>
+    
+    <filter id="shadow-lg" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="3" stdDeviation="8" flood-color="#0f172a" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="780" fill="#fafbfc"/>
+  <rect width="960" height="780" fill="url(#dots)"/>
+  
+  <!-- Title -->
+  <text x="480" y="38" class="title" text-anchor="middle">智目科技 AI 赋能 — 技术架构</text>
+  <text x="480" y="54" class="subtitle" text-anchor="middle">AI Empowerment Technical Architecture</text>
+
+  <!-- ==================== ROW 1: 统一 AI 网关 ==================== -->
+  
+  <!-- Gateway Region Boundary -->
+  <rect x="50" y="75" width="860" height="70" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,3" opacity="0.7"/>
+  <text x="66" y="92" class="layer-label" fill="#d97706">LAYER 1</text>
+  
+  <!-- Gateway Box -->
+  <rect x="230" y="88" width="500" height="46" rx="8" fill="white" filter="url(#shadow-lg)"/>
+  <rect x="230" y="88" width="500" height="46" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="480" y="113" class="component-title" text-anchor="middle">统一 AI 网关</text>
+  <text x="480" y="127" class="component-desc" text-anchor="middle">One API / LiteLLM（私有化部署）</text>
+
+  <!-- Arrows: Gateway → API Layer -->
+  <line x1="165" y1="134" x2="165" y2="170" stroke="#cbd5e1" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="355" y1="134" x2="355" y2="170" stroke="#cbd5e1" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="545" y1="134" x2="545" y2="170" stroke="#cbd5e1" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="735" y1="134" x2="735" y2="170" stroke="#cbd5e1" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ==================== ROW 2: 模型 API 层 ==================== -->
+  
+  <text x="30" y="195" class="layer-label" text-anchor="start" transform="rotate(-90, 30, 195)">MODEL APIs</text>
+  
+  <!-- Claude API - Cyan -->
+  <g transform="translate(70, 175)">
+    <rect x="0" y="0" width="190" height="65" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="190" height="65" rx="10" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.5"/>
+    <text x="95" y="26" class="component-title" text-anchor="middle">Claude API</text>
+    <text x="95" y="44" class="component-desc" text-anchor="middle">文案生成 / 代码开发</text>
+  </g>
+  
+  <!-- Azure OpenAI - Emerald -->
+  <g transform="translate(280, 175)">
+    <rect x="0" y="0" width="190" height="65" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="190" height="65" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+    <text x="95" y="26" class="component-title" text-anchor="middle">Azure OpenAI</text>
+    <text x="95" y="44" class="component-desc" text-anchor="middle">GPT-5.5 / o4</text>
+  </g>
+  
+  <!-- Gemini API - Violet -->
+  <g transform="translate(490, 175)">
+    <rect x="0" y="0" width="190" height="65" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="190" height="65" rx="10" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="95" y="26" class="component-title" text-anchor="middle">Gemini API</text>
+    <text x="95" y="44" class="component-desc" text-anchor="middle">图像生成 / 长文本</text>
+  </g>
+  
+  <!-- DeepSeek/Qwen - Slate -->
+  <g transform="translate(700, 175)">
+    <rect x="0" y="0" width="190" height="65" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="190" height="65" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+    <text x="95" y="26" class="component-title" text-anchor="middle">DeepSeek / Qwen</text>
+    <text x="95" y="44" class="component-desc" text-anchor="middle">私有部署 / 敏感数据</text>
+  </g>
+
+  <!-- Arrows: API → Capability Layer -->
+  <line x1="165" y1="240" x2="165" y2="300" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arrow-cyan)" stroke-opacity="0.6"/>
+  <line x1="375" y1="240" x2="375" y2="300" stroke="#10b981" stroke-width="1.5" marker-end="url(#arrow-emerald)" stroke-opacity="0.6"/>
+  <line x1="585" y1="240" x2="585" y2="300" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow-violet)" stroke-opacity="0.6"/>
+  <line x1="795" y1="240" x2="795" y2="300" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ==================== ROW 3: 能力层 (Capability Layer) ==================== -->
+  
+  <!-- Capability Region -->
+  <rect x="50" y="305" width="860" height="95" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="1" stroke-dasharray="4,4" opacity="0.45"/>
+  <text x="66" y="320" class="layer-label" fill="#16a34a" opacity="0.7">CAPABILITIES</text>
+  
+  <!-- 工作流 -->
+  <g transform="translate(70, 330)">
+    <rect x="0" y="0" width="190" height="58" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="190" height="58" rx="10" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+    <text x="95" y="24" class="component-title" text-anchor="middle">工作流引擎</text>
+    <text x="95" y="42" class="component-desc" text-anchor="middle">Dify / n8n</text>
+  </g>
+  
+  <!-- RAG知识库 -->
+  <g transform="translate(280, 330)">
+    <rect x="0" y="0" width="190" height="58" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="190" height="58" rx="10" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="95" y="24" class="component-title" text-anchor="middle">RAG 知识库</text>
+    <text x="95" y="38" class="component-desc" text-anchor="middle">产品 / 售后 / 客服</text>
+  </g>
+  
+  <!-- AI Agent -->
+  <g transform="translate(490, 330)">
+    <rect x="0" y="0" width="190" height="58" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="190" height="58" rx="10" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.5"/>
+    <text x="95" y="24" class="component-title" text-anchor="middle">AI Agent</text>
+    <text x="95" y="42" class="component-desc" text-anchor="middle">自动化任务执行</text>
+  </g>
+  
+  <!-- Skill -->
+  <g transform="translate(700, 330)">
+    <rect x="0" y="0" width="190" height="58" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="190" height="58" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="95" y="24" class="component-title" text-anchor="middle">Skill 技能包</text>
+    <text x="95" y="42" class="component-desc" text-anchor="middle">轻量级单任务</text>
+  </g>
+
+  <!-- Bus Bar between Capability and Business -->
+  <rect x="80" y="418" width="800" height="5" rx="2.5" fill="#fed7aa" stroke="#fb923c" stroke-width="1" opacity="0.8"/>
+  
+  <!-- Arrows from bus to business layer -->
+  <path d="M 165 423 L 165 468" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 480 423 L 480 468" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <path d="M 795 423 L 795 468" fill="none" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ==================== ROW 4: 业务接入层 ==================== -->
+  
+  <text x="30" y="520" class="layer-label" text-anchor="start" transform="rotate(-90, 30, 520)">BUSINESS</text>
+  
+  <!-- 钉钉 + 淘宝/京东 - Cyan tinted -->
+  <g transform="translate(70, 472)">
+    <rect x="0" y="0" width="250" height="85" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="250" height="85" rx="10" fill="#f0fdff" stroke="#06b6d4" stroke-width="1.5"/>
+    <circle cx="28" cy="24" r="9" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.5"/>
+    <text x="125" y="28" class="component-title" text-anchor="middle">钉钉（内部协作）</text>
+    <line x1="20" y1="44" x2="230" y2="44" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="125" y="62" class="component-desc" text-anchor="middle">淘宝 / 京东 API 接入</text>
+    <text x="125" y="76" class="component-desc" text-anchor="middle">国内电商客服通道</text>
+  </g>
+  
+  <!-- WhatsApp CRM - Emerald tinted -->
+  <g transform="translate(355, 472)">
+    <rect x="0" y="0" width="250" height="85" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="250" height="85" rx="10" fill="#f0fdf4" stroke="#10b981" stroke-width="1.5"/>
+    <circle cx="28" cy="24" r="9" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+    <text x="125" y="28" class="component-title" text-anchor="middle">WhatsApp CRM</text>
+    <line x1="20" y1="44" x2="230" y2="44" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="125" y="60" class="component-desc" text-anchor="middle">国际销售 / 亚马逊 / eBay</text>
+    <text x="125" y="74" class="component-desc" text-anchor="middle">独立站客户跟进</text>
+  </g>
+  
+  <!-- 金蝶 ERP - Violet tinted -->
+  <g transform="translate(640, 472)">
+    <rect x="0" y="0" width="250" height="85" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="250" height="85" rx="10" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+    <circle cx="28" cy="24" r="9" fill="#ede9fe" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="125" y="28" class="component-title" text-anchor="middle">金蝶 ERP</text>
+    <line x1="20" y1="44" x2="230" y2="44" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="125" y="60" class="component-desc" text-anchor="middle">工厂管理 / 供应链协同</text>
+    <text x="125" y="74" class="component-desc" text-anchor="middle">采购 / 库存 / 物流</text>
+  </g>
+
+  <!-- Arrow to Data Service -->
+  <path d="M 765 557 L 765 600" fill="none" stroke="#8b5cf6" stroke-width="1.5" marker-end="url(#arrow-violet)" opacity="0.6"/>
+
+  <!-- ==================== ROW 5: 数据服务层 ==================== -->
+  
+  <g transform="translate(650, 608)">
+    <rect x="0" y="0" width="240" height="68" rx="10" fill="white" filter="url(#shadow)"/>
+    <rect x="0" y="0" width="240" height="68" rx="10" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+    <text x="120" y="25" class="component-title" text-anchor="middle">Azure Document Intelligence</text>
+    <text x="120" y="44" class="component-desc" text-anchor="middle">OCR 文档智能处理</text>
+    <text x="120" y="58" font-size="8" fill="#94a3b8" text-anchor="middle">发票 / 合同 / 单据识别</text>
+  </g>
+
+  <!-- ==================== LEGEND ==================== -->
+  <g transform="translate(60, 705)">
+    <text x="0" y="0" class="layer-label" fill="#64748b">图例说明</text>
+    
+    <rect x="0" y="14" width="18" height="13" rx="3" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.2"/>
+    <text x="26" y="25" class="component-desc" text-anchor="start">文案/代码能力</text>
+    
+    <rect x="140" y="14" width="18" height="13" rx="3" fill="#ecfdf5" stroke="#10b981" stroke-width="1.2"/>
+    <text x="166" y="25" class="component-desc" text-anchor="start">通用处理能力</text>
+    
+    <rect x="280" y="14" width="18" height="13" rx="3" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.2"/>
+    <text x="306" y="25" class="component-desc" text-anchor="start">数据/文档能力</text>
+    
+    <rect x="420" y="14" width="18" height="13" rx="3" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.2"/>
+    <text x="446" y="25" class="component-desc" text-anchor="start">基础设施/工具</text>
+    
+    <rect x="570" y="14" width="18" height="13" rx="3" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/>
+    <text x="596" y="25" class="component-desc" text-anchor="start">私有/安全隔离</text>
+    
+    <line x1="720" y1="21" x2="752" y2="21" stroke="#fb923c" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="762" y="25" class="component-desc" text-anchor="start">消息总线</text>
+  </g>
+  
+  <!-- Version Info -->
+  <text x="900" y="768" class="subtitle" text-anchor="end" font-size="8">v2026.05 | 智目科技 AI 赋能官规划</text>
+
+</svg>

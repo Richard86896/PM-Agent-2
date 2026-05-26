@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>张也 Richard · 产品负责人</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0B0F19;
+      --surface:   #161B26;
+      --surface-2: #1c2233;
+      --border:    #1e2a3a;
+      --border-light: #2d3a52;
+      --blue:      #6366f1;
+      --blue-light:#818cf8;
+      --blue-dim:  #1e1b4b;
+      --cyan:      #00F2FE;
+      --amber:     #fbbf24;
+      --green:     #34d399;
+      --pink:      #f472b6;
+      --accent:    #8A2BE2;
+      --text-1:    #FFFFFF;
+      --text-2:    #94A3B8;
+      --text-3:    #546580;
+      --radius:    14px;
+      --radius-sm: 8px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-1);
+      font-family: 'Noto Sans SC', 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 60px;
+      background: rgba(11,15,25,0.8);
+      backdrop-filter: blur(24px) saturate(1.4);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+    nav.scrolled { border-bottom-color: var(--border); }
+    .nav-logo {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800; font-size: 20px;
+      color: var(--text-1); letter-spacing: -0.04em;
+    }
+    .nav-logo span { color: var(--blue); }
+    .nav-links { display: flex; gap: 36px; }
+    .nav-links a {
+      color: var(--text-3); text-decoration: none;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .nav-links a { position: relative; }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
+      height: 2px; border-radius: 1px;
+      background: var(--blue); transform: scaleX(0);
+      transition: transform 0.25s ease;
+    }
+    .nav-links a:hover { color: var(--text-1); }
+    .nav-links a.active { color: var(--text-1); }
+    .nav-links a.active::after { transform: scaleX(1); }
+    .nav-cta {
+      padding: 7px 18px; border-radius: 100px;
+      background: var(--blue); color: #fff;
+      font-size: 13px; font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 20px rgba(99,102,241,0.2);
+    }
+    .nav-cta:hover { opacity: 1; transform: translateY(-1px); box-shadow: 0 0 30px rgba(99,102,241,0.4); }
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text-1); border-radius: 2px;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .nav-hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .nav-hamburger.active span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 120px 48px 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(99,102,241,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,242,254,0.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 70% 50% at 50% 20%, black, transparent);
+    }
+    .hero-glow {
+      position: absolute; top: -180px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 500px;
+      background: radial-gradient(ellipse, rgba(99,102,241,0.15) 0%, rgba(0,242,254,0.06) 40%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner { max-width: 880px; margin: 0 auto; position: relative; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 16px; border-radius: 100px;
+      border: 1px solid var(--border);
+      background: rgba(14,14,26,0.6);
+      backdrop-filter: blur(8px);
+      font-size: 13px; color: var(--text-2);
+      margin-bottom: 28px;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px rgba(52,211,153,0.5);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    .hero h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(52px, 7.5vw, 92px);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 1.05;
+      background: linear-gradient(135deg, var(--text-1) 0%, var(--blue-light) 50%, var(--cyan) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      margin-top: 20px;
+      font-size: clamp(16px, 1.8vw, 19px);
+      color: var(--text-2);
+      max-width: 560px;
+      font-weight: 300; line-height: 1.8;
+    }
+    .hero-actions { display: flex; gap: 14px; margin-top: 36px; flex-wrap: wrap; }
+    .btn-primary {
+      padding: 13px 28px; border-radius: 100px;
+      background: var(--blue); color: #fff;
+      font-size: 14px; font-weight: 600;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(99,102,241,0.3);
+    }
+    .btn-primary:hover { opacity: 1; transform: translateY(-1px); box-shadow: 0 8px 32px rgba(99,102,241,0.45); }
+    .btn-ghost {
+      padding: 13px 28px; border-radius: 100px;
+      border: 1px solid var(--border-light);
+      background: transparent; color: var(--text-1);
+      font-size: 14px; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--text-2); background: rgba(14,14,26,0.4); }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 36px 48px;
+      background: var(--surface);
+    }
+    .stats-inner {
+      max-width: 960px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    }
+    .stat { padding: 0 28px; border-right: 1px solid var(--border); }
+    .stat:first-child { padding-left: 0; }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Inter', sans-serif;
+      font-size: 44px; font-weight: 800;
+      letter-spacing: -0.04em;
+      background: linear-gradient(135deg, var(--text-1), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1.1;
+    }
+    .stat-unit {
+      font-size: 0.5em; font-weight: 600;
+      letter-spacing: 0;
+    }
+    .stat-label {
+      margin-top: 4px;
+      font-size: 12px; color: var(--text-3); font-weight: 400;
+    }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 80px 48px; scroll-margin-top: 60px; }
+    .section-inner { max-width: 960px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--blue); margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(26px, 3.5vw, 36px);
+      font-weight: 800; letter-spacing: -0.04em;
+      color: var(--text-1); line-height: 1.15;
+    }
+
+    /* ─── ABOUT ─── */
+    #about { background: var(--bg); }
+    .about-grid {
+      display: grid; grid-template-columns: 1.2fr auto 1fr;
+      gap: 32px; margin-top: 40px; align-items: start;
+    }
+    .about-avatar {
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      padding-top: 8px;
+    }
+    .about-avatar-ring {
+      position: relative;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      padding: 3px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(0,242,254,0.3), rgba(99,102,241,0.1));
+      box-shadow: 0 0 40px rgba(99,102,241,0.15), 0 0 80px rgba(0,242,254,0.08);
+      transition: box-shadow 0.4s ease, transform 0.3s ease;
+    }
+    .about-avatar-ring:hover {
+      transform: scale(1.04);
+      box-shadow: 0 0 60px rgba(99,102,241,0.25), 0 0 100px rgba(0,242,254,0.12);
+    }
+    .about-avatar-ring img {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 20%;
+      border: 3px solid var(--bg);
+      filter: saturate(0.7) brightness(0.85) contrast(1.05);
+      transition: filter 0.3s ease;
+    }
+    .about-avatar-ring:hover img {
+      filter: saturate(0.85) brightness(0.9) contrast(1.05);
+    }
+    .about-avatar-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600;
+      color: var(--text-2); letter-spacing: 0.02em;
+    }
+    .about-text p {
+      color: var(--text-2); line-height: 1.8; font-size: 15px;
+      margin-bottom: 12px;
+    }
+    .about-text p strong { color: var(--text-1); font-weight: 500; }
+    .about-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .pill {
+      padding: 5px 14px; border-radius: 100px;
+      border: 1px solid var(--border);
+      font-size: 12px; color: var(--text-2);
+      background: var(--surface);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .pill:hover { border-color: var(--blue); color: var(--blue-light); }
+    .about-info { display: flex; flex-direction: column; gap: 14px; }
+    .info-card {
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      display: flex; align-items: center; gap: 16px;
+      transition: border-color 0.2s;
+    }
+    .info-card:hover { border-color: var(--border-light); }
+    .info-card-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--blue-dim); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .info-card-icon svg { width: 16px; height: 16px; color: var(--blue-light); }
+    .info-card-body { flex: 1; }
+    .info-card-label {
+      font-size: 11px; font-weight: 500;
+      color: var(--text-3); margin-bottom: 2px;
+    }
+    .info-card-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 600; color: var(--text-1);
+    }
+    .info-card-sub { font-size: 12px; color: var(--text-2); }
+
+    /* ─── EXPERIENCE (SIMPLIFIED) ─── */
+    #experience { background: var(--surface); }
+    .exp-list { margin-top: 40px; display: flex; flex-direction: column; gap: 16px; }
+    .exp-card {
+      padding: 24px 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      display: grid; grid-template-columns: 140px 1fr auto;
+      gap: 20px; align-items: center;
+      transition: border-color 0.25s, transform 0.2s;
+      cursor: default;
+    }
+    .exp-card:hover { border-color: var(--border-light); transform: translateY(-1px); }
+    .exp-period {
+      font-family: 'Inter', sans-serif;
+      font-size: 12px; color: var(--text-3); font-weight: 500;
+      white-space: nowrap;
+    }
+    .exp-body {}
+    .exp-role {
+      font-family: 'Inter', sans-serif;
+      font-size: 17px; font-weight: 700; color: var(--text-1);
+      letter-spacing: -0.02em;
+    }
+    .exp-company {
+      font-size: 13px; color: var(--blue-light); font-weight: 500;
+      margin-top: 2px;
+    }
+    .exp-tags {
+      display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
+    }
+    .exp-tag {
+      padding: 4px 12px; border-radius: 100px;
+      font-size: 12px; font-weight: 500;
+      white-space: nowrap;
+    }
+    .exp-tag.blue { background: rgba(99,102,241,0.12); color: var(--blue-light); }
+    .exp-tag.amber { background: rgba(251,191,36,0.1); color: var(--amber); }
+    .exp-tag.green { background: rgba(52,211,153,0.1); color: var(--green); }
+    .exp-tag.pink { background: rgba(244,114,182,0.1); color: var(--pink); }
+
+    /* ─── PROJECTS ─── */
+    #projects { background: var(--bg); }
+    .projects-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 40px;
+    }
+    .project-card {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      cursor: default;
+      position: relative; overflow: hidden;
+    }
+    .project-card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(99,102,241,0.03), transparent);
+      pointer-events: none;
+    }
+    .project-card:hover {
+      border-color: rgba(99,102,241,0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+    .project-card.featured {
+      grid-column: 1 / -1;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 28px; align-items: center;
+    }
+    .project-tag {
+      display: inline-block;
+      padding: 3px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.04em; margin-bottom: 12px;
+    }
+    .project-tag.ai { background: rgba(99,102,241,0.12); color: var(--blue-light); }
+    .project-tag.ecom { background: rgba(251,191,36,0.1); color: var(--amber); }
+    .project-tag.fin { background: rgba(52,211,153,0.1); color: var(--green); }
+    .project-tag.growth { background: rgba(244,114,182,0.1); color: var(--pink); }
+    .project-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--text-1);
+      margin-bottom: 8px;
+    }
+    .project-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; }
+    .project-results {
+      margin-top: 16px; display: flex; flex-direction: column; gap: 6px;
+    }
+    .result-row {
+      display: flex; align-items: center; gap: 8px; font-size: 13px;
+    }
+    .result-row .arrow {
+      width: 20px; height: 20px; border-radius: 5px;
+      background: rgba(52,211,153,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--green); font-size: 11px; flex-shrink: 0;
+    }
+    .result-row span { color: var(--text-2); }
+    .result-row strong { color: var(--text-1); font-weight: 700; font-size: 14px; }
+
+    /* ─── SHOWCASE ─── */
+    #showcase { background: var(--surface); }
+    .showcase-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px; margin-top: 40px;
+    }
+    .showcase-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      cursor: default;
+    }
+    .showcase-card:hover {
+      border-color: rgba(99,102,241,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 0 20px rgba(99,102,241,0.08);
+    }
+    .showcase-preview {
+      width: 100%;
+      background: var(--surface-2);
+      position: relative; overflow: hidden;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    }
+    .showcase-browser {
+      display: flex; flex-direction: column;
+      width: 100%; height: 180px;
+    }
+    .showcase-browser-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 10px 12px 8px;
+      background: #151c2a;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      flex-shrink: 0;
+    }
+    .browser-dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+    .browser-dot.r { background: #ff5f57; }
+    .browser-dot.y { background: #febc2e; }
+    .browser-dot.g { background: #28c840; }
+    .browser-url {
+      flex: 1; margin-left: 8px;
+      padding: 4px 10px; border-radius: 6px;
+      background: rgba(255,255,255,0.05);
+      font-size: 10px; color: var(--text-3);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      font-family: 'Inter', monospace; letter-spacing: 0.02em;
+    }
+    .showcase-browser img {
+      width: 100%; height: calc(100% - 36px);
+      object-fit: cover;
+      transition: transform 0.35s ease, filter 0.35s ease;
+      display: block;
+    }
+    .showcase-card:hover .showcase-browser img {
+      transform: scale(1.03);
+      filter: brightness(1.08) saturate(1.05);
+    }
+    /* Chat animation overlay */
+    .chat-anim {
+      position: absolute; bottom: 10px; left: 10px; right: 10px;
+      display: flex; flex-direction: column; gap: 6px;
+      opacity: 0; transition: opacity 0.4s ease;
+      pointer-events: none;
+    }
+    .showcase-card:hover .chat-anim { opacity: 1; }
+    .chat-bubble {
+      padding: 5px 10px; border-radius: 8px;
+      font-size: 10px; line-height: 1.4; max-width: 80%;
+      animation: chat-fade-in 0.3s ease both;
+    }
+    .chat-bubble.user {
+      align-self: flex-end;
+      background: rgba(0,242,254,0.85); color: #0B0F19;
+      border-bottom-right-radius: 2px; font-weight: 500;
+    }
+    .chat-bubble.bot {
+      align-self: flex-start;
+      background: rgba(22,27,38,0.95); color: var(--text-1);
+      border: 1px solid rgba(0,242,254,0.15);
+      border-bottom-left-radius: 2px;
+    }
+    .chat-bubble:nth-child(1) { animation-delay: 0s; }
+    .chat-bubble:nth-child(2) { animation-delay: 0.6s; }
+    .chat-bubble:nth-child(3) { animation-delay: 1.2s; }
+    .chat-bubble:nth-child(4) { animation-delay: 1.8s; }
+    @keyframes chat-fade-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .chat-anim { animation: chat-loop 5s ease-in-out infinite; }
+    @keyframes chat-loop {
+      0%, 10% { opacity: 0; }
+      20%, 85% { opacity: 1; }
+      95%, 100% { opacity: 0; }
+    }
+    .showcase-card:hover .chat-anim { animation: none; opacity: 1; }
+    .showcase-body {
+      padding: 20px;
+    }
+    .showcase-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px; font-weight: 700;
+      color: var(--text-1); letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+    .showcase-url {
+      font-size: 12px; color: var(--blue-light);
+      margin-bottom: 8px; word-break: break-all;
+    }
+    .showcase-desc {
+      font-size: 13px; color: var(--text-2); line-height: 1.6;
+    }
+    .showcase-badge {
+      display: inline-block;
+      padding: 2px 8px; border-radius: 100px;
+      font-size: 10px; font-weight: 600;
+      margin-left: 8px; vertical-align: middle;
+    }
+    .showcase-badge.demo { background: rgba(52,211,153,0.1); color: var(--green); }
+    .showcase-badge.private { background: rgba(251,191,36,0.1); color: var(--amber); }
+    .showcase-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-top: 12px; font-size: 12px; font-weight: 500;
+      color: var(--blue-light); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .showcase-link:hover { color: var(--cyan); }
+    .showcase-link svg { width: 12px; height: 12px; }
+    .typing-dots { display: flex; gap: 3px; align-items: center; }
+    .typing-dots span {
+      width: 4px; height: 4px; border-radius: 50%; background: var(--text-3);
+      animation: typing-bounce 1.4s infinite ease-in-out;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing-bounce {
+      0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes pulse-dot {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* ─── SKILLS ─── */
+    #skills { background: var(--surface); }
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 14px; margin-top: 40px;
+    }
+    .skill-group {
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      transition: border-color 0.2s;
+    }
+    .skill-group:hover { border-color: var(--border-light); }
+    .skill-group-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px; font-weight: 700;
+      color: var(--text-1); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .skill-group-name .sg-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .skill-tag {
+      padding: 3px 10px; border-radius: 4px;
+      border: 1px solid var(--border);
+      font-size: 12px; color: var(--text-2);
+      background: var(--surface);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .skill-tag:hover { border-color: var(--blue); color: var(--blue-light); }
+
+    /* ─── CONTACT ─── */
+    #contact { background: var(--bg); }
+    .contact-card {
+      margin-top: 40px;
+      padding: 48px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+      position: relative; overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+      width: 500px; height: 300px;
+      background: radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, rgba(0,242,254,0.03) 50%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-top {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 48px; align-items: start;
+    }
+    .contact-info { position: relative; }
+    .contact-info h2 {
+      font-family: 'Inter', sans-serif;
+      font-size: 32px; font-weight: 800;
+      letter-spacing: -0.04em; color: var(--text-1);
+      background: linear-gradient(135deg, var(--text-1), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .contact-info p {
+      color: var(--text-2); margin-top: 8px; font-size: 16px;
+    }
+    .contact-links {
+      display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap;
+    }
+    .contact-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 100px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-1); text-decoration: none;
+      font-size: 13px; font-weight: 500;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .contact-link:hover {
+      border-color: var(--blue);
+      background: rgba(99,102,241,0.06);
+      box-shadow: 0 0 20px rgba(99,102,241,0.1);
+    }
+    .contact-link svg { width: 15px; height: 15px; color: var(--text-3); }
+
+    /* QR Codes */
+    .qr-section {
+      display: flex; gap: 24px; align-items: flex-end;
+    }
+    .qr-item {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    .qr-box {
+      width: 120px; height: 120px;
+      border-radius: var(--radius-sm);
+      background: #fff;
+      padding: 8px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .qr-box img {
+      width: 100%; height: 100%;
+      border-radius: 4px;
+      object-fit: contain;
+    }
+    .qr-label {
+      font-size: 11px; color: var(--text-3); font-weight: 500;
+    }
+    .copy-wechat {
+      display: inline-block;
+      margin-left: 6px; padding: 2px 8px;
+      border-radius: 100px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-3);
+      font-size: 10px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .copy-wechat:hover {
+      border-color: var(--blue); color: var(--blue-light);
+      background: rgba(99,102,241,0.08);
+    }
+
+    .resume-downloads {
+      display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap;
+    }
+    .resume-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 8px;
+      background: rgba(0,242,254,0.08); border: 1px solid rgba(0,242,254,0.25);
+      color: var(--cyan); font-size: 13px; font-weight: 500;
+      text-decoration: none; transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .resume-btn svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .resume-btn:hover {
+      background: rgba(0,242,254,0.15); border-color: rgba(0,242,254,0.5);
+      transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0,242,254,0.12);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 28px 48px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800; font-size: 15px;
+      color: var(--text-3);
+    }
+    .footer-copy { font-size: 12px; color: var(--text-3); }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-links {
+        display: none; position: fixed; top: 60px; left: 0; right: 0;
+        flex-direction: column; gap: 0;
+        background: rgba(11,15,25,0.96); backdrop-filter: blur(24px);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 20px;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 14px 0; font-size: 15px; }
+      .nav-hamburger { display: flex; }
+      section, .stats-bar, footer { padding: 56px 20px; }
+      .hero { padding: 100px 20px 56px; }
+      .stats-inner { grid-template-columns: repeat(2,1fr); gap: 20px; }
+      .stat { border-right: none; padding: 0; }
+      .about-grid, .projects-grid, .skills-grid, .showcase-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; text-align: center; }
+      .about-avatar { order: -1; }
+      .about-pills { justify-content: center; }
+      .project-card.featured { grid-template-columns: 1fr; }
+      .exp-card { grid-template-columns: 1fr; gap: 8px; }
+      .exp-period { white-space: normal; }
+      .exp-tags { justify-content: flex-start; }
+      .contact-top { grid-template-columns: 1fr; gap: 32px; }
+      .contact-card { padding: 28px 20px; }
+      .qr-section { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .qr-section { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">张也<span>.</span></div>
+  <div class="nav-links">
+    <a href="#about">关于</a>
+    <a href="#experience">经历</a>
+    <a href="#projects">项目</a>
+    <a href="#showcase">作品</a>
+    <a href="#skills">技能</a>
+  </div>
+  <a href="#contact" class="nav-cta">联系我</a>
+  <button class="nav-hamburger" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      复合型产品负责人 · AI 落地实践者
+    </div>
+    <h1>张也 Richard<br>产品 × AI × 增长</h1>
+    <p class="hero-sub">8 年复合经验，深度参与多个亿级业务。擅长把 AI 工作流嵌入核心业务流程，跑出可量化 ROI。</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn-primary">查看项目成果</a>
+      <a href="#contact" class="btn-ghost">联系我</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat reveal">
+      <div class="stat-num"><span class="counter" data-target="8">0</span><span class="stat-unit">年</span></div>
+      <div class="stat-label">复合型产品经验</div>
+    </div>
+    <div class="stat reveal" style="transition-delay:0.1s">
+      <div class="stat-num"><span class="counter" data-target="3.23" data-decimals="2">0</span><span class="stat-unit">亿</span></div>
+      <div class="stat-label">所在跨境业务 GMV · MXN</div>
+    </div>
+    <div class="stat reveal" style="transition-delay:0.2s">
+      <div class="stat-num"><span class="counter" data-target="352">0</span><span class="stat-unit">亿</span></div>
+      <div class="stat-label">所在电商平台年 GMV · CNY</div>
+    </div>
+    <div class="stat reveal" style="transition-delay:0.3s">
+      <div class="stat-num"><span class="counter" data-target="1380">0</span><span class="stat-unit">万</span></div>
+      <div class="stat-label">所在业务会员体系峰值</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-tag reveal">关于我</div>
+    <h2 class="section-title reveal">产品 × AI × 跨境<br>三者交汇处的实践者</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>我是张也（Richard），<strong>8 年复合型产品经理</strong>，横跨跨境电商、ERP、金融 SaaS、AI 工作流等领域。深度参与亿级业务，从 0 到 1 定义产品，从 1 到 N 推动规模化。</p>
+        <p>核心能力：把 <strong>RAG、Agent、工作流</strong>真正接入供应链、客服、内容生产等核心业务，跑出可量化的效率数据。兼具金融级（等保三级认证）严谨风控合规意识，与跨境供应链全流程数字化架构能力。</p>
+        <p>技术栈：<strong>Claude / Cursor / n8n / Dify</strong> 完成原型和功能代码，能独立搭建 AI Agent 工作流。</p>
+        <p style="margin-top:16px;padding:12px 16px;border-left:3px solid var(--cyan);background:rgba(0,242,254,0.04);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:14px;color:var(--text-2);">💡 <strong style="color:var(--text-1)">生产力宣言</strong> — 能用 AI 解决的，绝不手动重复。AI 已长化为我的第二大脑，省下的精力 100% 聚焦在架构设计与商业价值闭环上。</p>
+      </div>
+      <div class="about-avatar reveal" style="transition-delay:0.05s">
+        <div class="about-avatar-ring">
+          <img src="IMG_2554.JPG" alt="张也 Richard">
+        </div>
+        <div class="about-avatar-name">Richard Zhang</div>
+      </div>
+      <div class="about-info reveal" style="transition-delay:0.1s">
+        <div class="info-card">
+          <div class="info-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+          <div class="info-card-body">
+            <div class="info-card-label">当前状态</div>
+            <div class="info-card-value">开放新机会</div>
+            <div class="info-card-sub">产品 × AI 交叉领域</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div class="info-card-body">
+            <div class="info-card-label">所在城市</div>
+            <div class="info-card-value">深圳</div>
+            <div class="info-card-sub">持欧美加日韩商务签证，可全球出差</div>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg></div>
+          <div class="info-card-body">
+            <div class="info-card-label">教育背景</div>
+            <div class="info-card-value">中国地质大学 · 本科</div>
+            <div class="info-card-sub">国际贸易（经济学学士）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE (SIMPLIFIED) -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-tag reveal">工作经历</div>
+    <h2 class="section-title reveal">每段经历都有业务数据</h2>
+    <div class="exp-list">
+
+      <div class="exp-card reveal">
+        <div class="exp-period">2023.07 — 2026.02</div>
+        <div class="exp-body">
+          <div class="exp-role">产品负责人</div>
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag amber">业务 GMV 3.23亿</span>
+          <span class="exp-tag green">库存积压 ↓25%</span>
+          <span class="exp-tag blue">AI客服满意度 90%</span>
+        </div>
+      </div>
+
+      <div class="exp-card reveal" style="transition-delay:0.05s">
+        <div class="exp-period">2021.10 — 2023.06</div>
+        <div class="exp-body">
+          <div class="exp-role">高级产品经理</div>
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag amber">服务五大行</span>
+          <span class="exp-tag green">工期缩短 66%</span>
+          <span class="exp-tag blue">点击率 42%</span>
+        </div>
+      </div>
+
+      <div class="exp-card reveal" style="transition-delay:0.1s">
+        <div class="exp-period">2018.07 — 2021.09</div>
+        <div class="exp-body">
+          <div class="exp-role">增长产品经理</div>
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag blue">业务会员 1380万</span>
+          <span class="exp-tag amber">平台年 GMV 352亿</span>
+          <span class="exp-tag blue">推荐 CTR 40%</span>
+        </div>
+      </div>
+
+      <div class="exp-card reveal" style="transition-delay:0.15s">
+        <div class="exp-period">2016.10 — 2018.06</div>
+        <div class="exp-body">
+          <div class="exp-role">产品经理</div>
+        </div>
+        <div class="exp-tags">
+          <span class="exp-tag blue">店主 30万</span>
+          <span class="exp-tag amber">销售额破 10亿</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-tag reveal">代表项目</div>
+    <h2 class="section-title reveal">每个项目都有业务数据</h2>
+    <div class="projects-grid">
+
+      <div class="project-card featured reveal">
+        <div>
+          <span class="project-tag ai">AI · RAG · Agent</span>
+          <div class="project-name">AI 知识库 + 智能营销客服系统</div>
+          <div class="project-desc">集成大模型与 RAG，打通 ERP 及订单系统，构建 AI 机器人与知识库，支持在线 / 私有化双部署。</div>
+        </div>
+        <div class="project-results">
+          <div class="result-row"><div class="arrow">↑</div><span>覆盖 <strong>75%+</strong> 日咨询量</span></div>
+          <div class="result-row"><div class="arrow">↓</div><span>响应 <strong>&lt;6 秒</strong></span></div>
+          <div class="result-row"><div class="arrow">↓</div><span>人力成本缩减 <strong>50%</strong></span></div>
+          <div class="result-row"><div class="arrow">↑</div><span>满意度 <strong>90%</strong> · </span>
+            <a href="https://chat.yx11.fun" target="_blank" style="color:var(--blue-light);font-size:13px;text-decoration:none;font-weight:500;margin-left:4px;">在线体验 →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" style="transition-delay:0.05s">
+        <span class="project-tag ai">AI · AIGC</span>
+        <div class="project-name">智语 AI 生成平台</div>
+        <div class="project-desc">横跨文案 / 图片 / 视频的多模态 AIGC 平台，日均调用量 10,000+ 次。</div>
+        <div class="project-results">
+          <div class="result-row"><div class="arrow">↑</div><span>赋能 <strong>200+</strong> 商家</span></div>
+          <div class="result-row"><div class="arrow">↑</div><span>效率提升 <strong>6 倍</strong></span></div>
+          <div class="result-row"><div class="arrow">↑</div><span>GMV 提升 <strong>15%</strong></span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" style="transition-delay:0.1s">
+        <span class="project-tag ecom">跨境电商 · B2B2C</span>
+        <div class="project-name">墨西哥跨境电商平台</div>
+        <div class="project-desc">中墨供应链整合，商家入驻 / 订单履约 / 国际物流全流程。</div>
+        <div class="project-results">
+          <div class="result-row"><div class="arrow">↑</div><span>入驻商家 <strong>1000+</strong></span></div>
+          <div class="result-row"><div class="arrow">↑</div><span>GMV <strong>3.23亿比索</strong></span></div>
+          <div class="result-row"><div class="arrow">↑</div><span>季度增速 <strong>30%+</strong></span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" style="transition-delay:0.15s">
+        <span class="project-tag fin">金融 SaaS</span>
+        <div class="project-name">银麟金融数字化营销平台</div>
+        <div class="project-desc">银行标准化营销 SaaS 六大引擎，金融级等保三级认证。</div>
+        <div class="project-results">
+          <div class="result-row"><div class="arrow">↑</div><span>点击率 <strong>42%</strong></span></div>
+          <div class="result-row"><div class="arrow">↓</div><span>工期缩短 <strong>66%</strong></span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" style="transition-delay:0.2s">
+        <span class="project-tag growth">用户增长</span>
+        <div class="project-name">个性化推荐系统 · 云集</div>
+        <div class="project-desc">冷启动→画像→召回→排序全链路推荐。</div>
+        <div class="project-results">
+          <div class="result-row"><div class="arrow">↑</div><span>CTR <strong>40%</strong></span></div>
+          <div class="result-row"><div class="arrow">↑</div><span>转化率提升 <strong>20%</strong></span></div>
+        </div>
+      </div>
+
+      <div class="project-card reveal" style="transition-delay:0.25s">
+        <span class="project-tag growth">会员增长</span>
+        <div class="project-name">会员营销体系 · 云集</div>
+        <div class="project-desc">优惠券 / 秒杀 / 拼团 / 会员特权 / 积分奖励完整体系。</div>
+        <div class="project-results">
+          <div class="result-row"><div class="arrow">↑</div><span>MAU 提升 <strong>30%</strong></span></div>
+          <div class="result-row"><div class="arrow">↑</div><span>GMV 占比 <strong>~50%</strong></span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SHOWCASE -->
+<section id="showcase">
+  <div class="section-inner">
+    <div class="section-tag reveal">作品展示</div>
+    <h2 class="section-title reveal">不只是PPT，能线上看的才算数</h2>
+    <div class="showcase-grid">
+
+      <div class="showcase-card reveal">
+        <div class="showcase-preview">
+          <div class="showcase-browser">
+            <div class="showcase-browser-bar">
+              <span class="browser-dot r"></span>
+              <span class="browser-dot y"></span>
+              <span class="browser-dot g"></span>
+              <div class="browser-url">nanobanan.tech</div>
+            </div>
+            <img src="showcase-nanobanan.png" alt="NanoBanan 个人站" onerror="this.style.minHeight='120px';this.style.background='var(--surface-2)';"/>
+          </div>
+        </div>
+        <div class="showcase-body">
+          <div class="showcase-name">NanoBanan 个人站 <span class="showcase-badge demo">在线</span></div>
+          <div class="showcase-url">nanobanan.tech</div>
+          <div class="showcase-desc">独立设计与开发，一键生成、想象落地。赋能下一代创作者的 AI 生产力工具。</div>
+          <a href="https://www.nanobanan.tech/" target="_blank" class="showcase-link">
+            访问网站
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="showcase-card reveal" style="transition-delay:0.05s">
+        <div class="showcase-preview">
+          <div class="showcase-browser">
+            <div class="showcase-browser-bar">
+              <span class="browser-dot r"></span>
+              <span class="browser-dot y"></span>
+              <span class="browser-dot g"></span>
+              <div class="browser-url">yx11.fun</div>
+            </div>
+            <img src="showcase-yx11.png" alt="AI API 中转站" onerror="this.style.minHeight='120px';this.style.background='var(--surface-2)';"/>
+          </div>
+        </div>
+        <div class="showcase-body">
+          <div class="showcase-name">AI API 中转站 <span class="showcase-badge private">仅展示</span></div>
+          <div class="showcase-url">yx11.fun</div>
+          <div class="showcase-desc">自建 API 中转服务，接入主流大模型，私有化部署。目前仅作个人使用，未开放购买。</div>
+          <a href="http://yx11.fun/" target="_blank" class="showcase-link">
+            查看演示
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="showcase-card reveal" style="transition-delay:0.1s">
+        <div class="showcase-preview">
+          <div class="showcase-browser">
+            <div class="showcase-browser-bar">
+              <span class="browser-dot r"></span>
+              <span class="browser-dot y"></span>
+              <span class="browser-dot g"></span>
+              <div class="browser-url">chat.yx11.fun</div>
+            </div>
+            <img src="showcase-ai-cs.png" alt="AI 智能客服" onerror="this.style.minHeight='120px';this.style.background='var(--surface-2)';"/>
+            <div class="chat-anim">
+              <div class="chat-bubble user">这个产品的物流进度？</div>
+              <div class="chat-bubble bot">正在查询您的订单…</div>
+              <div class="chat-bubble bot">📦 已从深圳仓发出，预计3天送达</div>
+              <div class="chat-bubble user">能加急吗？</div>
+            </div>
+          </div>
+        </div>
+        <div class="showcase-body">
+          <div class="showcase-name">AI 智能客服 <span class="showcase-badge demo">可演示</span></div>
+          <div class="showcase-url">RAG + Agent + 知识库</div>
+          <div class="showcase-desc">RAG 知识库 + Agent 自动化 + 多模型切换，覆盖 75% 日咨询量，响应 &lt;6秒。</div>
+          <a href="https://chat.yx11.fun" target="_blank" class="showcase-link">
+            进入用户端聊天
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <a href="https://zy.yx11.fun" target="_blank" class="showcase-link">
+            查看客服后台
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-tag reveal">技能栈</div>
+    <h2 class="section-title reveal">产品力 + AI 工程力</h2>
+    <div class="skills-grid">
+
+      <div class="skill-group reveal">
+        <div class="skill-group-name"><span class="sg-dot" style="background:var(--blue)"></span>AI 技术栈</div>
+        <div class="skill-tags">
+          <span class="skill-tag">LLM 原理</span>
+          <span class="skill-tag">RAG 架构</span>
+          <span class="skill-tag">Prompt 工程</span>
+          <span class="skill-tag">向量数据库</span>
+          <span class="skill-tag">Agent 框架</span>
+          <span class="skill-tag">Dify</span>
+          <span class="skill-tag">n8n</span>
+          <span class="skill-tag">Coze</span>
+          <span class="skill-tag">OpenClaw</span>
+          <span class="skill-tag">Hermes</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal" style="transition-delay:0.1s">
+        <div class="skill-group-name"><span class="sg-dot" style="background:var(--cyan)"></span>AI 编程工具</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Claude</span>
+          <span class="skill-tag">Cursor</span>
+          <span class="skill-tag">Codex</span>
+          <span class="skill-tag">SQL 基础</span>
+          <span class="skill-tag">Python 基础</span>
+          <span class="skill-tag">API 对接</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal" style="transition-delay:0.2s">
+        <div class="skill-group-name"><span class="sg-dot" style="background:var(--green)"></span>产品设计工具</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Axure</span>
+          <span class="skill-tag">Pencil</span>
+          <span class="skill-tag">Figma</span>
+          <span class="skill-tag">GA4</span>
+          <span class="skill-tag">用友 U8</span>
+          <span class="skill-tag">AB Test</span>
+          <span class="skill-tag">埋点设计</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal" style="transition-delay:0.05s">
+        <div class="skill-group-name"><span class="sg-dot" style="background:var(--amber)"></span>产品方法论</div>
+        <div class="skill-tags">
+          <span class="skill-tag">SaaS + TOB</span>
+          <span class="skill-tag">AARRR</span>
+          <span class="skill-tag">RFM 分层</span>
+          <span class="skill-tag">推荐系统</span>
+          <span class="skill-tag">OKR</span>
+          <span class="skill-tag">数据驱动</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal" style="transition-delay:0.15s">
+        <div class="skill-group-name"><span class="sg-dot" style="background:var(--pink)"></span>行业领域</div>
+        <div class="skill-tags">
+          <span class="skill-tag">跨境电商</span>
+          <span class="skill-tag">ERP 系统</span>
+          <span class="skill-tag">金融 SaaS</span>
+          <span class="skill-tag">供应链</span>
+          <span class="skill-tag">智能客服</span>
+        </div>
+      </div>
+
+      <div class="skill-group reveal" style="transition-delay:0.25s">
+        <div class="skill-group-name"><span class="sg-dot" style="background:var(--text-2)"></span>团队 & 语言</div>
+        <div class="skill-tags">
+          <span class="skill-tag">团队管理</span>
+          <span class="skill-tag">跨部门协作</span>
+          <span class="skill-tag">英语</span>
+          <span class="skill-tag">跨文化沟通</span>
+          <span class="skill-tag">全球出差能力</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-card reveal">
+      <div class="contact-top">
+        <div class="contact-info">
+          <h2>准备好了，聊一聊？</h2>
+          <p>期待在产品 × AI 交叉领域，加入下一个值得全力投入的战场</p>
+          <div class="contact-links">
+            <a href="tel:13926590459" class="contact-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.5 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.55a16 16 0 0 0 6.29 6.29l.87-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              13926590459
+            </a>
+            <a href="mailto:351955084@qq.com" class="contact-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              351955084@qq.com
+            </a>
+            <a href="#" class="contact-link" onclick="alert('微信号：请添加 13926590459（同微信）');return false;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              微信同手机号
+            </a>
+          </div>
+          <div class="resume-downloads">
+            <a href="resume-b-end.pdf" download class="resume-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+              B端产品简历
+            </a>
+            <a href="resume-c-end.pdf" download class="resume-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+              C端产品简历
+            </a>
+          </div>
+        </div>
+
+        <!-- QR Codes -->
+        <div class="qr-section">
+          <div class="qr-item">
+            <div class="qr-box">
+              <img src="wechat-qr.png" alt="微信二维码" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:var(--text-3);font-size:12px;text-align:center;line-height:1.4\'>微信<br>二维码</div>'">
+            </div>
+            <div class="qr-label">加微信 <button class="copy-wechat" onclick="navigator.clipboard.writeText('13926590459');this.textContent='已复制!';setTimeout(()=>this.textContent='复制微信号',1500)">复制微信号</button></div>
+          </div>
+          <div class="qr-item">
+            <div class="qr-box">
+              <img src="mp-qr.jpg" alt="公众号二维码" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:var(--text-3);font-size:12px;text-align:center;line-height:1.4\'>公众号<br>二维码</div>'">
+            </div>
+            <div class="qr-label">关注公众号</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">张也 Richard</div>
+  <div class="footer-copy">2026 · 产品 × AI × 增长</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Trigger above-fold reveals immediately
+  setTimeout(() => {
+    document.querySelectorAll('.hero .reveal, .stats-bar .reveal').forEach(el => {
+      el.classList.add('visible');
+    });
+  }, 100);
+
+  // Mobile hamburger toggle
+  const hamburger = document.querySelector('.nav-hamburger');
+  const navLinks = document.querySelector('.nav-links');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    hamburger.classList.toggle('active');
+  });
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('active');
+    });
+  });
+
+  // Nav scroll effect
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Stat counter animation
+  function animateCounters() {
+    document.querySelectorAll('.counter').forEach(el => {
+      if (el.dataset.done) return;
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || '0');
+      const duration = 1600;
+      const start = performance.now();
+      el.dataset.done = '1';
+      function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        const val = target * ease;
+        el.textContent = val.toFixed(decimals);
+        if (t < 1) requestAnimationFrame(tick);
+        else el.textContent = target.toFixed(decimals);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  const statsBar = document.querySelector('.stats-bar');
+  const statsObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) { animateCounters(); statsObserver.disconnect(); }
+  }, { threshold: 0.3 });
+  statsObserver.observe(statsBar);
+
+  // Nav active indicator
+  const sections = document.querySelectorAll('section[id]');
+  const navAs = document.querySelectorAll('.nav-links a');
+  function updateActiveNav() {
+    let current = '';
+    const scrollPos = window.scrollY + 100;
+    sections.forEach(s => {
+      if (s.offsetTop <= scrollPos) current = s.getAttribute('id');
+    });
+    navAs.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+  window.addEventListener('scroll', updateActiveNav, { passive: true });
+  updateActiveNav();
+</script>
+
+</body>
+</html>

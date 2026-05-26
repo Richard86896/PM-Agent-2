@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n \"^---$\" /Users/Richard/Desktop/skill/pm_agent/prd/流程编辑器增强PRD.md)",
+      "Bash(python3 -)",
+      "Bash(node -e ' *)",
+      "Bash(open \"http://localhost:8788/design智语prd/v2/\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"http://localhost:8788/\")",
+      "Bash(curl -s \"http://localhost:8788/\")",
+      "Bash(open \"http://localhost:8788/\")",
+      "Skill(company-research)",
+      "Skill(company-research:*)",
+      "mcp__brave-search__brave_web_search",
+      "Skill(defuddle)",
+      "Skill(defuddle:*)",
+      "Bash(defuddle parse *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('markdown',''\\)[:3000]\\)\")",
+      "Bash(mkdir -p \"/Users/Richard/Desktop/pm_agent（供应链）/prd/tool-specs\" && mv \"/Users/Richard/Desktop/pm_agent（供应链）/业财一体化/skills/\"*.md \"/Users/Richard/Desktop/pm_agent（供应链）/prd/tool-specs/\" && rmdir \"/Users/Richard/Desktop/pm_agent（供应链）/业财一体化/skills\" && rmdir \"/Users/Richard/Desktop/pm_agent（供应链）/业财一体化\")",
+      "Bash(ls -la \"/Users/Richard/Desktop/未命名\" 2>/dev/null && echo \"EXISTS\" || echo \"NOT_EXISTS\")",
+      "Read(//Users/Richard/Desktop/未命名/**)",
+      "Bash(mkdir -p /Users/Richard/Desktop/未命名/.claude/skills)",
+      "Bash(cp /Users/Richard/Desktop/pm_agent（供应链）/.claude/settings.json /Users/Richard/Desktop/未命名/.claude/settings.json)",
+      "Bash(rsync -a /Users/Richard/Desktop/pm_agent（供应链）/.claude/skills/ /Users/Richard/Desktop/未命名/.claude/skills/)",
+      "Bash(cp /Users/Richard/Desktop/pm_agent（供应链）/CLAUDE.md /Users/Richard/Desktop/未命名/CLAUDE.md)",
+      "Bash(cp /Users/Richard/Desktop/pm_agent（供应链）/README.md /Users/Richard/Desktop/未命名/README.md)"
+    ],
+    "additionalDirectories": [
+      "/Users/Richard/Desktop/pm_agent（供应链）/业财一体化/skills"
+    ]
+  }
+}
