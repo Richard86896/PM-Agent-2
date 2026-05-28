@@ -650,7 +650,7 @@
 
     /* QR Codes */
     .qr-section {
-      display: flex; gap: 24px; align-items: flex-end;
+      display: flex; gap: 24px; align-items: flex-start;
     }
     .qr-item {
       display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -1006,6 +1006,20 @@
         </div>
       </div>
 
+      <div class="project-card reveal" style="transition-delay:0.35s">
+        <span class="project-tag" style="background:rgba(249,115,22,0.12);color:#FB923C;">eSIM · 出行</span>
+        <div class="project-name">Tiger eSIM · App 产品改造</div>
+        <div class="project-desc">主导 eSIM 购买全链路体验重构：设备检测前置非阻断、套餐两级切换、跨设备激活闭环、邀请裂变升级，覆盖 P0~P2 共 15 个改进点。</div>
+        <div class="project-results">
+          <div class="result-row"><div class="arrow">↑</div><span>购买转化链路减少 <strong>1 个阻断弹窗</strong></span></div>
+          <div class="result-row"><div class="arrow">↓</div><span>设备不兼容导致退款 <strong>路径已闭环</strong></span></div>
+          <div class="result-row" style="margin-top:8px;gap:8px;">
+            <a href="./tiger-esim/" target="_blank" style="color:var(--blue-light);font-size:13px;text-decoration:none;font-weight:600;background:rgba(99,102,241,0.1);padding:4px 10px;border-radius:6px;border:1px solid rgba(99,102,241,0.25);">查看交互原型 →</a>
+            <a href="./tiger-esim-roadmap.html" target="_blank" style="color:#FB923C;font-size:13px;text-decoration:none;font-weight:600;background:rgba(249,115,22,0.08);padding:4px 10px;border-radius:6px;border:1px solid rgba(249,115,22,0.2);">查看路线图 →</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -1339,6 +1353,6 @@
     });
   });
 </script>
-
+  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

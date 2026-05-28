@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiger eSIM · 产品路线图 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand: #F97316;
+            --brand-dim: rgba(249,115,22,0.15);
+            --brand-glow: rgba(249,115,22,0.3);
+            --p0: #F87171;
+            --p0-dim: rgba(248,113,113,0.12);
+            --p0-border: rgba(248,113,113,0.3);
+            --p1: #FB923C;
+            --p1-dim: rgba(251,146,60,0.12);
+            --p1-border: rgba(251,146,60,0.3);
+            --p2: #60A5FA;
+            --p2-dim: rgba(96,165,250,0.1);
+            --p2-border: rgba(96,165,250,0.28);
+            --p3: #34D399;
+            --p3-dim: rgba(52,211,153,0.1);
+            --p3-border: rgba(52,211,153,0.28);
+            --p4: #94A3B8;
+            --p4-dim: rgba(148,163,184,0.08);
+            --p4-border: rgba(148,163,184,0.2);
+            --bg: #08090E;
+            --bg2: #0D0F18;
+            --surface: rgba(255,255,255,0.04);
+            --surface-hover: rgba(255,255,255,0.07);
+            --border: rgba(255,255,255,0.08);
+            --border-bright: rgba(255,255,255,0.14);
+            --text-primary: #F1F5F9;
+            --text-secondary: #94A3B8;
+            --text-muted: #475569;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            background-image:
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(249,115,22,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 40% 30% at 80% 10%, rgba(96,165,250,0.05) 0%, transparent 50%);
+        }
+
+        /* ── Header ── */
+        .header {
+            padding: 0 56px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(8,9,14,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #F97316, #C2410C);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 0 20px rgba(249,115,22,0.4);
+        }
+
+        .logo-text { display: flex; flex-direction: column; }
+        .logo-name { font-size: 17px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.3px; }
+        .logo-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
+
+        .header-right { display: flex; align-items: center; gap: 10px; }
+
+        .badge-version {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-year {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--brand);
+            background: var(--brand-dim);
+            border: 1px solid var(--brand-glow);
+            padding: 4px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.4px;
+        }
+
+        /* ── Hero Stats ── */
+        .hero {
+            padding: 56px 56px 0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 48px;
+            align-items: end;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .hero-left {}
+
+        .hero-eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--brand);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1.05;
+            letter-spacing: -1.5px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #F97316, #FB923C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            line-height: 1.6;
+            max-width: 520px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .hero-stat {
+            padding: 20px 28px;
+            background: var(--bg2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            min-width: 90px;
+        }
+
+        .hero-stat-num {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .hero-stat-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-align: center;
+        }
+
+        /* ── Timeline bar ── */
+        .timeline-bar {
+            padding: 40px 56px 0;
+            max-width: 1440px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .tbar-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+
+        .tbar-item:hover { background: var(--surface-hover); }
+
+        .tbar-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+            flex-shrink: 0;
+        }
+
+        .tbar-info {}
+        .tbar-count { font-size: 18px; font-weight: 800; line-height: 1; letter-spacing: -0.5px; }
+        .tbar-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.6px; }
+        .tbar-time { font-size: 10px; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
+
+        /* ── Main ── */
+        .main {
+            padding: 40px 56px 80px;
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 20px;
+            height: 1px;
+            background: var(--text-muted);
+        }
+
+        /* ── Phase rows ── */
+        .timeline { display: flex; flex-direction: column; gap: 2px; }
+
+        .phase {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: border-color 0.2s;
+        }
+
+        .phase:hover { border-color: var(--border-bright); }
+
+        .phase-meta {
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 6px;
+            border-right: 1px solid var(--border);
+            position: relative;
+        }
+
+        .phase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            width: fit-content;
+            margin-bottom: 4px;
+        }
+
+        .phase-badge .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .phase-ver {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .phase-name {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .phase-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .phase-cnt {
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .phase-cards {
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-content: flex-start;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            width: calc(25% - 8px);
+            min-width: 180px;
+            transition: background 0.15s, border-color 0.15s, transform 0.15s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px;
+            height: 100%;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .card:hover {
+            background: rgba(255,255,255,0.06);
+            transform: translateY(-1px);
+        }
+
+        .card-badge {
+            display: inline-block;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-new {
+            background: rgba(52,211,153,0.12);
+            color: #34D399;
+            border: 1px solid rgba(52,211,153,0.25);
+        }
+
+        .badge-benchmark {
+            background: rgba(96,165,250,0.12);
+            color: #60A5FA;
+            border: 1px solid rgba(96,165,250,0.25);
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+            line-height: 1.35;
+        }
+
+        .card-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            font-weight: 400;
+        }
+
+        /* Phase color variants */
+        /* P0 */
+        .phase-p0 { background: linear-gradient(90deg, rgba(248,113,113,0.04) 0%, var(--bg2) 240px); }
+        .phase-p0 .phase-meta { background: rgba(248,113,113,0.05); }
+        .phase-p0 .phase-badge { background: rgba(248,113,113,0.15); color: var(--p0); }
+        .phase-p0 .phase-badge .dot { background: var(--p0); }
+        .phase-p0 .phase-ver { color: var(--p0); }
+        .phase-p0 .phase-cnt { background: rgba(248,113,113,0.15); color: var(--p0); }
+        .phase-p0 .card { border-color: var(--p0-border); background: var(--p0-dim); }
+        .phase-p0 .card::after { background: var(--p0); }
+        .phase-p0 .card:hover { background: rgba(248,113,113,0.15); }
+
+        /* P1 */
+        .phase-p1 { background: linear-gradient(90deg, rgba(251,146,60,0.04) 0%, var(--bg2) 240px); }
+        .phase-p1 .phase-meta { background: rgba(251,146,60,0.05); }
+        .phase-p1 .phase-badge { background: rgba(251,146,60,0.15); color: var(--p1); }
+        .phase-p1 .phase-badge .dot { background: var(--p1); }
+        .phase-p1 .phase-ver { color: var(--p1); }
+        .phase-p1 .phase-cnt { background: rgba(251,146,60,0.15); color: var(--p1); }
+        .phase-p1 .card { border-color: var(--p1-border); }
+        .phase-p1 .card::after { background: var(--p1); }
+        .phase-p1 .card:hover { background: rgba(251,146,60,0.08); border-color: rgba(251,146,60,0.4); }
+
+        /* P2 */
+        .phase-p2 { background: linear-gradient(90deg, rgba(96,165,250,0.04) 0%, var(--bg2) 240px); }
+        .phase-p2 .phase-meta { background: rgba(96,165,250,0.05); }
+        .phase-p2 .phase-badge { background: rgba(96,165,250,0.15); color: var(--p2); }
+        .phase-p2 .phase-badge .dot { background: var(--p2); }
+        .phase-p2 .phase-ver { color: var(--p2); }
+        .phase-p2 .phase-cnt { background: rgba(96,165,250,0.15); color: var(--p2); }
+        .phase-p2 .card { border-color: var(--p2-border); background: var(--p2-dim); }
+        .phase-p2 .card::after { background: var(--p2); }
+        .phase-p2 .card:hover { background: rgba(96,165,250,0.14); }
+
+        /* P3 */
+        .phase-p3 { background: linear-gradient(90deg, rgba(52,211,153,0.04) 0%, var(--bg2) 240px); }
+        .phase-p3 .phase-meta { background: rgba(52,211,153,0.05); }
+        .phase-p3 .phase-badge { background: rgba(52,211,153,0.15); color: var(--p3); }
+        .phase-p3 .phase-badge .dot { background: var(--p3); }
+        .phase-p3 .phase-ver { color: var(--p3); }
+        .phase-p3 .phase-cnt { background: rgba(52,211,153,0.15); color: var(--p3); }
+        .phase-p3 .card { border-color: var(--p3-border); background: var(--p3-dim); }
+        .phase-p3 .card::after { background: var(--p3); }
+        .phase-p3 .card:hover { background: rgba(52,211,153,0.14); }
+
+        /* P4 */
+        .phase-p4 { background: linear-gradient(90deg, rgba(148,163,184,0.03) 0%, var(--bg2) 240px); }
+        .phase-p4 .phase-meta { background: rgba(148,163,184,0.04); }
+        .phase-p4 .phase-badge { background: rgba(148,163,184,0.12); color: var(--p4); }
+        .phase-p4 .phase-badge .dot { background: var(--p4); }
+        .phase-p4 .phase-ver { color: var(--p4); }
+        .phase-p4 .phase-cnt { background: rgba(148,163,184,0.12); color: var(--p4); }
+        .phase-p4 .card { border-color: var(--p4-border); background: var(--p4-dim); }
+        .phase-p4 .card::after { background: var(--p4); }
+        .phase-p4 .card:hover { background: rgba(148,163,184,0.1); }
+
+        /* ── Footer ── */
+        .footer {
+            padding: 28px 56px;
+            border-top: 1px solid var(--border);
+            background: rgba(255,255,255,0.02);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .footer-text strong { color: var(--brand); font-weight: 700; }
+
+        .footer-legend {
+            display: flex;
+            gap: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .legend-pip {
+            width: 6px;
+            height: 6px;
+            border-radius: 2px;
+        }
+
+        @media (max-width: 1100px) {
+            .hero { grid-template-columns: 1fr; }
+            .hero-stats { width: fit-content; }
+            .card { width: calc(33.33% - 7px); }
+        }
+
+        @media (max-width: 800px) {
+            .header, .hero, .timeline-bar, .main, .footer { padding-left: 20px; padding-right: 20px; }
+            .hero-title { font-size: 32px; }
+            .phase { grid-template-columns: 1fr; }
+            .phase-meta { border-right: none; border-bottom: 1px solid var(--border); }
+            .timeline-bar { grid-template-columns: repeat(3, 1fr); }
+            .card { width: calc(50% - 5px); }
+        }
+
+        @media (max-width: 560px) {
+            .card { width: 100%; }
+            .timeline-bar { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="logo-area">
+        <div class="logo-icon">🐯</div>
+        <div class="logo-text">
+            <span class="logo-name">Tiger eSIM</span>
+            <span class="logo-sub">香港老虎电讯有限公司</span>
+        </div>
+    </div>
+    <div class="header-right">
+        <span class="badge-version">当前版本 v3.1.0</span>
+        <span class="badge-year">2026 版本规划</span>
+    </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+    <div class="hero-left">
+        <div class="hero-eyebrow">Product Roadmap · 2026</div>
+        <h1 class="hero-title">从止血到增长<br><span>全年迭代路线图</span></h1>
+        <p class="hero-sub">覆盖 P0 紧急修复、拉新裂变、AI 体验升级、品类扩展四个战略阶段，以「增长 & 拉新」为首要驱动，逐步建立用户粘性护城河。</p>
+    </div>
+    <div class="hero-stats">
+        <div class="hero-stat">
+            <div class="hero-stat-num" style="color:#F87171">3</div>
+            <div class="hero-stat-label">P0<br>修复</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-num" style="color:#FB923C">10</div>
+            <div class="hero-stat-label">P1<br>增长</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-num" style="color:#60A5FA">8</div>
+            <div class="hero-stat-label">P2<br>体验</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-num" style="color:#34D399">6</div>
+            <div class="hero-stat-label">P3<br>扩张</div>
+        </div>
+        <div class="hero-stat">
+            <div class="hero-stat-num" style="color:#94A3B8">2</div>
+            <div class="hero-stat-label">P4<br>探索</div>
+        </div>
+    </div>
+</div>
+
+<!-- Timeline quick bar -->
+<div class="timeline-bar">
+    <div class="tbar-item">
+        <div class="tbar-circle" style="background:rgba(248,113,113,0.15);color:#F87171">P0</div>
+        <div class="tbar-info">
+            <div class="tbar-count" style="color:#F87171">v3.1.x</div>
+            <div class="tbar-label">Bug 止血</div>
+            <div class="tbar-time">2026 Q1 · 2 周内</div>
+        </div>
+    </div>
+    <div class="tbar-item">
+        <div class="tbar-circle" style="background:rgba(251,146,60,0.15);color:#FB923C">P1</div>
+        <div class="tbar-info">
+            <div class="tbar-count" style="color:#FB923C">v3.2</div>
+            <div class="tbar-label">增长核心</div>
+            <div class="tbar-time">2026 Q1–Q2 · 4–6 周</div>
+        </div>
+    </div>
+    <div class="tbar-item">
+        <div class="tbar-circle" style="background:rgba(96,165,250,0.15);color:#60A5FA">P2</div>
+        <div class="tbar-info">
+            <div class="tbar-count" style="color:#60A5FA">v3.3</div>
+            <div class="tbar-label">体验升级</div>
+            <div class="tbar-time">2026 Q2 · 8–12 周</div>
+        </div>
+    </div>
+    <div class="tbar-item">
+        <div class="tbar-circle" style="background:rgba(52,211,153,0.15);color:#34D399">P3</div>
+        <div class="tbar-info">
+            <div class="tbar-count" style="color:#34D399">v3.4</div>
+            <div class="tbar-label">品类扩展</div>
+            <div class="tbar-time">2026 Q3</div>
+        </div>
+    </div>
+    <div class="tbar-item">
+        <div class="tbar-circle" style="background:rgba(148,163,184,0.12);color:#94A3B8">P4</div>
+        <div class="tbar-info">
+            <div class="tbar-count" style="color:#94A3B8">v4.x</div>
+            <div class="tbar-label">战略探索</div>
+            <div class="tbar-time">2026 Q4+</div>
+        </div>
+    </div>
+</div>
+
+<!-- Main -->
+<main class="main">
+    <div class="section-label">产品迭代路线图</div>
+
+    <div class="timeline">
+
+        <!-- P0 -->
+        <div class="phase phase-p0">
+            <div class="phase-meta">
+                <div class="phase-badge"><span class="dot"></span>URGENT · 紧急</div>
+                <div class="phase-ver">v3.1.x</div>
+                <div class="phase-name">Bug 止血 & 核心修复</div>
+                <div class="phase-time">⏱ 2026 Q1 · 2 周内上线</div>
+                <div class="phase-cnt">3</div>
+            </div>
+            <div class="phase-cards">
+                <div class="card">
+                    <div class="card-title">支付宝偶发无法到达付款页</div>
+                    <div class="card-desc">支付宝 SDK 唤起偶发超时，增加 8s 超时检测，自动切换失败降级态，提供重新发起与换付款方式双出路</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">eSIM 兼容性前置检测</div>
+                    <div class="card-desc">进入套餐详情页时静默检测，结果以顶部 Banner 非阻断展示；不支持设备提供「购买并转发给其他设备」与「换选 SIM 实体卡」两条出路，降低退款率</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">到期套餐无法续订</div>
+                    <div class="card-desc">「我的套餐」到期卡增加「续订」入口，复用现有购买流程，减少因操作门槛高导致的用户流失</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- P1 -->
+        <div class="phase phase-p1">
+            <div class="phase-meta">
+                <div class="phase-badge"><span class="dot"></span>GROWTH · 增长</div>
+                <div class="phase-ver">v3.2</div>
+                <div class="phase-name">增长核心 & 转化体验</div>
+                <div class="phase-time">⏱ 2026 Q1–Q2 · 4–6 周</div>
+                <div class="phase-cnt">10</div>
+            </div>
+            <div class="phase-cards">
+                <div class="card">
+                    <div class="card-title">邀请裂变升级</div>
+                    <div class="card-desc">首页显眼入口、海报二维码生成、被邀人首单奖励、注册后 48h 内仍可补填邀请码</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">折扣码 / 兑换码</div>
+                    <div class="card-desc">购买确认页新增优惠码输入框，支持折扣码减价与兑换码直接换套餐，打通营销链路</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">绑卡记录保存</div>
+                    <div class="card-desc">接入支付网关 Token 化存储，下次付款一键选择已保存卡，减少支付摩擦提升复购</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">首页弹窗规范化</div>
+                    <div class="card-desc">规范触发规则（仅首次或活动期），每 7 天最多弹 1 次，增加「不再提醒」选项</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">多币种结算支持</div>
+                    <div class="card-desc">结算页支持 CNY / JPY / SGD / EUR / GBP 展示，对接汇率 API 动态转换，降低境外用户决策摩擦</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · 竞品对标</div>
+                    <div class="card-title">流量用量实时监控</div>
+                    <div class="card-desc">出行中实时查看剩余流量 & 每日消耗趋势；用量低于 20% 自动预警并弹出加购 CTA</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · 行业空白</div>
+                    <div class="card-title">eSIM 激活状态追踪</div>
+                    <div class="card-desc">购买后分步展示 eSIM 下发 & 安装进度，下发成功后推送通知并附机型专属教程</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · 复购驱动</div>
+                    <div class="card-title">智能推送通知策略</div>
+                    <div class="card-desc">7 类场景：流量告急、到期提醒、GPS 抵达目的地触发激活、历史行程复购预测、积分到期等</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge" style="background:rgba(251,146,60,0.12);color:#FB923C;border:1px solid rgba(251,146,60,0.3)">裂变前置</div>
+                    <div class="card-title">WhatsApp 客服接入</div>
+                    <div class="card-desc">「我的」页客服入口增加 WhatsApp Deep Link，预填用户 ID 和套餐信息，快速定位问题。裂变用户首单遇阻时的兜底，直接决定口碑裂变能否正向循环</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge" style="background:rgba(251,146,60,0.12);color:#FB923C;border:1px solid rgba(251,146,60,0.3)">裂变前置</div>
+                    <div class="card-title">购买交互灵活化</div>
+                    <div class="card-desc">套餐选购重构为两级切换：主 Tab（纯数据 / 数据+通话+短信）+ 子 Toggle（无限量 / 固定流量）；支持一次购买多张卡（1–5 张），满足团队场景。被邀请的新用户首次下单体验直接影响邀请口碑</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- P2 -->
+        <div class="phase phase-p2">
+            <div class="phase-meta">
+                <div class="phase-badge"><span class="dot"></span>EXPERIENCE · 体验</div>
+                <div class="phase-ver">v3.3</div>
+                <div class="phase-name">产品体验深度升级</div>
+                <div class="phase-time">⏱ 2026 Q2 · 8–12 周</div>
+                <div class="phase-cnt">8</div>
+            </div>
+            <div class="phase-cards">
+                <div class="card">
+                    <div class="card-title">老虎智能 AI 全面升级</div>
+                    <div class="card-desc">多轮上下文管理、流式输出、AI Agent 可直接查套餐状态 / 续费 / 查余额，识别失败转人工</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · AI 创收</div>
+                    <div class="card-title">AI 客服下单直链</div>
+                    <div class="card-desc">用户在对话中表达购买意向后，AI 生成可点击的下单卡片，一键跳转预填结账页，30 分钟限时有效</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">多设备 eSIM 分享激活</div>
+                    <div class="card-desc">购买后生成带 Token 的激活链接或二维码，另一台支持 eSIM 的设备扫码完成绑定激活</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">SIM 实体卡入口显化</div>
+                    <div class="card-desc">首页 / 套餐页明确展示实体 SIM 选项，补充邮寄地址填写与物流追踪完整流程</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-benchmark">策略调整</div>
+                    <div class="card-title">套餐质量反馈（内部）</div>
+                    <div class="card-desc">不做公开文字评价（信号质量依赖运营商，差评不可控）。改为三维结构化反馈：信号 / 速度 / 激活难易，聚合指标展示在详情页，原始数据内部用于选品优化</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · 新场景</div>
+                    <div class="card-title">礼品卡 / 送礼功能</div>
+                    <div class="card-desc">购买套餐作为礼品发送，填写对方手机号 / 邮箱并设定送达时间，打开同事礼赠 & 情侣互送场景</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · 内容价值</div>
+                    <div class="card-title">目的地旅行信息卡</div>
+                    <div class="card-desc">套餐详情页附目的地货币、插座、运营商、交通卡、时差等实用信息，传递「Tiger 懂旅行」品牌感</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · 行业空白</div>
+                    <div class="card-title">iOS 桌面 Widget</div>
+                    <div class="card-desc">小 / 中尺寸 Widget 展示剩余流量 & 天数，出行中无需打开 App；中尺寸含「加购流量」快捷按钮</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- P3 -->
+        <div class="phase phase-p3">
+            <div class="phase-meta">
+                <div class="phase-badge"><span class="dot"></span>EXPAND · 扩张</div>
+                <div class="phase-ver">v3.4</div>
+                <div class="phase-name">品类扩展 & 用户粘性</div>
+                <div class="phase-time">⏱ 2026 Q3</div>
+                <div class="phase-cnt">6</div>
+            </div>
+            <div class="phase-cards">
+                <div class="card">
+                    <div class="card-title">多国联合套餐</div>
+                    <div class="card-desc">上架日韩卡、东南亚多国卡、欧洲卡、北美卡，在「区域」Tab 独立展示，提升客单价</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">短信 & 通话分钟包</div>
+                    <div class="card-desc">套餐详情页新增短信包、通话分钟包加购选项，配合运营商能力逐步开放，扩展 ARPU</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">会员积分体系</div>
+                    <div class="card-desc">消费积分兑换套餐、等级会员（铜 / 银 / 金 / 钻）享折扣和专属客服、签到任务、月度消费返现</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">每月免费 1G 权益</div>
+                    <div class="card-desc">会员 / 签到体系融入每月 1G 免费流量作为留存钩子，驱动用户持续回访，观察 30 日留存变化</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · ARPU 提升</div>
+                    <div class="card-title">家庭 / 团队共享套餐</div>
+                    <div class="card-desc">主账号一次购买多人份，分配给家庭成员，人均价格更低，主账号可查看所有人用量，填补行业空白</div>
+                </div>
+                <div class="card">
+                    <div class="card-badge badge-new">补充 · LTV 提升</div>
+                    <div class="card-title">套餐自动续费订阅</div>
+                    <div class="card-desc">月度订阅制面向商务 / 数字游民，长期订阅享 15% 折扣，到期前 3 天推送确认通知，可随时取消</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- P4 -->
+        <div class="phase phase-p4">
+            <div class="phase-meta">
+                <div class="phase-badge"><span class="dot"></span>EXPLORE · 探索</div>
+                <div class="phase-ver">v4.x</div>
+                <div class="phase-name">中长期战略探索</div>
+                <div class="phase-time">⏱ 2026 Q4 及以后</div>
+                <div class="phase-cnt">2</div>
+            </div>
+            <div class="phase-cards">
+                <div class="card">
+                    <div class="card-title">对公企业账户</div>
+                    <div class="card-desc">企业账户体系，支持多子账号管理、批量购买、发票开具、对公支付方式，开拓 B 端市场</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">号码池自选号码</div>
+                    <div class="card-desc">探索实体 SIM 业务中的号码池选号功能，需配合运营商号码资源开放，属长期技术储备</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-text">
+        共覆盖 <strong>24 个改进点</strong> · <strong>5 个优先级梯队</strong> · 含 <strong>9 项竞品对标补充</strong> · Tiger eSIM v3.1.0 → v4.x · 2026 全年规划
+    </div>
+    <div class="footer-legend">
+        <div class="legend-item"><div class="legend-pip" style="background:#F87171"></div>P0 紧急</div>
+        <div class="legend-item"><div class="legend-pip" style="background:#FB923C"></div>P1 增长</div>
+        <div class="legend-item"><div class="legend-pip" style="background:#60A5FA"></div>P2 体验</div>
+        <div class="legend-item"><div class="legend-pip" style="background:#34D399"></div>P3 扩张</div>
+        <div class="legend-item"><div class="legend-pip" style="background:#94A3B8"></div>P4 探索</div>
+    </div>
+</footer>
+
+</body>
+</html>
