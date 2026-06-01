@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 赋能官岗位规划书（精简版）· 智目科技</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --header-bg: #0f172a;
+      --accent: #2563eb;
+      --accent-light: #dbeafe;
+      --accent-mid: #93c5fd;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --green: #059669;
+      --green-light: #d1fae5;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+    .header {
+      background: var(--header-bg);
+      padding: 36px 48px 32px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 600px 400px at 80% -10%, rgba(37,99,235,.35) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .header-meta {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent-mid);
+      margin-bottom: 10px;
+    }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .header p {
+      font-size: 14px;
+      color: #94a3b8;
+      max-width: 600px;
+    }
+    .header p strong { color: #e2e8f0; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-mid);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .back-link:hover { color: #fff; }
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 48px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 20px 0 10px;
+      color: var(--accent);
+    }
+    p, li {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    ul { padding-left: 20px; margin: 8px 0; }
+    li { margin-bottom: 4px; }
+    strong { color: var(--text-primary); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 13.5px;
+    }
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 8px 12px 8px 0;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 10px 12px 10px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    .highlight {
+      background: var(--accent-light);
+      border: 1.5px solid var(--accent-mid);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin: 12px 0;
+    }
+    .highlight-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    code {
+      font-size: 12.5px;
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent);
+    }
+    .phase-block {
+      background: #f8fafc;
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 14px 18px;
+      margin: 10px 0;
+    }
+    .phase-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .promise {
+      background: var(--green-light);
+      border: 1.5px solid #6ee7b7;
+      border-radius: var(--radius-sm);
+      padding: 18px 22px;
+      margin-top: 16px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--green);
+      text-align: center;
+    }
+    .footer {
+      background: var(--header-bg);
+      padding: 20px 48px;
+      text-align: center;
+    }
+    .footer-note {
+      font-size: 12.5px;
+      color: #64748b;
+    }
+    @media (max-width: 760px) {
+      .header, .main, .footer { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-meta">深圳市智目科技有限公司 · 2026年5月</div>
+      <h1>AI 赋能官岗位规划书（精简版）</h1>
+      <p>完整版含各部门工具包、技术架构、培训体系和详细预算，<strong>可在复试中详细展开。</strong></p>
+      <a class="back-link" href="./index.html">← 返回一页展示总览</a>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <div class="card">
+      <h2>一句话定位</h2>
+      <p>智目的业务结构（跨境多平台电商 + 无人机研发制造 + 全球售后）天然存在大量重复流程、多语言沟通和数据孤岛——这恰恰是 AI 落地价值最高的组合。</p>
+      <p><strong>我的目标不是"让员工用上 AI 工具"，而是让 AI 真正进入业务流程，并产生可量化的 ROI。</strong></p>
+      <div class="promise">90 天内让 2 个核心场景跑出可量化 ROI，3 个轻量场景完成验证，交出第一批真实效率数据。</div>
+    </div>
+
+    <div class="card">
+      <h2>当前最值得解决的 5 个痛点</h2>
+      <table>
+        <thead>
+          <tr><th>痛点</th><th>影响范围</th><th>当前代价</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>多平台 Listing 重复撰写</strong></td><td>亚马逊 / eBay / 速卖通 / 淘宝 / 独立站运营</td><td>每款新品上线耗时 2-5 天</td></tr>
+          <tr><td><strong>售后重复问题占 70%+</strong></td><td>售后客服团队</td><td>人力持续消耗，国际客户等待时间长</td></tr>
+          <tr><td><strong>跨境长周期补货，人工预测难以系统化</strong></td><td>采购计划部门</td><td>30–45 天海运周期叠加多品类季节波动，积压与断货并存</td></tr>
+          <tr><td><strong>展会名片 / 询盘线索丢失</strong></td><td>国际销售团队</td><td>展会后跟进率低，线索流失</td></tr>
+          <tr><td><strong>选品依赖人工调研，竞品动态难持续跟踪</strong></td><td>运营团队</td><td>调研周期长，竞品降价或新爆款出现时反应滞后</td></tr>
+          <tr><td><strong>AI 工具靠翻墙 + 个人账号</strong></td><td>全员</td><td>随时封号、数据泄露风险、无法统一管控</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>90 天我会做什么</h2>
+
+      <div class="phase-block">
+        <div class="phase-title">第 1-30 天：打地基 + 摸清场景</div>
+        <ul>
+          <li>部署统一 AI 网关（One API），废弃个人翻墙账号</li>
+          <li>影子跟访 12 个岗位（坐到员工旁边看他们怎么工作）</li>
+          <li>输出《AI 场景优先级矩阵》，确认 5 个试点</li>
+        </ul>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-title">第 31-60 天：2 个核心试点 + 3 个轻量验证上线</div>
+        <p style="margin:8px 0 4px;font-weight:600;color:var(--accent)">【核心试点】需要 IT 配合，深度集成，重点出 ROI</p>
+        <ul>
+          <li>售后 AI 客服（多渠道自动回复，人工兜底）</li>
+          <li>库存智能预测 + 积压预警（接 ERP 历史数据）</li>
+        </ul>
+        <p style="margin:12px 0 4px;font-weight:600;color:var(--green)">【轻量验证】我独立完成，1-2 周内见效</p>
+        <ul>
+          <li>多平台内容生产流水线（Dify 工作流，一键 5 平台）</li>
+          <li>WhatsApp B2B 询盘草稿推送 + 展会线索管理（AI 辅助销售判断，不自动发送）</li>
+          <li>竞品监控 + 选品趋势分析（抓取平台榜单 + Google Trends，辅助运营选品决策）</li>
+          <li>报关文件 OCR 自动录入 ERP</li>
+        </ul>
+      </div>
+
+      <div class="phase-block">
+        <div class="phase-title">第 61-90 天：出数据 + 推广</div>
+        <ul>
+          <li>5 个试点前后效率对比报告</li>
+          <li>启动全员 AI 培训（4 个层级）</li>
+          <li>上线内部 AI 最佳实践知识库</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>组织推进策略</h2>
+      <p>AI 落地 70% 是组织问题，不是技术问题。我会：</p>
+      <ul>
+        <li><strong>先找明星员工，不铺全员</strong>：选 1-2 个最愿意折腾的人先跑通，让他们带动周围同事</li>
+        <li><strong>前 3 个月不碰绩效</strong>：不让员工觉得 AI 是来"监控"或"替代"他们的，消除抵触</li>
+        <li><strong>AI 输出必须人工确认</strong>：所有 AI 生成内容，发出前必须有人过目，不绕过人的判断</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>预算：从极低成本起步</h2>
+      <table>
+        <thead>
+          <tr><th>阶段</th><th>月支出参考</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>第 1 个月（测试验证）</strong></td><td>约 2,000 – 5,000 元</td><td>API 测试 + 工具订阅 + 环境搭建</td></tr>
+          <tr><td><strong>第 2–3 个月（试点运行）</strong></td><td>约 5,000 – 15,000 元</td><td>5 个场景日常跑量，实际成本随客服消息量和选品数据采购浮动</td></tr>
+          <tr><td><strong>6 个月后</strong></td><td>按 ROI 动态扩容</td><td>用量越大说明 ROI 越高，成本与价值同步增长；不达标的场景随时停</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:8px;font-size:13px;color:var(--text-muted)">核心原则：先"外挂"验证效果，有 ROI 再"内嵌"开发。不先花大钱。</p>
+    </div>
+
+    <div class="card">
+      <h2>我能亲自做 vs 需要 IT 配合</h2>
+      <table>
+        <thead>
+          <tr><th>我能独立完成</th><th>需要 IT 配合</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>工作流搭建</td><td>金蝶 ERP 深度 API 集成</td></tr>
+          <tr><td>n8n / Make 自动化对接</td><td>私有化 GPU 服务器部署</td></tr>
+          <tr><td>Prompt 工程设计与优化</td><td>企业权限系统改造</td></tr>
+          <tr><td>Azure Document Intelligence OCR 配置</td><td>多系统数据库打通</td></tr>
+          <tr><td>RAG 向量知识库构建（Dify 内置）</td><td>多租户 SaaS 架构</td></tr>
+          <tr><td>One API 网关部署</td><td>核心业务系统安全审计</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>我做过的真实验证</h2>
+
+      <h3>案例 1：AI 补货算法设计（跨境供应链 ERP 项目）</h3>
+      <ul>
+        <li><strong>背景</strong>：中墨跨境海运周期 30-45 天，计划部门靠经验拍脑袋补货，积压与断货并存</li>
+        <li><strong>核心设计</strong>：按历史数据量自动切换三种模式——冷启动（<30天）→ 过渡期（30-90天）→ 算法期（≥90天，乘法季节性系数）</li>
+        <li><strong>效果（目标）</strong>：库存积压率 ↓20%，库存资金占用 ↓30%，从「拍脑袋」到可审计的算法决策</li>
+      </ul>
+
+      <h3>案例 2：AI 幻觉治理系统（智能客服 SaaS 项目）</h3>
+      <ul>
+        <li><strong>背景</strong>：电商客服 AI 频繁捏造退款承诺、编造发货时间，引发投诉</li>
+        <li><strong>三层防护</strong>：RAG 强制召回 → 越权检测（20 条规则引擎）→ 置信度色标（绿 ≥85 / 橙 60-84 / 红 <60）</li>
+        <li><strong>效果</strong>：将「AI 乱承诺」从业务风险转变为可量化、可干预的工程问题</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border:2px solid var(--green);background:var(--green-light)">
+      <h2 style="color:var(--green)">核心承诺</h2>
+      <p style="font-size:15px;font-weight:600;color:var(--green);text-align:center;margin:12px 0">
+        90 天内交出可量化效率数据。如果 2 个核心试点没有跑出正向 ROI，我愿意接受考核。
+      </p>
+      <p style="text-align:center">我希望 AI 在智目不是停留在"试用工具"，而是真正成为业务流程的一部分——每个部门都有自己的工具包，每个效率提升都有数据支撑。</p>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-note">完整版规划书（含各部门工具包、技术架构、培训体系）可在复试中详细展开</div>
+  </footer>
+
+</body>
+</html>
