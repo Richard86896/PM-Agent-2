@@ -344,15 +344,7 @@
         <textarea id="verifiedSpecs" rows="3" placeholder='{"model":"A3293","storage":"256GB","chip":"A17 Pro","camera":"4800万主摄","waterproof":"IP68","connectivity":"5G"}'></textarea>
       </div>
 
-      <div class="field">
-        <label for="brandMode">品牌策略模式</label>
-        <select id="brandMode">
-          <option value="auto">auto — 自动判断</option>
-          <option value="official_brand">official_brand — 正规品牌 / 授权货</option>
-          <option value="white_label" selected>white_label — 白牌 / 通用（推荐体验）</option>
-          <option value="placeholder_safe">placeholder_safe — 信息不清时安全中断</option>
-        </select>
-      </div>
+      <input type="hidden" id="brandMode" value="white_label">
 
       <button class="submit-btn" id="submitBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="btnIcon">
