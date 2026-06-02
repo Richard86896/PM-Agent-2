@@ -330,6 +330,15 @@
     }
     .upload-zone.drag-over { animation: pulse-border 1s ease-in-out infinite; }
   </style>
+<script>
+  (function(){
+    var co = new URLSearchParams(location.search).get('co') || '贵公司';
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+      document.title = document.title.replace('智目科技', co);
+    });
+  })();
+</script>
 </head>
 <body>
 
@@ -360,7 +369,7 @@
         <path d="M45 30 L45 34 L41 34" stroke="#4a7cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     </div>
-    <h1>智目科技 · 展会名片录入</h1>
+    <h1><span data-co>贵公司</span> · 展会名片录入</h1>
     <p>拍照上传，AI 自动识别并写入线索库</p>
   </div>
 
@@ -443,7 +452,7 @@
   </div>
 </div>
 
-<div class="footer">由 <span>智目科技 AI</span> 驱动识别入库</div>
+<div class="footer">由 <span data-co>贵公司</span> AI 驱动识别入库</div>
 
 <script>
 (function () {

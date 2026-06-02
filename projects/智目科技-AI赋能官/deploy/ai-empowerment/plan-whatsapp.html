@@ -188,6 +188,15 @@ footer a{color:var(--rust);text-decoration:none}
 .acc.on{border-color:var(--ink)}
 </style>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="88e021da-f557-4c17-90dc-b90677d04892"></script>
+<script>
+  (function(){
+    var co = new URLSearchParams(location.search).get('co') || '贵公司';
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+      document.title = document.title.replace('智目科技', co);
+    });
+  })();
+</script>
 </head>
 <body>
 
@@ -205,7 +214,7 @@ footer a{color:var(--rust);text-decoration:none}
 
 <header class="hero"><div class="wrap"><div class="hero-grid">
   <div class="rv in">
-    <div class="eyebrow">智目科技 · AI 赋能官试点</div>
+    <div class="eyebrow"><span data-co>贵公司</span> · AI 赋能官试点</div>
     <h1>询盘进来,<br><em>五分钟出草稿</em></h1>
     <p class="lead">客户 WhatsApp / Telegram 发来询盘，自动识别意图、多语言起草回复、推送给对应销售确认——AI 只辅助判断，发出动作由人控制。</p>
     <div class="tags">
@@ -332,7 +341,7 @@ footer a{color:var(--rust);text-decoration:none}
 </div></section>
 
 <footer><div class="wrap">
-  <div>WhatsApp 外贸询盘智能跟进助手 · 实现方案 · 智目科技</div>
+  <div>WhatsApp 外贸询盘智能跟进助手 · 实现方案 · <span data-co>贵公司</span></div>
   <div class="todo"><span>渠道：WhatsApp Cloud API / Telegram</span><span>已本地跑通端到端</span></div>
 </div></footer>
 

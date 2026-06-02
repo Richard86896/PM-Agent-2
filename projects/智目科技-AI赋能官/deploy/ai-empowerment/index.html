@@ -741,6 +741,15 @@
     }
   </style>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="88e021da-f557-4c17-90dc-b90677d04892"></script>
+<script>
+  (function(){
+    var co = new URLSearchParams(location.search).get('co') || '贵公司';
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+      document.title = document.title.replace('智目科技', co);
+    });
+  })();
+</script>
 </head>
 <body>
 
@@ -749,11 +758,11 @@
     <div class="header-inner">
       <div class="header-avatar">ZY</div>
       <div class="header-content">
-        <div class="header-meta">深圳市智目科技有限公司 · AI 赋能官岗位规划书 · 2026年5月</div>
+        <div class="header-meta"><span data-co>贵公司</span> · AI 赋能官岗位规划书 · 2026年5月</div>
         <h1>张也 Richard</h1>
         <div class="header-subtitle">复合型产品经理 · AI 落地实践者</div>
         <p class="header-tagline">
-          智目的业务结构（跨境业务 + 无人机研发制造 + 全球售后）天然存在大量重复流程、多语言沟通和数据孤岛——AI 落地价值极高。
+          企业日常运营中往往存在大量重复流程、多语言沟通和数据孤岛——这恰恰是 AI 赋能价值最高的场景，也是我希望优先突破的方向。
           <strong>目标不是让员工"用上 AI 工具"，而是让 AI 进入业务流程并产生可量化 ROI。</strong>
         </p>
         <div class="header-stats">
@@ -1056,7 +1065,7 @@
     <!-- 核心承诺 -->
     <div class="commit-card">
       <div class="commit-text">90 天内交出可量化效率数据。如果 2 个核心试点没有跑出正向 ROI，我愿意接受考核。</div>
-      <div class="commit-sub">我希望 AI 在智目不是停留在"试用工具"，而是真正成为业务流程的一部分——每个部门都有自己的工具包，每个效率提升都有数据支撑。</div>
+      <div class="commit-sub">我希望 AI 在<span data-co>贵公司</span>不是停留在"试用工具"，而是真正成为业务流程的一部分——每个部门都有自己的工具包，每个效率提升都有数据支撑。</div>
     </div>
 
   </div>
