@@ -539,9 +539,17 @@
       }
 
       const data = await res.json();
+      const status = data?.data?.status || data?.status || '';
       const outputs = data?.data?.outputs || data?.outputs || {};
-      const text = outputs.final_output || outputs.text || outputs.result || outputs.listing || JSON.stringify(outputs, null, 2);
-      resultBody.textContent = text;
+      const text = outputs.final_output || outputs.text || outputs.result || outputs.listing || '';
+
+      if (text) {
+        resultBody.textContent = text;
+      } else {
+        // 输出为空时展示完整原始响应帮助排查
+        const raw = JSON.stringify(data, null, 2);
+        resultBody.textContent = `⚠️ 工作流状态: ${status || '未知'}\n\n原始返回（用于排查）:\n${raw}`;
+      }
       resultCard.classList.add('show');
       resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (err) {
