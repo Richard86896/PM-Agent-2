@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>审核卡片体验 · 智目科技</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-start: #0f1629;
+      --bg-end: #1e2d5a;
+      --card-bg: #ffffff;
+      --accent: #4a7cf8;
+      --accent-2: #6c9dff;
+      --green: #16a34a;
+      --green-soft: #f0fdf4;
+      --green-border: #86efac;
+      --red: #dc2626;
+      --red-soft: #fff1f2;
+      --red-border: #fca5a5;
+      --text-primary: #0f1629;
+      --text-secondary: #5a6480;
+      --text-muted: #9aa0b4;
+      --border: #e4e8f4;
+      --radius-card: 24px;
+      --radius-btn: 14px;
+      --shadow-card: 0 24px 64px rgba(10,20,60,.22), 0 4px 16px rgba(10,20,60,.10);
+      --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      background: linear-gradient(155deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      background-attachment: fixed;
+    }
+    body {
+      min-height: 100dvh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 40px;
+    }
+
+    .bg-glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .glow-circle { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; }
+    .gc1 { width: 420px; height: 420px; background: #4a7cf8; top: -120px; right: -80px; }
+    .gc2 { width: 300px; height: 300px; background: #7c4af8; bottom: 60px; left: -80px; }
+    .gc3 { width: 200px; height: 200px; background: #4af8d0; top: 40%; left: 40%; }
+
+    .wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 480px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .label-bar {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.5);
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .label-bar::before, .label-bar::after {
+      content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.15);
+    }
+
+    /* ── 飞书卡片 ── */
+    .feishu-card {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .fc-header {
+      background: linear-gradient(135deg, #1a2550 0%, #2a3d7a 100%);
+      padding: 18px 20px 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .fc-app-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .fc-header-text { flex: 1; }
+    .fc-app-name { font-size: 12px; color: rgba(255,255,255,.5); font-weight: 500; }
+    .fc-title { font-size: 15px; font-weight: 700; color: #fff; margin-top: 2px; }
+    .fc-badge {
+      font-size: 11px; font-weight: 700; padding: 3px 9px;
+      border-radius: 99px; background: #f59e0b; color: #fff;
+      flex-shrink: 0;
+    }
+
+    .fc-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+
+    .fc-row { display: flex; gap: 10px; align-items: flex-start; }
+    .fc-key {
+      font-size: 12.5px; font-weight: 600; color: var(--text-muted);
+      min-width: 64px; padding-top: 1px; flex-shrink: 0;
+    }
+    .fc-val { font-size: 14px; color: var(--text-primary); font-weight: 500; line-height: 1.5; }
+    .fc-val.score {
+      font-size: 18px; font-weight: 800;
+      color: #16a34a;
+    }
+    .fc-val.score .bar {
+      display: inline-block;
+      width: 80px; height: 6px;
+      background: #dcfce7; border-radius: 99px;
+      vertical-align: middle; margin-left: 8px; overflow: hidden;
+    }
+    .fc-val.score .bar-fill {
+      height: 100%; background: #16a34a; border-radius: 99px;
+    }
+
+    .divider { height: 1px; background: var(--border); }
+
+    .fc-draft {
+      background: #f8faff; border: 1.5px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+      font-size: 14px; color: var(--text-primary);
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+    .fc-draft-label {
+      font-size: 12px; font-weight: 600; color: var(--text-muted);
+      margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+    }
+    .fc-draft-label::before {
+      content: '';
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+    }
+
+    .fc-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .fc-btn {
+      flex: 1; padding: 13px 12px;
+      font-family: var(--font); font-size: 14.5px; font-weight: 700;
+      border: none; border-radius: var(--radius-btn);
+      cursor: pointer; transition: all .18s;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .fc-btn-confirm {
+      background: #16a34a; color: #fff;
+      box-shadow: 0 6px 18px rgba(22,163,74,.3);
+    }
+    .fc-btn-confirm:hover { background: #15803d; transform: translateY(-1px); box-shadow: 0 8px 22px rgba(22,163,74,.38); }
+    .fc-btn-reject {
+      background: var(--red-soft); color: var(--red);
+      border: 1.5px solid var(--red-border);
+    }
+    .fc-btn-reject:hover { background: #fee2e2; }
+    .fc-btn svg { width: 16px; height: 16px; }
+
+    /* 已发送态 */
+    .sent-state {
+      display: none;
+      padding: 20px;
+      flex-direction: column; align-items: center; gap: 12px;
+      text-align: center;
+    }
+    .sent-state.show { display: flex; }
+    .sent-icon {
+      width: 56px; height: 56px;
+      background: var(--green-soft); border: 2px solid var(--green-border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+    .sent-title { font-size: 17px; font-weight: 800; color: var(--text-primary); }
+    .sent-sub { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; }
+
+    /* 放弃态 */
+    .rejected-state {
+      display: none;
+      padding: 20px;
+      flex-direction: column; align-items: center; gap: 12px;
+      text-align: center;
+    }
+    .rejected-state.show { display: flex; }
+    .rej-icon {
+      width: 56px; height: 56px;
+      background: var(--red-soft); border: 2px solid var(--red-border);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 26px;
+    }
+    .rej-title { font-size: 17px; font-weight: 800; color: var(--text-primary); }
+    .rej-sub { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; }
+
+    .reset-btn {
+      margin-top: 4px;
+      padding: 10px 22px;
+      font-family: var(--font); font-size: 13.5px; font-weight: 600;
+      color: var(--text-secondary);
+      background: #f4f6fb; border: 1.5px solid var(--border);
+      border-radius: 10px; cursor: pointer;
+      transition: background .15s;
+    }
+    .reset-btn:hover { background: #e8edf8; }
+
+    /* 说明卡 */
+    .info-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px; padding: 16px 18px;
+      font-size: 13px; color: rgba(255,255,255,.55);
+      line-height: 1.7;
+    }
+    .info-card b { color: rgba(255,255,255,.8); }
+
+    .footer {
+      position: relative; z-index: 1;
+      margin-top: 8px;
+      font-size: 12px; color: rgba(255,255,255,.32);
+      text-align: center;
+    }
+    .footer a { color: rgba(255,255,255,.38); text-decoration: none; }
+    .footer a:hover { color: rgba(255,255,255,.65); }
+  </style>
+  <script>
+    (function(){
+      var co = new URLSearchParams(location.search).get('co') || '贵公司';
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+        document.title = document.title.replace('智目科技', co);
+      });
+    })();
+  </script>
+</head>
+<body>
+
+<div class="bg-glow">
+  <div class="glow-circle gc1"></div>
+  <div class="glow-circle gc2"></div>
+  <div class="glow-circle gc3"></div>
+</div>
+
+<div class="wrap">
+
+  <div class="label-bar">飞书 · 销售群审核卡片</div>
+
+  <!-- 飞书卡片 -->
+  <div class="feishu-card" id="mainCard">
+
+    <div class="fc-header">
+      <div class="fc-app-icon">🤖</div>
+      <div class="fc-header-text">
+        <div class="fc-app-name"><span data-co>贵公司</span> · AI 询盘助手</div>
+        <div class="fc-title">新询盘待审核</div>
+      </div>
+      <div class="fc-badge">待审核</div>
+    </div>
+
+    <div class="fc-body" id="cardBody">
+      <div class="fc-row">
+        <span class="fc-key">客户</span>
+        <span class="fc-val">Ahmed Al-Rashid（WhatsApp +971-50-xxx-xxxx）</span>
+      </div>
+      <div class="fc-row">
+        <span class="fc-key">意向分</span>
+        <span class="fc-val score">
+          82
+          <span class="bar"><span class="bar-fill" style="width:82%"></span></span>
+        </span>
+      </div>
+      <div class="fc-row">
+        <span class="fc-key">识别语言</span>
+        <span class="fc-val">英语 🇬🇧</span>
+      </div>
+      <div class="fc-row">
+        <span class="fc-key">原始询盘</span>
+        <span class="fc-val">Hi, I'm interested in your LED flood lights. Can you give me the price for 500 units? We need delivery within 30 days.</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div>
+        <div class="fc-draft-label">AI 草稿（待销售补充价格 / 交期后发出）</div>
+        <div class="fc-draft">Dear Ahmed,
+
+Thank you for reaching out! We're glad to hear you're interested in our LED flood lights.
+
+For 500 units, our team will prepare a detailed quotation for you. Regarding your 30-day delivery requirement, we'll confirm feasibility with our production team and get back to you shortly.
+
+Could you please share more details on:
+• Wattage and beam angle requirements?
+• Installation environment (indoor/outdoor)?
+
+We look forward to working with you.
+
+Best regards,
+[销售姓名]
+<span data-co>贵公司</span>
+
+---
+⚠️ 价格 / 交期请销售补充后再发送</div>
+      </div>
+
+      <div class="fc-actions">
+        <button class="fc-btn fc-btn-confirm" id="confirmBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          确认发送
+        </button>
+        <button class="fc-btn fc-btn-reject" id="rejectBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          放弃
+        </button>
+      </div>
+
+      <div class="sent-state" id="sentState">
+        <div class="sent-icon">✅</div>
+        <div class="sent-title">已发送给客户</div>
+        <div class="sent-sub">回复已通过 WhatsApp 发回给 Ahmed，线索状态已更新为「已发送」。</div>
+        <button class="reset-btn" id="resetBtn">重置演示</button>
+      </div>
+
+      <div class="rejected-state" id="rejectedState">
+        <div class="rej-icon">🗑️</div>
+        <div class="rej-title">已放弃该草稿</div>
+        <div class="rej-sub">草稿已丢弃，线索状态保持「待处理」，可在飞书多维表格中手动编辑后再发送。</div>
+        <button class="reset-btn" id="resetBtn2">重置演示</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <b>真实场景说明：</b>收到询盘后，AI 自动起草回复并将此卡片推送至飞书销售群。销售在手机上点击「确认发送」后，系统才真实回复客户——AI 仅辅助起草，发出动作始终由人控制。
+  </div>
+
+  <div class="footer">
+    <a href="plan-whatsapp.html">← 查看完整方案</a>
+    &nbsp;·&nbsp;
+    <span data-co>贵公司</span> AI 赋能外贸询盘助手
+  </div>
+
+</div>
+
+<script>
+(function () {
+  const confirmBtn   = document.getElementById('confirmBtn');
+  const rejectBtn    = document.getElementById('rejectBtn');
+  const cardBody     = document.getElementById('cardBody');
+  const sentState    = document.getElementById('sentState');
+  const rejectedState= document.getElementById('rejectedState');
+
+  function hideActions() {
+    confirmBtn.closest('.fc-actions').style.display = 'none';
+  }
+
+  confirmBtn.addEventListener('click', function () {
+    hideActions();
+    sentState.classList.add('show');
+  });
+
+  rejectBtn.addEventListener('click', function () {
+    hideActions();
+    rejectedState.classList.add('show');
+  });
+
+  function reset() {
+    confirmBtn.closest('.fc-actions').style.display = '';
+    sentState.classList.remove('show');
+    rejectedState.classList.remove('show');
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', reset);
+  document.getElementById('resetBtn2').addEventListener('click', reset);
+})();
+</script>
+</body>
+</html>
