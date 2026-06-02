@@ -216,6 +216,15 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .acc.on{border-color:var(--ink)}
 </style>
 <script defer src="https://cloud.umami.is/script.js" data-website-id="88e021da-f557-4c17-90dc-b90677d04892"></script>
+<script>
+  (function(){
+    var co = new URLSearchParams(location.search).get('co') || '贵公司';
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+      document.title = document.title.replace('智目科技', co);
+    });
+  })();
+</script>
 </head>
 <body>
 
@@ -236,7 +245,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 <!-- HERO -->
 <header class="hero"><div class="wrap"><div class="hero-grid">
   <div class="rv in">
-    <div class="eyebrow">智目科技 · AI 赋能官试点</div>
+    <div class="eyebrow"><span data-co>贵公司</span> · AI 赋能官试点</div>
     <h1>一次录入,<br><em>六平台合规出稿</em></h1>
     <p class="lead">基于 Dify 工作流的多平台 Listing 智能生成：提取产品资料 → 联网核实 → 按平台逐个生成 → 合规审查去重 → 自动落库飞书 / 钉钉文档。</p>
     <div class="tags">
@@ -381,7 +390,7 @@ footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 </div></section>
 
 <footer><div class="wrap">
-  <div>多平台 Listing 自动生成 · 实现方案 · 智目科技</div>
+  <div>多平台 Listing 自动生成 · 实现方案 · <span data-co>贵公司</span></div>
   <div class="todo"><span>待办：接入 Dify Knowledge 检索</span><span>命名隧道固定域名</span><span>品牌策略模式细化</span></div>
 </div></footer>
 
