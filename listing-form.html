@@ -307,22 +307,22 @@
       <div class="field-row">
         <div class="field">
           <label for="productName">产品名称</label>
-          <input type="text" id="productName" placeholder="例：Phone 15 Pro Max 256GB">
+          <input type="text" id="productName" placeholder="例：RGB 机械键盘 TK-87 无线版">
         </div>
         <div class="field">
           <label for="targetAudience">目标人群</label>
-          <input type="text" id="targetAudience" placeholder="例：25-40岁职场人士、数码爱好者">
+          <input type="text" id="targetAudience" placeholder="例：18-35岁游戏玩家、程序员、办公用户">
         </div>
       </div>
 
       <div class="field">
         <label for="productDesc">产品描述 / 原始卖点</label>
-        <textarea id="productDesc" rows="3" placeholder="例：钛金属机身，A17Pro芯片，4800万像素主摄，全天续航，灵动岛交互，IP68防水，支持5G"></textarea>
+        <textarea id="productDesc" rows="3" placeholder="例：87键紧凑布局，热插拔轴体，三模连接（有线/蓝牙/2.4G），RGB背光1680万色，铝合金上盖，续航约2000小时，兼容Windows/Mac"></textarea>
       </div>
 
       <div class="field">
         <label for="keywords">核心关键词 <span class="opt">（逗号分隔）</span></label>
-        <input type="text" id="keywords" placeholder="例：旗舰手机，钛金属，高性能，长续航">
+        <input type="text" id="keywords" placeholder="例：机械键盘，热插拔，三模，RGB，无线，游戏外设">
       </div>
 
       <div class="field">
@@ -349,7 +349,8 @@
         <select id="brandMode">
           <option value="auto">auto — 自动判断</option>
           <option value="official_brand">official_brand — 正规品牌 / 授权货</option>
-          <option value="white_label">white_label — 白牌 / 通用</option>
+          <option value="official_brand">official_brand — 正规品牌 / 授权货</option>
+          <option value="white_label" selected>white_label — 白牌 / 通用（推荐体验）</option>
           <option value="placeholder_safe">placeholder_safe — 信息不清时安全中断</option>
         </select>
       </div>
@@ -543,12 +544,17 @@
       const outputs = data?.data?.outputs || data?.outputs || {};
       const text = outputs.final_output || outputs.text || outputs.result || outputs.listing || '';
 
+      const isInterrupted = text && text.includes('生成中断');
+      const resultHeader = document.querySelector('.result-header h3');
       if (text) {
         resultBody.textContent = text;
+        resultHeader.textContent = isInterrupted
+          ? '⚠️ 护栏拦截 · 生成已中断'
+          : '✅ 生成完成 · 全平台 Listing';
       } else {
-        // 输出为空时展示完整原始响应帮助排查
         const raw = JSON.stringify(data, null, 2);
-        resultBody.textContent = `⚠️ 工作流状态: ${status || '未知'}\n\n原始返回（用于排查）:\n${raw}`;
+        resultBody.textContent = `⚠️ 工作流状态: ${status || '未知'}\n\n原始返回:\n${raw}`;
+        resultHeader.textContent = '⚠️ 输出异常';
       }
       resultCard.classList.add('show');
       resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
