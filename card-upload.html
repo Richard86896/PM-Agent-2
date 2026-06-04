@@ -329,6 +329,74 @@
       50% { border-color: var(--accent-2); }
     }
     .upload-zone.drag-over { animation: pulse-border 1s ease-in-out infinite; }
+
+    /* ─── Hide upload zone when preview is active ─── */
+    .upload-zone.hidden { display: none; }
+
+    /* ─── History section ─── */
+    .history-section {
+      width: 100%; max-width: 440px;
+      position: relative; z-index: 1;
+      margin-top: 16px;
+    }
+    .history-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .history-title {
+      font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.85);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .history-title svg { width: 15px; height: 15px; opacity: 0.75; }
+    .history-count {
+      font-size: 12px; color: rgba(255,255,255,0.45);
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .history-item {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 16px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px;
+      backdrop-filter: blur(8px);
+      animation: fadeInUp 0.3s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .history-thumb {
+      width: 52px; height: 36px; border-radius: 8px;
+      object-fit: cover; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .history-info {
+      flex: 1; min-width: 0;
+    }
+    .history-info-name {
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.88);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .history-info-meta {
+      font-size: 11.5px; color: rgba(255,255,255,0.42);
+      margin-top: 2px;
+    }
+    .history-badge {
+      flex-shrink: 0;
+      background: rgba(74,124,248,0.20);
+      border: 1px solid rgba(74,124,248,0.35);
+      color: #8db4ff;
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .history-empty {
+      text-align: center;
+      font-size: 13px; color: rgba(255,255,255,0.28);
+      padding: 20px 0;
+    }
   </style>
 <script>
   (function(){
@@ -454,6 +522,23 @@
 
 <div class="footer">由 <span data-co>贵公司</span> AI 驱动识别入库</div>
 
+<!-- History section -->
+<div class="history-section" id="historySection">
+  <div class="history-header">
+    <div class="history-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+      </svg>
+      本次已录入
+    </div>
+    <span class="history-count" id="historyCount">0 张</span>
+  </div>
+  <div class="history-list" id="historyList">
+    <div class="history-empty" id="historyEmpty">暂无记录，提交名片后将在此显示</div>
+  </div>
+</div>
+
 <script>
 (function () {
   const dropZone     = document.getElementById('dropZone');
@@ -473,20 +558,74 @@
   const errorText    = document.getElementById('errorText');
 
   const N8N_URL = 'https://n8n.yx11.fun/form/card-ocr-form';
+  const HISTORY_KEY = 'card_upload_history';
   let selectedFile = null;
+  let selectedFileDataUrl = null;
 
   // Show camera button on mobile
   if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     cameraBtnWrap.style.display = 'flex';
   }
 
+  // ── History helpers ──
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+    catch { return []; }
+  }
+  function saveHistory(list) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+  }
+  function renderHistory() {
+    const list = loadHistory();
+    const countEl = document.getElementById('historyCount');
+    const listEl = document.getElementById('historyList');
+    const emptyEl = document.getElementById('historyEmpty');
+    countEl.textContent = list.length + ' 张';
+    if (list.length === 0) {
+      emptyEl.style.display = '';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    // Rebuild list (newest first)
+    const existing = listEl.querySelectorAll('.history-item');
+    existing.forEach(el => el.remove());
+    list.slice().reverse().forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      const timeStr = new Date(item.time).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      div.innerHTML =
+        '<img class="history-thumb" src="' + item.thumb + '" alt="">' +
+        '<div class="history-info">' +
+          '<div class="history-info-name">' + escHtml(item.filename) + '</div>' +
+          '<div class="history-info-meta">' + timeStr + (item.sales ? ' · ' + escHtml(item.sales) : '') + '</div>' +
+        '</div>' +
+        '<span class="history-badge">已入库</span>';
+      listEl.appendChild(div);
+    });
+  }
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function addHistory(filename, thumb, sales) {
+    const list = loadHistory();
+    list.push({ filename, thumb, sales: sales || '', time: Date.now() });
+    saveHistory(list);
+    renderHistory();
+  }
+
   // ── File selection helpers ──
   function setFile(file) {
     if (!file) return;
     selectedFile = file;
-    const url = URL.createObjectURL(file);
-    previewImg.src = url;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      selectedFileDataUrl = e.target.result;
+      previewImg.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
     previewWrap.classList.add('visible');
+    dropZone.classList.add('hidden');
+    if (cameraBtnWrap.style.display !== 'none') cameraBtnWrap.style.display = 'none';
     fileName.textContent = file.name + '  (' + (file.size / 1024).toFixed(1) + ' KB)';
     submitBtn.disabled = false;
     btnText.textContent = '提交名片';
@@ -500,11 +639,22 @@
     if (cameraInput.files[0]) setFile(cameraInput.files[0]);
   });
 
-  // Replace image
+  // Replace image — show upload zone again
   previewChange.addEventListener('click', () => {
     fileInput.value = '';
+    previewWrap.classList.remove('visible');
+    dropZone.classList.remove('hidden');
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) cameraBtnWrap.style.display = 'flex';
+    selectedFile = null;
+    selectedFileDataUrl = null;
+    submitBtn.disabled = true;
+    btnText.textContent = '请先上传名片';
     fileInput.click();
   });
+
+  // Init history on load
+  renderHistory();
 
   // ── Drag & drop ──
   ['dragenter','dragover'].forEach(evt =>
@@ -567,13 +717,19 @@
     try {
       const res = await fetch(N8N_URL, { method: 'POST', body: fd });
       if (res.ok) {
+        // Save to history before resetting
+        addHistory(selectedFile.name, selectedFileDataUrl, salesInput.value.trim());
         showSuccess();
         // Reset
         selectedFile = null;
+        selectedFileDataUrl = null;
         fileInput.value = '';
         cameraInput.value = '';
         salesInput.value = '';
         previewWrap.classList.remove('visible');
+        dropZone.classList.remove('hidden');
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) cameraBtnWrap.style.display = 'flex';
         previewImg.src = '';
         fileName.textContent = '—';
         submitBtn.disabled = true;
