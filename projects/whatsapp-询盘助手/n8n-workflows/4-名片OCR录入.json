@@ -16,7 +16,9 @@
         "httpMethod": "POST",
         "path": "card-ocr",
         "responseMode": "responseNode",
-        "options": {}
+        "options": {
+          "allowedOrigins": "*"
+        }
       },
       "id": "w4-form",
       "name": "名片上传表单",
