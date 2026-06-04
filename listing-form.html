@@ -236,6 +236,52 @@
     .demo-mode-badge svg { width: 16px; height: 16px; flex-shrink: 0; }
 
     /* ── 信息卡 ── */
+    /* ── 进阶选项折叠 ── */
+    .advanced-section { border: none; }
+    .advanced-section > summary {
+      cursor: pointer; list-style: none; user-select: none;
+    }
+    .advanced-section > summary::-webkit-details-marker { display: none; }
+    .advanced-section > summary .toggle-icon {
+      display: inline-block; transition: transform .2s; margin-right: 4px;
+    }
+    .advanced-section[open] > summary .toggle-icon { transform: rotate(90deg); }
+    .advanced-section .advanced-content { padding-top: 14px; }
+
+    /* ── 推断参数预览卡 ── */
+    .inferred-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .inferred-header {
+      background: var(--surface-2); border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 14px; font-weight: 700; color: var(--text-primary);
+    }
+    .risk-badge {
+      font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 6px;
+    }
+    .risk-badge.low { background: #dcfce7; color: #15803d; }
+    .risk-badge.medium { background: #fef9c3; color: #a16207; }
+    .risk-badge.high { background: #fee2e2; color: #dc2626; }
+    .inferred-body {
+      padding: 16px 20px;
+      font-size: 13px; color: var(--text-secondary); line-height: 1.8;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 280px; overflow-y: auto;
+    }
+    .inferred-toggle {
+      font-family: var(--font); font-size: 13px; font-weight: 600;
+      padding: 6px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; background: #fff;
+      color: var(--text-muted); cursor: pointer;
+      transition: all .15s;
+    }
+    .inferred-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
     .info-card {
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.12);
@@ -337,12 +383,17 @@
         </div>
       </div>
 
-      <div class="divider-label">进阶选项（选填）</div>
-
-      <div class="field">
-        <label for="verifiedSpecs">已核实商品参数 JSON <span class="opt">（最高可信来源，不填则由描述推断）</span></label>
-        <textarea id="verifiedSpecs" rows="3" placeholder='{"model":"A3293","storage":"256GB","chip":"A17 Pro","camera":"4800万主摄","waterproof":"IP68","connectivity":"5G"}'></textarea>
-      </div>
+      <details class="advanced-section" id="advancedSection">
+        <summary class="divider-label">
+          <span class="toggle-icon">▶</span>进阶选项（选填，留空 AI 自动推断）
+        </summary>
+        <div class="advanced-content">
+          <div class="field">
+            <label for="verifiedSpecs">手动指定商品参数 JSON <span class="opt">（最高可信来源，留空则由 AI 从描述中自动推断）</span></label>
+            <textarea id="verifiedSpecs" rows="3" placeholder='{"颜色":"深空灰","重量":"1.2kg","接口":"USB-C"}'></textarea>
+          </div>
+        </div>
+      </details>
 
       <input type="hidden" id="brandMode" value="white_label">
 
@@ -354,6 +405,18 @@
       </button>
 
     </div>
+  </div>
+
+  <!-- 推断参数预览卡 -->
+  <div class="inferred-card" id="inferredCard" style="display:none;">
+    <div class="inferred-header">
+      <span>🔍 AI 推断参数</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="risk-badge" id="riskBadge"></span>
+        <button class="inferred-toggle" id="inferredToggle">收起</button>
+      </div>
+    </div>
+    <div class="inferred-body" id="inferredBody"></div>
   </div>
 
   <!-- 结果卡 -->
@@ -405,13 +468,48 @@
     return Array.from(document.querySelectorAll('.plat-chip.checked')).map(c => c.dataset.val).join(',');
   }
 
-  const submitBtn = document.getElementById('submitBtn');
-  const btnText   = document.getElementById('btnText');
-  const btnIcon   = document.getElementById('btnIcon');
-  const toastErr  = document.getElementById('toastErr');
-  const errText   = document.getElementById('errText');
-  const resultCard= document.getElementById('resultCard');
-  const resultBody= document.getElementById('resultBody');
+  const submitBtn    = document.getElementById('submitBtn');
+  const btnText      = document.getElementById('btnText');
+  const btnIcon      = document.getElementById('btnIcon');
+  const toastErr     = document.getElementById('toastErr');
+  const errText      = document.getElementById('errText');
+  const resultCard   = document.getElementById('resultCard');
+  const resultBody   = document.getElementById('resultBody');
+  const inferredCard = document.getElementById('inferredCard');
+  const inferredBody = document.getElementById('inferredBody');
+  const riskBadge    = document.getElementById('riskBadge');
+  const inferredToggle = document.getElementById('inferredToggle');
+
+  // 推断参数卡展开/收起
+  inferredToggle.addEventListener('click', function () {
+    const isHidden = inferredBody.style.display === 'none';
+    inferredBody.style.display = isHidden ? '' : 'none';
+    this.textContent = isHidden ? '收起' : '展开查看';
+  });
+
+  function showInferredParams(outputs) {
+    const schema = outputs.canonical_product_schema || outputs.verified_specs_json || '';
+    const report = outputs.preflight_report || '';
+    const riskLevel = outputs.risk_level || 'low';
+    const riskScore = outputs.risk_score;
+
+    // 从 preflight_report 中提取 Canonical Product Schema 部分
+    let schemaText = schema || '';
+    if (!schemaText && report) {
+      const match = report.match(/##\s*Canonical Product Schema\s*\n([\s\S]*?)(?=\n##|$)/i)
+                 || report.match(/##\s*Trusted Fields\s*\n([\s\S]*?)(?=\n##|$)/i);
+      if (match) schemaText = match[1].trim();
+    }
+    if (!schemaText) schemaText = report || '（参数推断完成，已注入生成流程）';
+
+    inferredBody.textContent = schemaText;
+    riskBadge.textContent = riskScore != null
+      ? `风险分 ${riskScore} · ${riskLevel}`
+      : riskLevel;
+    riskBadge.className = 'risk-badge ' + (riskLevel === 'high' ? 'high' : riskLevel === 'medium' ? 'medium' : 'low');
+    inferredCard.style.display = '';
+    inferredCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 
   function hideErr() { toastErr.classList.remove('visible'); }
   function showErr(m) { errText.textContent = m; toastErr.classList.add('visible'); }
@@ -455,8 +553,11 @@
       return;
     }
 
-    setLoading(true, '正在上传产品资料…');
+    setLoading(true, 'AI 生成中…');
     resultCard.classList.remove('show');
+    inferredCard.style.display = 'none';
+    inferredBody.textContent = '';
+    inferredBody.style.display = '';
 
     if (isDemoMode) {
       await new Promise(r => setTimeout(r, 2000));
@@ -468,38 +569,7 @@
     }
 
     try {
-      // ── Step 1：把表单内容打包成文本文件上传 ──
-      const fileContent = [
-        '产品名称: ' + productName,
-        '产品描述: ' + productDesc,
-        keywords       ? '核心关键词: ' + keywords       : '',
-        targetAudience ? '目标人群: '   + targetAudience  : '',
-        verifiedSpecs  ? '已核实参数 JSON:\n' + verifiedSpecs : '',
-      ].filter(Boolean).join('\n\n');
-
-      const blob = new Blob([fileContent], { type: 'text/plain' });
-      const uploadFile = new File([blob], 'product-info.txt', { type: 'text/plain' });
-
-      const fd = new FormData();
-      fd.append('file', uploadFile);
-      fd.append('user', 'listing-demo');
-
-      const uploadRes = await fetch('https://api.dify.ai/v1/files/upload', {
-        method: 'POST',
-        headers: { 'Authorization': 'Bearer ' + DIFY_API_KEY },
-        body: fd,
-      });
-      if (!uploadRes.ok) {
-        const t = await uploadRes.text().catch(() => '');
-        showErr('文件上传失败 ' + uploadRes.status + (t ? '：' + t.slice(0, 80) : ''));
-        return;
-      }
-      const uploadData = await uploadRes.json();
-      const fileId = uploadData.id;
-
-      // ── Step 2：运行工作流 ──
-      setLoading(true, 'AI 生成中…');
-
+      // ── 运行工作流（直接传文本，无需文件上传）──
       const inputs = {
         product_name: productName,
         product_desc: productDesc,
@@ -507,11 +577,6 @@
         target_audience: targetAudience,
         platforms: platforms,
         brand_strategy_mode: brandMode,
-        product_file: {
-          transfer_method: 'local_file',
-          upload_file_id: fileId,
-          type: 'document',
-        },
       };
       if (verifiedSpecs) inputs.verified_specs_json = verifiedSpecs;
 
@@ -555,9 +620,16 @@
           try {
             const evt = JSON.parse(jsonStr);
             lastEvent = evt;
-            // 节点完成时更新进度文案
-            if (evt.event === 'node_finished' && evt.data?.title) {
-              setLoading(true, '生成中… ' + evt.data.title);
+            if (evt.event === 'node_finished') {
+              const nodeTitle = evt.data?.title || '';
+              const nodeOutputs = evt.data?.outputs || {};
+              setLoading(true, '生成中… ' + nodeTitle);
+              // 捕获 preflight / evidence-pack 节点的推断参数
+              if (nodeOutputs.preflight_report !== undefined
+                  || nodeOutputs.canonical_product_schema !== undefined
+                  || nodeOutputs.risk_level !== undefined) {
+                showInferredParams(nodeOutputs);
+              }
             }
             if (evt.event === 'workflow_finished') {
               status = evt.data?.status || '';
