@@ -30,7 +30,7 @@
             }
           ]
         },
-        "responseMode": "responseNode",
+        "responseMode": "lastNode",
         "options": {}
       },
       "id": "w4-form",
@@ -143,14 +143,12 @@
     },
     {
       "parameters": {
-        "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ ok: true, card: $('解析名片').item.json.card }) }}",
-        "options": {}
+        "jsCode": "const c = $('解析名片').item.json.card || {};\nreturn [{ json: { ok: true, card: c } }];"
       },
       "id": "w4-respond",
       "name": "返回OCR结果",
-      "type": "n8n-nodes-base.respondToWebhook",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         1930,
         300
