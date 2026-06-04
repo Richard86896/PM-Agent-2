@@ -1,0 +1,228 @@
+{
+  "name": "WA-4 名片OCR录入",
+  "active": false,
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "tags": [
+    {
+      "name": "whatsapp-询盘助手"
+    }
+  ],
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "展会名片录入",
+        "formDescription": "拍照上传名片，系统自动识别并写入线索库",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "名片照片",
+              "fieldType": "file",
+              "acceptFileTypes": ".jpg,.jpeg,.png",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "负责销售",
+              "fieldType": "text",
+              "requiredField": false
+            }
+          ]
+        },
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "w4-form",
+      "name": "名片上传表单",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        250,
+        300
+      ],
+      "webhookId": "card-ocr-form"
+    },
+    {
+      "parameters": {
+        "jsCode": "// 把表单上传的名片图转 base64 data URL，并构建 OCR 请求\nconst bin = $input.item.binary || {};\nconst keys = Object.keys(bin);\nif (keys.length === 0) { throw new Error('未收到名片图片，请确认表单已上传文件'); }\nconst key = keys[0];\nconst meta = bin[key];\nconst buffer = await this.helpers.getBinaryDataBuffer(0, key);\nconst b64 = buffer.toString('base64');\nconst mime = (meta && meta.mimeType) || 'image/jpeg';\nconst dataUrl = 'data:' + mime + ';base64,' + b64;\nconst salesOwner = $input.item.json['负责销售'] || '';\nreturn [{ json: {\n  sales_owner: salesOwner,\n  ai_payload: {\n    model: 'Qwen/Qwen3-VL-32B-Instruct',\n    temperature: 0,\n    response_format: { type: 'json_object' },\n    messages: [\n      { role: 'system', content: \"\\u4f60\\u662f\\u540d\\u7247\\u4fe1\\u606f\\u63d0\\u53d6\\u5668\\u3002\\u4ece\\u56fe\\u7247\\u4e2d\\u63d0\\u53d6\\u8054\\u7cfb\\u4eba\\u5b57\\u6bb5\\uff0c\\u53ea\\u8f93\\u51faJSON\\uff1a{\\\"name\\\":\\\"\\\",\\\"company\\\":\\\"\\\",\\\"title\\\":\\\"\\\",\\\"phone\\\":\\\"\\\",\\\"email\\\":\\\"\\\",\\\"country\\\":\\\"\\\"}\\u3002\\u8bc6\\u522b\\u4e0d\\u5230\\u7684\\u5b57\\u6bb5\\u586bnull\\uff0c\\u4e0d\\u8981\\u7f16\\u9020\\u3002phone\\u542b\\u56fd\\u5bb6\\u7801\\u5e76\\u53bb\\u6389\\u7a7a\\u683c\\u4e0e\\u7b26\\u53f7\\u3002\" },\n      { role: 'user', content: [\n        { type: 'image_url', image_url: { url: dataUrl } },\n        { type: 'text', text: '提取这张名片的联系人信息。' }\n      ]}\n    ]\n  }\n}}];"
+      },
+      "id": "w4-read",
+      "name": "读图并构建请求",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        530,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.ONEAPI_BASE_URL + '/v1/chat/completions' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $env.ONEAPI_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('读图并构建请求').item.json.ai_payload) }}",
+        "options": {}
+      },
+      "id": "w4-vision",
+      "name": "Vision OCR",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        810,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "var raw=($input.first().json.choices&&$input.first().json.choices[0]&&$input.first().json.choices[0].message&&$input.first().json.choices[0].message.content)||'{}';\nvar c;try{c=JSON.parse(raw);}catch(e){c={};}\nvar sales=$('读图并构建请求').item.json.sales_owner||'';\nreturn [{json:{card:c,feishu_body:{fields:{\n  '客户号码':c.phone||'', '姓名':c.name||'', '公司':c.company||'', '职位':c.title||'',\n  '邮箱':c.email||'', '国家':c.country||'', '来源':'展会', '负责销售':sales,\n  '审核状态':'待审核', '跟进状态':'新线索'\n}}}}];"
+      },
+      "id": "w4-parse",
+      "name": "解析名片",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1090,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({app_id: $env.FEISHU_APP_ID, app_secret: $env.FEISHU_APP_SECRET}) }}",
+        "options": {}
+      },
+      "id": "w4-token",
+      "name": "取飞书Token",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1370,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ 'https://open.feishu.cn/open-apis/bitable/v1/apps/' + $env.FEISHU_APP_TOKEN + '/tables/' + $env.FEISHU_TABLE_ID + '/records' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "={{ 'Bearer ' + $('取飞书Token').item.json.tenant_access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($('解析名片').item.json.feishu_body) }}",
+        "options": {}
+      },
+      "id": "w4-write",
+      "name": "写入展会线索",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1650,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ ok: true, card: $('解析名片').item.json.card }) }}",
+        "options": {}
+      },
+      "id": "w4-respond",
+      "name": "返回OCR结果",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1930,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "名片上传表单": {
+      "main": [
+        [
+          {
+            "node": "读图并构建请求",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "读图并构建请求": {
+      "main": [
+        [
+          {
+            "node": "Vision OCR",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vision OCR": {
+      "main": [
+        [
+          {
+            "node": "解析名片",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "解析名片": {
+      "main": [
+        [
+          {
+            "node": "取飞书Token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "取飞书Token": {
+      "main": [
+        [
+          {
+            "node": "写入展会线索",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "写入展会线索": {
+      "main": [
+        [
+          {
+            "node": "返回OCR结果",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
