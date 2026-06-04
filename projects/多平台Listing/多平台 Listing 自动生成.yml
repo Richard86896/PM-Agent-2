@@ -1,0 +1,1774 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  icon_type: emoji
+  mode: workflow
+  name: 多平台 Listing 自动生成
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.17@f7a5c1d222d17ee419b17a80d6e4923838fe93788dc724a3af73fbc6990b3a32
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/brave:0.0.7@1f3ad136f550f1d17fcb98ba3f5b898a12c138886d0d9ed5f656d67d5caed947
+    version: null
+kind: app
+version: 0.6.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .PDF
+      - .DOC
+      - .DOCX
+      - .XLS
+      - .XLSX
+      - .CSV
+      - .TXT
+      - .MD
+      - .HTML
+      - .PPT
+      - .PPTX
+      allowed_file_types:
+      - document
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: true
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 50
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: document-extractor
+      id: 1779898038871-source-1779902000001-target
+      selected: false
+      source: '1779898038871'
+      sourceHandle: source
+      target: '1779902000001'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: document-extractor
+        targetType: llm
+      id: 1779902000001-source-1779902000002-target
+      source: '1779902000001'
+      sourceHandle: source
+      target: '1779902000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1779902000002-source-1779902000003-target
+      source: '1779902000002'
+      sourceHandle: source
+      target: '1779902000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1779899961694'
+        sourceType: iteration-start
+        targetType: llm
+      id: 1779899961694start-source-1779900068689-target
+      selected: false
+      source: 1779899961694start
+      sourceHandle: source
+      target: '1779900068689'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1779898136632-source-17799009977710-target
+      source: '1779898136632'
+      sourceHandle: source
+      target: '17799009977710'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: iteration
+      id: 17799009977710-source-1779899961694-target
+      selected: false
+      source: '17799009977710'
+      sourceHandle: source
+      target: '1779899961694'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: iteration
+        targetType: code
+      id: 1779899961694-source-1779900808738-target
+      source: '1779899961694'
+      sourceHandle: source
+      target: '1779900808738'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: http-request
+      id: 1779900808738-source-1779903000001-target
+      source: '1779900808738'
+      sourceHandle: source
+      target: '1779903000001'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: http-request
+        targetType: end
+      id: 1779903000001-source-1779898422606-target
+      source: '1779903000001'
+      sourceHandle: source
+      target: '1779898422606'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: code
+      id: 1779902000003-source-1779902500001-target
+      source: '1779902000003'
+      sourceHandle: source
+      target: '1779902500001'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: llm
+      id: 1779902500001-source-1779898136632-target
+      source: '1779902500001'
+      sourceHandle: source
+      target: '1779898136632'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: ''
+        selected: false
+        title: 用户输入
+        type: start
+        variables:
+        - default: ''
+          hint: ''
+          label: 产品名称
+          options: []
+          placeholder: ''
+          required: false
+          hide: false
+          type: text-input
+          variable: product_name
+        - default: ''
+          hint: ''
+          label: 产品描述 / 原始卖点
+          options: []
+          placeholder: ''
+          required: false
+          hide: false
+          type: text-input
+          variable: product_desc
+        - default: ''
+          hint: ''
+          label: 核心关键词（逗号分隔）
+          options: []
+          placeholder: ''
+          required: false
+          hide: false
+          type: text-input
+          variable: keywords
+        - default: ''
+          hint: ''
+          label: 目标人群，如"25-35岁职场妈妈"
+          options: []
+          placeholder: ''
+          required: false
+          hide: false
+          type: text-input
+          variable: target_audience
+        - default: Amazon,淘宝,京东,ebay,速卖通,独立站
+          hide: false
+          hint: ''
+          label: 平台列表
+          max_length: 100
+          options: []
+          placeholder: ''
+          required: false
+          type: text-input
+          variable: platforms
+        - default: ''
+          hint: 可选。粘贴已核实商品参数 JSON；这里的信息会作为最高可信事实来源，未出现字段不得由模型自行补全。
+          label: 已核实商品参数 JSON（可选）
+          options: []
+          placeholder: '{"model":"...","storage":"...","chip":"..."}'
+          required: false
+          hide: false
+          type: paragraph
+          variable: verified_specs_json
+        - default: auto
+          hint: auto 自动判断；official_brand 正规品牌/授权货；white_label 白牌/通用；placeholder_safe 信息不清时安全中断
+          label: 品牌策略模式
+          options: []
+          placeholder: auto / official_brand / white_label / placeholder_safe
+          required: false
+          hide: false
+          type: text-input
+          variable: brand_strategy_mode
+        - allowed_file_extensions:
+          - .PDF
+          - .DOC
+          - .DOCX
+          - .XLS
+          - .XLSX
+          - .CSV
+          - .TXT
+          - .MD
+          - .HTML
+          allowed_file_types:
+          - document
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          default: null
+          hide: false
+          hint: 上传产品资料、商品参数表、竞品 Listing、说明书或卖点文档；手填字段会作为覆盖或补充
+          label: 产品资料文件
+          max_length: 1
+          options: []
+          placeholder: ''
+          required: true
+          type: file
+          variable: product_file
+      height: 213
+      id: '1779898038871'
+      position:
+        x: -1000
+        y: 220
+      positionAbsolute:
+        x: -1000
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        desc: 从上传的产品资料文件中提取纯文本内容
+        is_array_file: false
+        selected: false
+        title: 产品资料提取
+        type: document-extractor
+        variable_selector:
+        - '1779898038871'
+        - product_file
+      height: 92
+      id: '1779902000001'
+      position:
+        x: -680
+        y: 220
+      positionAbsolute:
+        x: -680
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 自动识别产品基础信息；必要时调用 Brave Web Search 仅核实品牌官网参数
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_config:
+          jinja2_variables: []
+        prompt_template:
+        - id: 1779902000002-system
+          role: system
+          text: "你是一位电商 Listing 资料整理专家。请从上传文件文本和用户手填补充中抽取商品信息，输出严格 JSON，不要 markdown 代码块。\n\n=== 搜索增强（有 Brave Search 工具时优先执行）===\n\
+            如果产品名称包含可识别的品牌+型号（如 iPhone 15 Pro Max、Samsung Galaxy S24、Dyson V15 等），执行：\n1. 使用 Brave Search 搜索 \"{产品名} official\
+            \ specifications site:{品牌官网域名}\"，优先命中品牌官网（apple.com / samsung.com / sony.com 等）\n2. 只使用来自品牌官网的规格数据，第三方评测、电商平台参数页一律忽略\n\
+            3. 将搜索到的官方参数放入 verified_facts，key 前加前缀 \"[搜索核实]\"，例如 \"[搜索核实] 电池\": \"3274 mAh\"\n4. 无法确认来源为品牌官网时，不放入 verified_facts\n\
+            \n=== 抽取规则 ===\n1. 手填字段优先级 > 文件内容 > 搜索结果；手填非空时必须采用手填值。\n2. 文件可能是 Word、Excel、CSV、TXT、PDF 或竞品 Listing，字段名不固定，请根据语义识别。\n\
+            3. platforms 如果文件和手填都没有，默认使用 \"Amazon,淘宝,京东,ebay,速卖通,独立站\"。\n4. keywords 输出逗号分隔字符串，优先保留文件里的核心搜索词；没有时根据产品信息生成 5-10\
+            \ 个。\n5. 不要编造确定性硬参数；不确定的信息放进 product_desc 里的\"待确认\"说明。\n6. 如果文件里出现 Shopify、WooCommerce、Brand Website、官网、自建站、品牌官网，platforms\
+            \ 统一归为\"独立站\"。\n7. verified_facts 只允许三类来源：(a) 上传文件明确出现的参数 (b) 用户已核实 JSON 中的参数 (c) 搜索到的品牌官网参数（加 [搜索核实] 前缀）；禁止基于常识、推断或训练知识补全。\n\
+            8. 输出字段必须完整：\n{\n  \"product_name\": \"...\",\n  \"product_desc\": \"...\",\n  \"keywords\": \"...\",\n  \"target_audience\"\
+            : \"...\",\n  \"platforms\": \"Amazon,淘宝,京东,ebay,速卖通,独立站\",\n  \"verified_facts\": {\"字段名\": \"已核实值\", \"[搜索核实]\
+            \ 字段名\": \"官网数值\"}\n}"
+        - id: 1779902000002-user
+          role: user
+          text: '【上传文件提取文本】
+
+            {{#1779902000001.text#}}
+
+
+            【用户手填补充/覆盖】
+
+            产品名称：{{#1779898038871.product_name#}}
+
+            产品描述：{{#1779898038871.product_desc#}}
+
+            核心关键词：{{#1779898038871.keywords#}}
+
+            目标人群：{{#1779898038871.target_audience#}}
+
+            平台列表：{{#1779898038871.platforms#}}
+
+            已核实商品参数 JSON：{{#1779898038871.verified_specs_json#}}'
+        selected: false
+        title: 资料字段识别 + Brave核实
+        tools:
+        - provider_id: langgenius/brave/brave
+          provider_name: langgenius/brave/brave
+          provider_type: builtin
+          tool_label: Brave Search
+          tool_name: brave_search
+          tool_parameters: {}
+        type: llm
+        vision:
+          enabled: false
+      height: 116
+      id: '1779902000002'
+      position:
+        x: -360
+        y: 220
+      positionAbsolute:
+        x: -360
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\nimport re\n\n\nDEFAULT_PLATFORMS = \"Amazon,淘宝,京东,ebay,速卖通,独立站\"\nBRAND_KEYS = {\"brand\", \"\
+          品牌\", \"manufacturer\", \"maker\", \"牌子\", \"商品品牌\", \"品牌名\", \"商品牌名\"}\n\n\ndef _clean(value):\n    if value is\
+          \ None:\n        return \"\"\n    return str(value).strip()\n\n\ndef _parse_json(text):\n    text = _clean(text)\n\
+          \    if not text:\n        return {}\n    text = re.sub(r\"^```(?:json)?\\s*|\\s*```$\", \"\", text, flags=re.I\
+          \ | re.S).strip()\n    try:\n        return json.loads(text)\n    except Exception:\n        match = re.search(r\"\
+          \\{.*\\}\", text, flags=re.S)\n        if match:\n            try:\n                return json.loads(match.group(0))\n\
+          \            except Exception:\n                return {}\n    return {}\n\n\ndef _flatten_facts(value):\n    if\
+          \ isinstance(value, dict):\n        facts = {}\n        for k, v in value.items():\n            if isinstance(v,\
+          \ (dict, list)):\n                facts[str(k)] = json.dumps(v, ensure_ascii=False)\n            elif v is not None\
+          \ and str(v).strip():\n                facts[str(k)] = str(v).strip()\n        return facts\n    return {}\n\n\n\
+          def _facts_to_text(facts):\n    if not facts:\n        return \"未提供已核实商品参数。除产品资料明确出现的信息外，禁止补全参数。\"\n    return \"\
+          \\n\".join(f\"- {k}: {v}\" for k, v in facts.items())\n\n\ndef _source_numbers(*texts):\n    joined = \"\\n\".join(_clean(t)\
+          \ for t in texts if _clean(t))\n    nums = sorted(set(re.findall(r\"\\d+(?:\\.\\d+)?\", joined)))\n    return \"\
+          ,\".join(nums)\n\n\ndef _allowed_brand(facts):\n    for key, value in facts.items():\n        key_text = str(key).strip()\n\
+          \        if key_text.lower() in BRAND_KEYS or key_text in BRAND_KEYS:\n            return _clean(value)\n    joined\
+          \ = \"\\n\".join(f\"{k}: {v}\" for k, v in facts.items())\n    # Only infer from verified facts / official-search\
+          \ facts, never from keywords or product name alone.\n    if re.search(r\"\\bApple\\b|苹果\", joined, flags=re.I):\n\
+          \        return \"Apple\"\n    return \"\"\n\n\n\ndef _section(text, name):\n    text = _clean(text)\n    if not\
+          \ text:\n        return \"\"\n    pattern = rf\"【{re.escape(name)}】\\s*\\n(.*?)(?=\\n【|\\Z)\"\n    match = re.search(pattern,\
+          \ text, flags=re.S)\n    return match.group(1).strip() if match else \"\"\n\n\ndef _file_data(document_text):\n\
+          \    text = _clean(document_text)\n    if not text:\n        return {}\n    data = {\n        \"product_name\":\
+          \ _section(text, \"产品名称\"),\n        \"product_desc\": _section(text, \"产品描述 / 原始卖点\") or _section(text, \"产品描述\"\
+          ) or _section(text, \"原始卖点\"),\n        \"keywords\": _section(text, \"核心关键词\") or _section(text, \"关键词\"),\n  \
+          \      \"target_audience\": _section(text, \"目标人群\") or _section(text, \"受众\"),\n        \"platforms\": _section(text,\
+          \ \"平台列表\") or _section(text, \"平台\"),\n        \"brand_strategy_mode\": _section(text, \"品牌策略模式\") or _section(text,\
+          \ \"品牌模式\") or _section(text, \"策略模式\"),\n    }\n    specs = _section(text, \"已核实商品参数 JSON\") or _section(text,\
+          \ \"已核实商品参数\")\n    parsed_specs = _parse_json(specs)\n    if parsed_specs:\n        data[\"verified_facts\"] =\
+          \ parsed_specs\n    # Fallback for the old 5-line test format.\n    lines = [line.strip() for line in text.splitlines()\
+          \ if line.strip() and not line.strip().startswith(\"【\")]\n    if not any(data.values()) and len(lines) >= 4:\n\
+          \        data.update({\n            \"product_name\": lines[0],\n            \"product_desc\": lines[1],\n     \
+          \       \"keywords\": lines[2],\n            \"target_audience\": lines[3],\n            \"platforms\": \"\".join(lines[4:])\
+          \ if len(lines) > 4 else \"\",\n        })\n    return data\n\ndef main(extracted_json: str, product_name: str =\
+          \ \"\", product_desc: str = \"\",\n         keywords: str = \"\", target_audience: str = \"\", platforms: str =\
+          \ \"\",\n         verified_specs_json: str = \"\", document_text: str = \"\", brand_strategy_mode: str = \"auto\"\
+          ):\n    data = _parse_json(extracted_json)\n    file_data = _file_data(document_text)\n    data = {**file_data,\
+          \ **data}\n    manual_facts = _flatten_facts(_parse_json(verified_specs_json))\n    extracted_facts = _flatten_facts(data.get(\"\
+          verified_facts\"))\n    facts = {**extracted_facts, **manual_facts}\n    allowed_brand = _allowed_brand(facts)\n\
+          \n    normalized = {\n        \"product_name\": _clean(product_name) or _clean(data.get(\"product_name\")),\n  \
+          \      \"product_desc\": _clean(product_desc) or _clean(data.get(\"product_desc\")),\n        \"keywords\": _clean(keywords)\
+          \ or _clean(data.get(\"keywords\")),\n        \"target_audience\": _clean(target_audience) or _clean(data.get(\"\
+          target_audience\")),\n        \"platforms\": _clean(platforms) or _clean(data.get(\"platforms\")) or DEFAULT_PLATFORMS,\n\
+          \        \"verified_facts\": _facts_to_text(facts),\n        \"source_numbers\": _source_numbers(product_name, product_desc,\
+          \ keywords, target_audience, verified_specs_json, document_text, json.dumps(data, ensure_ascii=False)),\n      \
+          \  \"allowed_brand\": allowed_brand,\n        \"brand_strategy_mode\": (_clean(brand_strategy_mode) or _clean(data.get(\"\
+          brand_strategy_mode\")) or \"auto\"),\n    }\n\n    if not normalized[\"product_name\"]:\n        normalized[\"\
+          product_name\"] = \"待确认产品名称\"\n    if not normalized[\"product_desc\"]:\n        normalized[\"product_desc\"] =\
+          \ \"待确认产品描述：上传文件中未识别到足够信息，请人工补充。\"\n    if not normalized[\"keywords\"]:\n        normalized[\"keywords\"] = normalized[\"\
+          product_name\"]\n    if not normalized[\"target_audience\"]:\n        normalized[\"target_audience\"] = \"待确认目标人群\"\
+          \n\n    return normalized"
+        code_language: python3
+        desc: 合并文件识别结果与手填覆盖字段
+        outputs:
+          keywords:
+            children: null
+            type: string
+          platforms:
+            children: null
+            type: string
+          product_desc:
+            children: null
+            type: string
+          product_name:
+            children: null
+            type: string
+          target_audience:
+            children: null
+            type: string
+          verified_facts:
+            children: null
+            type: string
+          source_numbers:
+            children: null
+            type: string
+          allowed_brand:
+            children: null
+            type: string
+          brand_strategy_mode:
+            children: null
+            type: string
+        selected: false
+        title: 字段归一化
+        type: code
+        variables:
+        - value_selector:
+          - '1779902000002'
+          - text
+          value_type: string
+          variable: extracted_json
+        - value_selector:
+          - '1779902000001'
+          - text
+          value_type: string
+          variable: document_text
+        - value_selector:
+          - '1779898038871'
+          - product_name
+          value_type: string
+          variable: product_name
+        - value_selector:
+          - '1779898038871'
+          - product_desc
+          value_type: string
+          variable: product_desc
+        - value_selector:
+          - '1779898038871'
+          - keywords
+          value_type: string
+          variable: keywords
+        - value_selector:
+          - '1779898038871'
+          - target_audience
+          value_type: string
+          variable: target_audience
+        - value_selector:
+          - '1779898038871'
+          - platforms
+          value_type: string
+          variable: platforms
+        - value_selector:
+          - '1779898038871'
+          - verified_specs_json
+          value_type: string
+          variable: verified_specs_json
+        - variable: brand_strategy_mode
+          value_selector:
+          - '1779898038871'
+          - brand_strategy_mode
+      height: 92
+      id: '1779902000003'
+      position:
+        x: -40
+        y: 220
+      positionAbsolute:
+        x: -40
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: 产品分析
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_config:
+          jinja2_variables: []
+        prompt_template:
+        - edition_type: basic
+          id: d22124fc-be1d-4f24-aa1a-047a4d1773c0
+          role: system
+          text: "你是一位资深电商选品分析师。请根据以下产品信息，提炼出 5-8 个核心卖点角度，输出为 JSON：\n\n要求：\n1. 卖点必须区分\"功能卖点\"和\"情感卖点\"\n2. 每个卖点给出\"消费者痛点\"\
+            和\"产品解决方案\"\n3. 输出严格 JSON 格式，不要 markdown 代码块：\n{\n  \"angles\": [\n    {\"type\": \"功能\", \"pain_point\": \"...\"\
+            , \"solution\": \"...\", \"keywords\": \"...\"},\n    {\"type\": \"情感\", \"pain_point\": \"...\", \"solution\"\
+            : \"...\", \"keywords\": \"...\"}\n  ],\n  \"tone_summary\": \"整体调性建议，如专业/亲切/种草/硬核\"\n}/"
+        - id: 9af4addc-ed25-4001-932c-acf92e498397
+          role: user
+          text: '产品名称：{{#1779902000003.product_name#}}
+
+            产品描述：{{#1779902000003.product_desc#}}
+
+            关键词：{{#1779902000003.keywords#}}
+
+            目标受众：{{#1779902000003.target_audience#}}
+
+
+            Evidence Pack：
+
+            {{#1779902500001.evidence_pack#}}
+
+
+            如果 can_generate 为 false，只输出空 angles 和说明，不要补全卖点。'
+        selected: false
+        title: 产品卖点提炼
+        type: llm
+        vision:
+          enabled: false
+      height: 116
+      id: '1779898136632'
+      position:
+        x: 560
+        y: 220
+      positionAbsolute:
+        x: 560
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - '1779900808738'
+          - result
+          value_type: string
+          variable: final_output
+        selected: false
+        title: 输出
+        type: end
+      height: 88
+      id: '1779898422606'
+      position:
+        x: 2400
+        y: 220
+      positionAbsolute:
+        x: 2400
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        error_handle_mode: terminated
+        flatten_output: true
+        height: 300
+        is_parallel: true
+        iterator_input_type: array[object]
+        iterator_selector:
+        - '17799009977710'
+        - iteration_input
+        output_selector:
+        - '1779900068689'
+        - text
+        output_type: array[string]
+        parallel_nums: 10
+        selected: false
+        start_node_id: 1779899961694start
+        title: 迭代
+        type: iteration
+        width: 520
+      height: 300
+      id: '1779899961694'
+      position:
+        x: 1180
+        y: 120
+      positionAbsolute:
+        x: 1180
+        y: 120
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 520
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1779899961694start
+      parentId: '1779899961694'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 944
+        y: 188
+      selectable: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1779899961694'
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v4-pro
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 1936178a-f1ed-4679-90ae-fe1ee2428cc8
+          role: system
+          text: '你是一个单平台电商 Listing 生成器。本次只处理一个平台，禁止生成或提及其他平台的文案规则。
+
+
+            === 当前平台 ===
+
+            {{#1779899961694.item.platform#}}
+
+
+            === 当前平台策略 JSON（唯一策略来源）===
+
+            {{#1779899961694.item.platform_strategy_json#}}
+
+
+            === 当前平台规则包（可读版）===
+
+            {{#1779899961694.item.platform_rules#}}
+
+
+            === Brand Policy ===
+
+            brand_mode: {{#1779899961694.item.brand_mode#}}
+
+            brand_risk: {{#1779899961694.item.brand_risk#}}
+
+            strategy_mode: {{#1779899961694.item.strategy_mode#}}
+
+
+            === 全局治理规则 ===
+
+            1. 只输出当前平台一个区块，输出中只能出现一次【平台】{{#1779899961694.item.platform#}}。
+
+            2. 禁止输出内部推理、任务分析、自我审查、"用户需要我"、"我们分析"、"以下是"、"根据资料"等开场。
+
+            3. 只能使用 Canonical Product Schema 和允许声明清单里的事实；禁止编造未提供的硬件参数、具体数字、库存、销量、价格、认证、保修、物流时效、官方授权、赠品、优惠、平台背书；禁止 Best/No.1/#1/Perfect/Ultimate/Guaranteed/100%/Genuine/Authentic/Original/Official/FDA
+            Approved/Medical Grade/Military Grade/Waterproof 等高风险词，除非证据包明确允许。
+
+            4. 允许对已知卖点做中性展开：可以把"全天续航"写成 all-day battery life，可以把"4800万像素主摄"写成 48MP main camera，可以说明面向已知受众的使用场景；但禁止新增具体时长、深度、制程、百分比、版本、年份、尺寸、重量、屏幕尺寸、视频规格、镜头数量、额外功能名。
+
+            5. 不要把 To be confirmed / Unknown / N/A / TBD / Placeholder 当正文填充。缺失但影响发布的信息，只在【运营补充项】提示人工补充；eBay 也不得在公开 Item Specifics
+            输出占位行。
+
+            6. 品牌治理：允许品牌字段为「{{#1779899961694.item.allowed_brand#}}」。只有该字段非空时才能输出品牌名；关键词、型号或搜索暗示不等于品牌授权。
+
+            7. 风格不得串台：Amazon/eBay/速卖通禁止淘宝口吻；淘宝禁止 Amazon bullet 风；京东禁止独立站营销长文；独立站禁止平台卖家口吻。
+
+            8. 商标策略：brand_mode=official 时允许使用品牌与官方功能名；brand_mode=generic 时必须按 Trademark Guard 替换或删除；brand_mode=placeholder
+            时不应生成平台文案。
+
+            9. 每个卖点只能按 Claim Verification 的 allowed_phrases 展开，禁止使用 forbidden_expansions。
+
+            10. 严格执行缺字段策略：所有平台都不要输出公开 TBC/Unknown/N/A/TBD/Placeholder；缺失字段只进【运营补充项】或总 QA。
+
+            11. 如果 strategy_mode=official_brand，使用 Canonical Product Schema 并保持品牌、型号、JSON-LD 与正文一致；不得写“去品牌化/商标替换/已替换品牌词”等说明。
+
+            12. 如果 strategy_mode=white_label，只能使用 Generic Schema 和白牌化后的产品信息；禁止保留品牌识别锚点，不要写 Phone 15 Pro Max/A17 Pro/Dynamic
+            Island/iPhone/Apple。
+
+            13. 【运营补充项】统一放入运营发布前需补充的内容：实际售价、库存数量、发货地、物流方案、保修政策、配件清单、商品颜色、实拍图片、网络锁状态、地区兼容性；禁止将这些信息穿插进正文；禁止提及内部规则、策略名称、AI 或
+            QA。
+
+            14. 字段可信度优先级高于文案风格：Trusted Fields 中 state=forbidden/missing/needs_review 的字段不得进入公开正文；style tags 只能改变表达方式，不能新增事实。
+
+            15. SAFE_MARKETING 词只可用于正文/Bullet，不可进入标题、核心参数或 JSON-LD；INFERRED 词如 lightweight、ultra-thin、professional-grade、gaming
+            performance 未验证时禁止输出。
+
+
+            === 产品信息 ===
+
+            名称：{{#1779899961694.item.product_name#}}
+
+            描述：{{#1779899961694.item.product_desc#}}
+
+            关键词：{{#1779899961694.item.keywords#}}
+
+            受众：{{#1779899961694.item.target_audience#}}
+
+            核心卖点库：{{#1779899961694.item.product_angles#}}
+
+            已核实商品参数：
+
+            {{#1779899961694.item.verified_facts#}}
+
+            来源数字白名单：{{#1779899961694.item.source_numbers#}}
+
+            允许声明清单：
+
+            {{#1779899961694.item.allowed_claims#}}
+
+            Canonical Product Schema：
+
+            {{#1779899961694.item.canonical_product_schema#}}
+
+
+            Generic Schema：
+
+            {{#1779899961694.item.generic_schema#}}
+
+
+            禁止词清单：
+
+            {{#1779899961694.item.forbidden_terms#}}
+
+
+            === 术语策略 ===
+
+            {{#1779899961694.item.trademark_guard#}}
+
+
+            === 声明展开边界 ===
+
+            {{#1779899961694.item.claim_controls#}}
+
+
+            缺字段策略：{{#1779899961694.item.missing_field_strategy#}}
+
+
+            Trusted Fields（字段可信度；state=missing/forbidden 不得进入公开正文）：
+
+            {{#1779899961694.item.trusted_fields#}}
+
+
+            Style Tags（只影响语气，不授权新事实）：{{#1779899961694.item.copy_style#}} / compliance={{#1779899961694.item.compliance_weight#}},
+            marketing={{#1779899961694.item.marketing_weight#}}, risk={{#1779899961694.item.risk_level#}} {{#1779899961694.item.risk_score#}}
+
+
+            Evidence Pack：
+
+            {{#1779899961694.item.evidence_pack#}}
+
+
+            === 输出格式模板 ===
+
+            严格使用下面 5 个固定区块标题，不要新增同级标题：
+
+            {{#1779899961694.item.format_template#}}
+
+
+            现在直接输出最终可复制文案。'
+        selected: false
+        structured_output:
+          schema:
+            additionalProperties: false
+            properties:
+              listings:
+                items:
+                  type: string
+                type: array
+            required: []
+            type: object
+        structured_output_enabled: false
+        title: 单平台文案生成
+        type: llm
+        vision:
+          enabled: false
+      height: 88
+      id: '1779900068689'
+      parentId: '1779899961694'
+      position:
+        x: 144
+        y: 70
+      positionAbsolute:
+        x: 1064
+        y: 190
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 1002
+    - data:
+        code: "import json\nimport re\n\nREASONING_PATTERNS = [\n    r\"(?is)<think>.*?</think>\",\n    r\"(?m)^</think>\\\
+          s*\",\n    r\"(?i)</think>\",\n    r\"（[^）]*(?:检查字符数|字符数|我是否|应该去掉|重新修改|合规|现在输出|注意：我|这样合规|用户需要我|我们分析|我看看)[^）]*）\"\
+          ,\n    r\"\\([^)]*(?:检查字符数|字符数|我是否|should I|revise|revised|compliant|now output|user needs|let me check)[^)]*\\\
+          )\",\n    r\"(?ims)^\\s*(?:好的[，,。]?\\s*)?(?:用户需要我|用户需要|我们被要求|我们分析一下|我看看|嗯，我看看|现在组织输出|开始输出|最后，|注意：).*?(?=^【平台】|^【标题】|^【正文/详情/脚本】|^【标签/关键词/Bullet\
+          \ Points】|^【运营补充项】|\\Z)\",\n    r\"(?ims)^\\s*(?:重新修改|修改后|现在输出|这样合规多了|这个备注合理).*?(?=^【平台】|^【标题】|^【正文/详情/脚本】|^【标签/关键词/Bullet\
+          \ Points】|^【运营补充项】|\\Z)\",\n]\n\nFORBIDDEN_CLAIMS = [\n    \"包邮\", \"顺丰\", \"48h\", \"48小时\", \"现货\", \"库存告急\",\
+          \ \"限时\", \"限量\",\n    \"官方授权\", \"官方认证\", \"Apple官方\", \"Apple 官方\", \"国家三包\", \"全国联保\",\n    \"终身保修\", \"免费保修\"\
+          , \"赠品\", \"赠送\", \"优惠券\", \"粉丝福利\",\n    \"Dual SIM\", \"Unlocked\", \"Global Version\", \"Factory Sealed\", \"\
+          Free Shipping\",\n    \"Fast Shipping\", \"Warranty\", \"Best\", \"Best Seller\", \"No.1\", \"#1\", \"Perfect\"\
+          , \"Ultimate\",\n    \"Guaranteed\", \"100%\", \"Official\", \"Genuine\", \"Authentic\", \"Authentic Guaranteed\"\
+          ,\n    \"Compatible with Apple\", \"Original Apple\", \"FDA Approved\", \"Medical Grade\", \"Military Grade\",\n\
+          \    \"Waterproof\", \"4K\", \"triple lens\", \"triple-lens\", \"triple camera\",\n    \"lightweight\", \"ultra-thin\"\
+          , \"best battery\", \"flagship-level\", \"professional-grade\", \"gaming performance\",\n    \"Dimensions\", \"\
+          Weight\", \"screen size\", \"永久\", \"顶级\", \"最强\", \"无敌\", \"官方推荐\",\n]\n\nBRAND_TERMS = [\"Apple\", \"苹果\", \"\
+          iPhone\", \"Dynamic Island\", \"ProRAW\", \"MagSafe\", \"Face ID\", \"Retina\", \"AirDrop\", \"Lightning\"]\nBRAND_LEAKAGE_TERMS\
+          \ = [\n    \"原神\", \"王者荣耀\", \"小红书种草\", \"达人推荐\", \"KOL\", \"官方认证\", \"Apple官方\", \"Apple 官方\"\n]\n\nRISKY_REPLACEMENTS\
+          \ = [\n    (r\"\\bDual SIM\\b\", \"\"),\n    (r\"\\bUnlocked\\b\", \"\"),\n    (r\"\\bGlobal Version\\b\", \"\"\
+          ),\n    (r\"\\bFactory Sealed\\b\", \"\"),\n    (r\"\\bFree Shipping\\b\", \"\"),\n    (r\"\\bFast Shipping\\b\"\
+          , \"\"),\n    (r\"\\b(?:Best Seller|No\\.1|#1|Perfect|Ultimate|Guaranteed|100%)\\b\", \"\"),\n    (r\"\\b(?:Genuine|Authentic\
+          \ Guaranteed|Authentic|Original Apple|Compatible with Apple)\\b\", \"\"),\n    (r\"\\b(?:FDA Approved|Medical Grade|Military\
+          \ Grade)\\b\", \"\"),\n    (r\"\\bWaterproof\\b\", \"water resistant\"),\n    (r\"\\blightweight\\b\", \"comfortable\
+          \ to hold\"),\n    (r\"\\bultra[- ]thin\\b\", \"\"),\n    (r\"\\bbest battery\\b\", \"all-day battery life\"),\n\
+          \    (r\"\\bflagship[- ]level\\b\", \"\"),\n    (r\"\\bprofessional[- ]grade\\b\", \"\"),\n    (r\"\\bgaming performance\\\
+          b\", \"responsive performance\"),\n    (r\"国家三包服务及?\", \"\"),\n    (r\"Apple\\s*官方保修政策\", \"保修政策请以页面说明为准\"),\n \
+          \   (r\"Apple官方保修政策\", \"保修政策请以页面说明为准\"),\n    (r\"Apple 官方\", \"\"),\n    (r\"官方授权\", \"\"),\n    (r\"官方认证\", \"\
+          \"),\n    (r\"\\b3\\s*nm(?:\\s*architecture|\\s*process|\\s*制程)?\\b\", \"\"),\n    (r\"3\\s*纳米(?:架构|制程)?\", \"\"\
+          ),\n    (r\"\\bup to\\s*29\\s*hours(?:\\s*of\\s*video\\s*playback)?\\b\", \"all-day battery life\"),\n    (r\"约?\\\
+          s*29\\s*小时(?:视频播放)?\", \"全天续航\"),\n    (r\"\\b6\\s*meters?\\s*(?:for|/)\\s*30\\s*minutes?\\b\", \"the stated IP68\
+          \ rating\"),\n    (r\"6\\s*米(?:水深)?(?:浸泡|停留)?\\s*30\\s*分钟\", \"IP68 防水等级\"),\n    (r\"\\bUSB[- ]?C\\b\", \"接口信息待确认\"\
+          ),\n    (r\"多焦段拍摄\", \"拍摄能力\"),\n    (r\"Smart HDR\", \"\"),\n    (r\"\\beSIM\\b\", \"\"),\n    (r\"Wi[- ]?Fi\\\
+          s*6E?\", \"\"),\n    (r\"Bluetooth\\s*\\d+(?:\\.\\d+)?\", \"\"),\n    (r\"蓝牙\\s*\\d+(?:\\.\\d+)?\", \"\"),\n   \
+          \ (r\"光学变焦\", \"\"),\n    (r\"硬件光追\", \"\"),\n    (r\"GPU\\s*性能提升\\s*\\d+%\", \"图形性能表现请以官方规格为准\"),\n    (r\"desktop-level\\\
+          s*GPU\\s*performance\", \"powerful performance\"),\n    (r\"原神[^，。；\\n]*\", \"大型游戏\"),\n    (r\"第二代传感器位移防抖\", \"\
+          \"),\n    (r\"比前代多\\s*\\d+\\s*小时续航\", \"续航表现请以实际使用为准\"),\n    (r\"placeholder\\.com/[^\\s\\)\\]\\\"']*\", \"\"),\n\
+          \    (r\"example\\.com/[^\\s\\)\\]\\\"']*\", \"\"),\n    (r\"\\b(?:19|20)\\d{2}\\b\", \"\"),\n    (r\"\\b4K\\b\"\
+          , \"\"),\n    (r\"\\btriple[- ]?(?:lens|camera)(?:\\s+system)?\\b\", \"camera system\"),\n    (r\"(?im)^\\s*Dimensions\\\
+          s*[:：].*$\", \"\"),\n    (r\"(?im)^\\s*Weight\\s*[:：].*$\", \"\"),\n    (r\"(?im)^\\s*(?:尺寸|重量)\\s*[:：].*$\", \"\
+          \"),\n    (r\"\\b159\\.9\\s*[x×]\\s*76\\.7\\s*[x×]\\s*8\\.25\\s*mm\\b\", \"\"),\n    (r\"\\b221\\s*g\\b\", \"\"\
+          ),\n]\n\nDEFAULT_SAFE_NUMBERS = {\"1\", \"2\", \"3\", \"4\", \"5\", \"6\", \"10\", \"30\", \"48\", \"50\", \"60\"\
+          , \"80\", \"110\", \"120\", \"128\", \"155\", \"170\", \"200\"}\n\n\ndef extract_platform(text):\n    match = re.search(r\"\
+          (?m)^【平台】\\s*(.+?)\\s*$\", text)\n    return match.group(1).strip() if match else \"未知平台\"\n\n\ndef truncate_to_first_platform_block(text):\n\
+          \    matches = list(re.finditer(r\"(?m)^【平台】\\s*.+?\\s*$\", text))\n    if len(matches) <= 1:\n        return text\n\
+          \    return text[:matches[1].start()].strip()\n\n\ndef remove_unallowed_brand(text, allowed_brand=\"\"):\n    if\
+          \ str(allowed_brand or \"\").strip():\n        return text\n    text = re.sub(r\"(?im)^Brand:\\s*(?:Apple|苹果)\\\
+          s*$\", \"Brand: To be confirmed\", text)\n    text = re.sub(r\"(?im)^品牌[:：]\\s*(?:Apple|苹果)\\s*$\", \"品牌：待确认\",\
+          \ text)\n    text = re.sub(r'(?m)^\\s*\"brand\"\\s*:\\s*\\{\\s*\"@type\"\\s*:\\s*\"Brand\"\\s*,\\s*\"name\"\\s*:\\\
+          s*\"(?:Apple|苹果)\"\\s*\\}\\s*,?\\s*$', \"\", text)\n    text = re.sub(r'(?m)^\\s*\"brand\"\\s*:\\s*\"(?:Apple|苹果)\"\
+          \\s*,?\\s*$', \"\", text)\n    text = re.sub(r\"(?<![A-Za-z0-9])Apple[ /]*(?=iPhone|Phone|手机)\", \"\", text)\n \
+          \   text = re.sub(r\"(?im)^\\s*Apple\\s*,\\s*\", \"\", text)\n    text = re.sub(r\"(?im),\\s*Apple\\s*(?=,|$)\"\
+          , \"\", text)\n    text = re.sub(r\"(?im)^\\s*Apple\\s*$\", \"\", text)\n    text = re.sub(r\"苹果\\s*(?=iPhone|Phone|手机)\"\
+          , \"\", text)\n    text = re.sub(r\"(?m)^\\s*苹果\\s*,\\s*\", \"\", text)\n    text = re.sub(r\",\\s*苹果\\s*(?=,|$)\"\
+          , \"\", text)\n    return text\n\n\ndef sanitize_jsonld(text, allowed_brand=\"\"):\n    text = re.sub(r'(?m)^\\\
+          s*\"price\"\\s*:.*$', \"\", text)\n    text = re.sub(r'(?m)^\\s*\"priceCurrency\"\\s*:.*$', \"\", text)\n    text\
+          \ = re.sub(r'(?m)^\\s*\"availability\"\\s*:.*$', \"\", text)\n    text = re.sub(r'(?im)^\\s*\"aggregateRating\"\\\
+          s*:.*$', \"\", text)\n    text = re.sub(r'(?im)^\\s*\"review\"\\s*:.*$', \"\", text)\n    text = re.sub(r'(?im)^\\\
+          s*\"rating\"\\s*:.*$', \"\", text)\n    text = re.sub(r'\"offers\"\\s*:\\s*\\{[^}]*\\}\\s*,?', \"\", text)\n   \
+          \ text = re.sub(r'(?m)^\\s*\"url\"\\s*:\\s*\"待确认\"\\s*,?\\s*$', \"\", text)\n    text = re.sub(r'(?m)^\\s*\"image\"\
+          \\s*:\\s*\"(?:|https?://(?:placeholder|example)\\.com[^\\\"]*)\"\\s*,?\\s*$', \"\", text)\n    text = re.sub(r'\"\
+          image\"\\s*:\\s*\"https?://(?:placeholder|example)\\.com[^\\\"]*\"\\s*,?', \"\", text)\n    text = re.sub(r'(?m)^\\\
+          s*\"image\"\\s*:\\s*\"https?://\"\\s*,?\\s*$', \"\", text)\n    if not str(allowed_brand or \"\").strip():\n   \
+          \     text = remove_unallowed_brand(text, allowed_brand)\n    text = re.sub(r\",\\s*,\", \",\", text)\n    text\
+          \ = re.sub(r\"\\{\\s*,\", \"{\", text)\n    text = re.sub(r\",\\s*}\", \"}\", text)\n    text = re.sub(r\",\\s*\\\
+          n\\s*([}\\]])\", r\"\\n\\1\", text)\n    return text\ndef apply_trademark_guard(text, trademark_guard=\"\", allowed_brand=\"\
+          \", brand_mode=\"\"):\n    if brand_mode == \"official\" or str(allowed_brand or \"\").strip():\n        return\
+          \ text\n    try:\n        replacements = json.loads(trademark_guard or \"{}\")\n    except Exception:\n        replacements\
+          \ = {}\n    for term, replacement in sorted(replacements.items(), key=lambda kv: len(kv[0]), reverse=True):\n  \
+          \      if not term:\n            continue\n        text = re.sub(re.escape(term), replacement, text, flags=re.I)\n\
+          \    return text\n\n\ndef apply_missing_field_strategy(text):\n    text = re.sub(r\"(?im)^.*\\b(?:To be confirmed|待确认|seller\
+          \ should confirm|Please confirm|Unknown|N/A|TBD|Placeholder)[^\\n]*$\", \"\", text)\n    text = re.sub(r\"\\n{3,}\"\
+          , \"\\n\\n\", text)\n    return text.strip()\n\n\ndef apply_claim_controls(text, claim_controls=\"\"):\n    try:\n\
+          \        controls = json.loads(claim_controls or \"{}\")\n    except Exception:\n        controls = {}\n    forbidden\
+          \ = []\n    for cfg in controls.values():\n        forbidden.extend(cfg.get(\"forbidden_expansions\") or [])\n \
+          \   for term in forbidden:\n        if term:\n            text = re.sub(re.escape(term), \"\", text, flags=re.I)\n\
+          \    text = re.sub(r\"\\s+([,.;:，。；：])\", r\"\\1\", text)\n    return text\n\ndef clean_listing(text, allowed_brand=\"\
+          \", trademark_guard=\"\", claim_controls=\"\", brand_mode=\"\"):\n    text = str(text or \"\")\n    for pattern\
+          \ in REASONING_PATTERNS:\n        text = re.sub(pattern, \"\", text)\n    first_platform = re.search(r\"(?m)^【平台】\\\
+          s*.+?\\s*$\", text)\n    if first_platform:\n        text = text[first_platform.start():]\n    text = truncate_to_first_platform_block(text)\n\
+          \    for pattern, replacement in RISKY_REPLACEMENTS:\n        text = re.sub(pattern, replacement, text, flags=re.I)\n\
+          \    if brand_mode != \"official\":\n        text = remove_unallowed_brand(text, allowed_brand)\n    text = apply_trademark_guard(text,\
+          \ trademark_guard, allowed_brand, brand_mode)\n    text = apply_claim_controls(text, claim_controls)\n    text =\
+          \ sanitize_jsonld(text, allowed_brand)\n    text = apply_missing_field_strategy(text)\n    text = re.sub(r\"(?m)^\\\
+          s*接口信息待确认\\s*(?:and|和)?\\s*supported\\.?\\s*$\", \"接口信息待确认。\", text)\n    text = re.sub(r\"[ \\t]{2,}\", \" \",\
+          \ text)\n    text = re.sub(r\"[，,。；;：:]\\s*([，,。；;：:])\", r\"\\1\", text)\n    text = re.sub(r\"[ \\t]+\\n\", \"\
+          \\n\", text)\n    text = re.sub(r\"\\n{3,}\", \"\\n\\n\", text)\n    return text.strip()\n\n\ndef find_reasoning_leaks(text):\n\
+          \    keywords = [\"检查字符数\", \"我是否应该\", \"重新修改\", \"这样合规\", \"现在输出\", \"注意：我\", \"用户需要我\", \"我们分析\", \"我看看\", \"\
+          should I\", \"now output\"]\n    return [k for k in keywords if re.search(re.escape(k), text, flags=re.I)]\n\n\n\
+          def strip_style_notes(text):\n    return re.sub(r\"(?ms)^【运营补充项】.*?$(?=^【平台】|\\Z)\", \"\", text)\n\n\ndef find_forbidden_claims(text):\n\
+          \    body = strip_style_notes(text)\n    hits = []\n    for claim in FORBIDDEN_CLAIMS:\n        if not re.search(re.escape(claim),\
+          \ body, flags=re.I):\n            continue\n        # Neutral seller-confirmation phrasing is allowed; promises\
+          \ are not.\n        if claim in {\"赠品\", \"Warranty\"} and re.search(r\"(?:确认|核对|补充|check|confirm|subject to|policy)\"\
+          , body, flags=re.I):\n            continue\n        hits.append(claim)\n    return hits\n\n\ndef find_brand_leakage(text,\
+          \ allowed_brand=\"\", brand_mode=\"\"):\n    if brand_mode == \"official\" or str(allowed_brand or \"\").strip():\n\
+          \        return []\n    hits = [term for term in BRAND_LEAKAGE_TERMS if re.search(re.escape(term), text, flags=re.I)]\n\
+          \    if not str(allowed_brand or \"\").strip():\n        for term in BRAND_TERMS:\n            if re.search(re.escape(term),\
+          \ text, flags=re.I):\n                hits.append(f\"未授权品牌字段：{term}\")\n    return hits\n\n\ndef find_risky_numbers(text,\
+          \ source_numbers=\"\"):\n    allowed = set(DEFAULT_SAFE_NUMBERS) | set(re.findall(r\"\\d+(?:\\.\\d+)?\", source_numbers\
+          \ or \"\"))\n    numbers = set(re.findall(r\"(?<![A-Za-z0-9])\\d+(?:\\.\\d+)?\\s*(?:nm|小时|h|H|英寸|寸|GB|G|MP|万|%|倍|Hz|mAh|W|年|天|分钟|米|meters?)?\"\
+          , text))\n    risky = []\n    for raw in numbers:\n        value = re.match(r\"\\d+(?:\\.\\d+)?\", raw).group(0)\n\
+          \        if value not in allowed:\n            risky.append(raw.strip())\n    return sorted(set(risky))\n\n\ndef\
+          \ qa_listing(original, cleaned, source_numbers=\"\", allowed_brand=\"\", trademark_guard=\"\", claim_controls=\"\
+          \", brand_mode=\"\"):\n    platform = extract_platform(cleaned or original)\n    issues = []\n    reasoning = find_reasoning_leaks(original)\n\
+          \    if reasoning:\n        issues.append(\"已清理非正文分析内容\")\n    forbidden = find_forbidden_claims(cleaned)\n    if\
+          \ forbidden:\n        issues.append(\"仍含高风险声明，发布前必须核对来源：\" + \"、\".join(sorted(set(forbidden))))\n    brands_original\
+          \ = find_brand_leakage(original, allowed_brand, brand_mode)\n    brands_cleaned = find_brand_leakage(cleaned, allowed_brand,\
+          \ brand_mode)\n    if brands_original and not brands_cleaned:\n        issues.append(\"未授权品牌字段已自动清理\")\n    elif\
+          \ brands_cleaned:\n        issues.append(\"可能存在第三方品牌/平台背书风险：\" + \"、\".join(sorted(set(brands_cleaned))))\n    numbers\
+          \ = find_risky_numbers(cleaned, source_numbers)\n    if numbers:\n        issues.append(\"出现需核对来源的数字/规格：\" + \"\
+          、\".join(numbers))\n    if re.search(r\"(?i)placeholder\\.com|example\\.com|InStock|3\\s*nm|29\\s*hours|6\\s*meters|USB[-\
+          \ ]?C|Smart HDR|eSIM\", original) and not re.search(r\"(?i)placeholder\\.com|example\\.com|InStock|3\\s*nm|29\\\
+          s*hours|6\\s*meters|USB[- ]?C|Smart HDR|eSIM\", cleaned):\n        issues.append(\"已清理未核实参数或占位字段\")\n    return\
+          \ platform, issues\n\n\ndef classify_issue(issue):\n    if re.search(r\"第三方品牌|平台背书|未授权品牌字段\", issue):\n        return\
+          \ \"P0\"\n    if re.search(r\"高风险声明|数字/规格|保修|物流|库存|Condition|carrier|兼容\", issue, flags=re.I):\n        return \"\
+          P1\"\n    if re.search(r\"未核实参数|占位字段|重复平台|SKU|颜色|图片|尺寸|重量|包装\", issue):\n        return \"P2\"\n    return \"P2\"\
+          \n\n\ndef compute_qa_status(all_issues, risk_level=\"\", risk_score=0):\n    severities = [classify_issue(issue)\
+          \ for _, issues in all_issues for issue in issues]\n    if str(risk_level).lower() == \"high\" or int(risk_score\
+          \ or 0) >= 65 or \"P0\" in severities:\n        return \"BLOCKED\"\n    if \"P1\" in severities or str(risk_level).lower()\
+          \ == \"medium\" or int(risk_score or 0) >= 30:\n        return \"WARNING\"\n    if \"P2\" in severities:\n     \
+          \   return \"READY_WITH_REVIEW\"\n    return \"READY\"\n\n\ndef format_qa_report(all_issues, qa_status=\"READY\"\
+          , risk_score=0):\n    lines = [\"## QA 合规检查\", \"\", f\"- status: {qa_status}\", f\"- risk_score: {int(risk_score\
+          \ or 0)}\", \"\"]\n    if not all_issues:\n        lines.append(\"- 已完成基础合规复核。仍建议发布前人工复核价格、库存、物流、保修、授权、赠品等信息。\"\
+          )\n        return \"\\n\".join(lines)\n    lines.append(\"以下问题需要发布前人工复核：\")\n    lines.append(\"\")\n    for platform,\
+          \ issues in all_issues:\n        lines.append(f\"### {platform}\")\n        for issue in issues:\n            lines.append(f\"\
+          - {classify_issue(issue)}: {issue}\")\n        lines.append(\"\")\n    return \"\\n\".join(lines).strip()\n\n\n\
+          def main(listings: list, source_numbers: str = \"\", allowed_brand: str = \"\", can_generate: bool = True, preflight_report:\
+          \ str = \"\", trademark_guard: str = \"\", claim_controls: str = \"\", missing_field_strategies: str = \"\", brand_mode:\
+          \ str = \"\", brand_risk: str = \"\", risk_level: str = \"\", risk_score: int = 0):\n    if not can_generate:\n\
+          \        report = str(preflight_report or \"# Preflight Validation\\n\\n❌ 未通过：缺少必要字段。\")\n        md = \"# 多平台 Listing\
+          \ 生成中断\\n\\n\" + report + \"\\n\"\n        return {\"result\": md, \"qa_report\": \"status: BLOCKED\\n预检未通过，已中断生成。\"\
+          , \"qa_status\": \"BLOCKED\"}\n\n    cleaned_by_platform = {}\n    all_issues = []\n\n    for item in listings:\n\
+          \        original = str(item or \"\")\n        cleaned = clean_listing(original, allowed_brand, trademark_guard,\
+          \ claim_controls, brand_mode)\n        if not cleaned:\n            continue\n        platform, issues = qa_listing(original,\
+          \ cleaned, source_numbers, allowed_brand, trademark_guard, claim_controls, brand_mode)\n        if platform in cleaned_by_platform:\n\
+          \            issues.append(\"重复平台输出已去重：仅保留第一份内容\")\n        else:\n            cleaned_by_platform[platform] = cleaned\n\
+          \        if issues:\n            all_issues.append((platform, issues))\n\n    cleaned_items = list(cleaned_by_platform.values())\n\
+          \    qa_status = compute_qa_status(all_issues, risk_level, risk_score)\n    qa_report = format_qa_report(all_issues,\
+          \ qa_status, risk_score)\n\n    md = \"# 多平台 Listing 文案汇总\\n\\n\"\n\n    for item in cleaned_items:\n        md\
+          \ += item + \"\\n\\n---\\n\\n\"\n\n    return {\"result\": md, \"qa_report\": qa_report, \"qa_status\": qa_status}\n"
+        code_language: python3
+        outputs:
+          result:
+            children: null
+            type: string
+          qa_report:
+            children: null
+            type: string
+          qa_status:
+            children: null
+            type: string
+        selected: false
+        title: Aggregator 汇总与合规审查
+        type: code
+        variables:
+        - value_selector:
+          - '1779899961694'
+          - output
+          value_type: array[string]
+          variable: listings
+        - value_selector:
+          - '1779902000003'
+          - source_numbers
+          value_type: string
+          variable: source_numbers
+        - value_selector:
+          - '1779902000003'
+          - allowed_brand
+          value_type: string
+          variable: allowed_brand
+        - value_selector:
+          - '1779902500001'
+          - can_generate
+          value_type: boolean
+          variable: can_generate
+        - value_selector:
+          - '1779902500001'
+          - preflight_report
+          value_type: string
+          variable: preflight_report
+        - value_selector:
+          - '1779902500001'
+          - trademark_guard
+          value_type: string
+          variable: trademark_guard
+        - value_selector:
+          - '1779902500001'
+          - claim_controls
+          value_type: string
+          variable: claim_controls
+        - value_selector:
+          - '1779902500001'
+          - missing_field_strategies
+          value_type: string
+          variable: missing_field_strategies
+        - value_selector:
+          - '1779902500001'
+          - brand_mode
+          value_type: string
+          variable: brand_mode
+        - value_selector:
+          - '1779902500001'
+          - brand_risk
+          value_type: string
+          variable: brand_risk
+        - variable: risk_level
+          value_selector:
+          - '1779902500001'
+          - risk_level
+          value_type: string
+        - variable: risk_score
+          value_selector:
+          - '1779902500001'
+          - risk_score
+          value_type: number
+      height: 52
+      id: '1779900808738'
+      position:
+        x: 1760
+        y: 220
+      positionAbsolute:
+        x: 1760
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        authorization:
+          config: null
+          type: no-auth
+        body:
+          data:
+          - id: doc-content
+            key: ''
+            type: text
+            value: '{{#1779900808738.result#}}'
+          type: raw-text
+        desc: 自动创建飞书文档和钉钉文档，并返回两个文档链接
+        headers: 'Content-Type:text/markdown; charset=utf-8
+
+          Authorization:Bearer listing-doc-bridge-2026'
+        method: post
+        params: ''
+        error_strategy: default-value
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 100
+        selected: false
+        ssl_verify: true
+        timeout:
+          max_connect_timeout: 10
+          max_read_timeout: 180
+          max_write_timeout: 30
+        title: 创建飞书和钉钉文档
+        type: http-request
+        url: https://downloaded-pay-laser-send.trycloudflare.com/create/all
+        variables: []
+      height: 138
+      id: '1779903000001'
+      position:
+        x: 2080
+        y: 220
+      positionAbsolute:
+        x: 2080
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\nimport re\n\n\nDEFAULT_PLATFORMS = \"Amazon,淘宝,京东,ebay,速卖通,独立站\"\nCANONICAL_PLATFORMS = {\n  \
+          \  \"amazon\": \"Amazon\",\n    \"亚马逊\": \"Amazon\",\n    \"taobao\": \"淘宝\",\n    \"淘宝\": \"淘宝\",\n    \"tmall\"\
+          : \"淘宝\",\n    \"天猫\": \"淘宝\",\n    \"jd\": \"京东\",\n    \"jd.com\": \"京东\",\n    \"jingdong\": \"京东\",\n    \"\
+          京东\": \"京东\",\n    \"ebay\": \"ebay\",\n    \"e-bay\": \"ebay\",\n    \"速卖通\": \"速卖通\",\n    \"aliexpress\": \"\
+          速卖通\",\n    \"ali express\": \"速卖通\",\n    \"shopify\": \"独立站\",\n    \"woocommerce\": \"独立站\",\n    \"brand website\"\
+          : \"独立站\",\n    \"website\": \"独立站\",\n    \"official website\": \"独立站\",\n    \"dtc\": \"独立站\",\n    \"官网\": \"\
+          独立站\",\n    \"品牌官网\": \"独立站\",\n    \"自建站\": \"独立站\",\n    \"独立站\": \"独立站\",\n}\n\nPLATFORM_MIX = {\n    \"Amazon\"\
+          : {\"compliance\": 70, \"marketing\": 30, \"style\": \"balanced marketplace copy\", \"style_tags\": [\"professional\"\
+          , \"conversion\"]},\n    \"淘宝\": {\"compliance\": 40, \"marketing\": 60, \"style\": \"scenario-driven conversion\
+          \ copy\", \"style_tags\": [\"emotional\", \"lifestyle\"]},\n    \"京东\": {\"compliance\": 75, \"marketing\": 25,\
+          \ \"style\": \"parameter-first retail copy\", \"style_tags\": [\"minimalist\", \"tech\"]},\n    \"ebay\": {\"compliance\"\
+          : 80, \"marketing\": 20, \"style\": \"specifics-first seller copy\", \"style_tags\": [\"minimalist\", \"seller_neutral\"\
+          ]},\n    \"速卖通\": {\"compliance\": 75, \"marketing\": 25, \"style\": \"clean cross-border marketplace copy\", \"\
+          style_tags\": [\"professional\", \"cross_border\"]},\n    \"独立站\": {\"compliance\": 25, \"marketing\": 75, \"style\"\
+          : \"SEO and brand-conversion copy\", \"style_tags\": [\"seo\", \"branding\"]},\n}\n\nPLATFORM_RULES = {\n    \"\
+          Amazon\": {\n        \"language\": \"English\",\n        \"structure\": \"Title + 5 Bullet Points + Product Description\"\
+          ,\n        \"rules\": [\n            \"Title under 180 characters when possible; no emoji, exclamation marks, promotional\
+          \ claims, decorative symbols, all-caps spam, keyword stuffing, or subjective superlatives such as best/top/#1/ultimate/perfect/guaranteed.\"\
+          ,\n            \"Bullet points must be concise, readable, benefit-led, and based only on verified or allowed product\
+          \ facts.\",\n            \"Do not use Taobao/JD/social-commerce wording, Chinese slang, or customer-service filler.\"\
+          ,\n            \"Do not output To be confirmed placeholders. If a required fact is missing, omit that field or mention\
+          \ it only in 运营补充项.\",\n        ],\n        \"template\": \"【平台】Amazon\\n\\n【标题】\\n...\\n\\n【正文/详情/脚本】\\nProduct\
+          \ Description:\\n...\\n\\n【标签/关键词/Bullet Points】\\n- Feature: benefit\\n- Feature: benefit\\n- Feature: benefit\\\
+          n- Feature: benefit\\n- Feature: benefit\\n\\n【运营补充项】\\n请在发布前补充：\\n- 实际售价及 Buy Box 定价策略\\n- 颜色 SKU（每个颜色独立 ASIN）\\\
+          n- 库存数量\\n- 发货地及物流时效（FBA / FBM）\\n- 网络锁状态（Unlocked / Carrier — 需明确注明）\\n- 商品成色 / Condition（New / Refurbished / Open\
+          \ Box）\\n- 配件清单（是否含充电器、数据线）\\n- 地区频段兼容性说明\",\n    },\n    \"淘宝\": {\n        \"language\": \"Chinese\",\n      \
+          \  \"structure\": \"30字内短标题 + 卖点标签 + 详情页文案\",\n        \"rules\": [\n            \"可使用 1-2 个 emoji，但避免过时网络词、空洞 AI\
+          \ 腔和过度口语化。\",\n            \"场景化描述优先，用具体生活/办公场景表达收益，例如出差、会议、拍资料、通勤、晚上刷视频；避免‘效率与创作提供坚实后盾’这类泛泛表达。\",\n           \
+          \ \"严禁编造赠品、优惠、粉丝福利、平台联动、库存告急、销量、正品授权、保修、包邮、发货时效。\",\n            \"不要把复核提醒写成促销承诺；赠品/库存/售后只能放在运营补充项中提醒人工核对。\",\n\
+          \        ],\n        \"template\": \"【平台】淘宝\\n\\n【标题】\\n...\\n\\n【正文/详情/脚本】\\n...\\n\\n【标签/关键词/Bullet Points】\\\
+          n...\\n\\n【运营补充项】\\n请在发布前补充：\\n- 商品颜色及各颜色库存数量\\n- 实际售价（含活动价、会员价设置）\\n- 发货仓库与预计到达时效\\n- 售后说明（保修政策请以购买页面为准）\\n- 配件内容（是否含充电头、数据线，需在详情页说明）\\\
+          n- 主图及详情页视觉素材\",\n    },\n    \"京东\": {\n        \"language\": \"Chinese\",\n        \"structure\": \"规范标题 + 核心参数\
+          \ + 售后承诺\",\n        \"rules\": [\n            \"正文直接从【核心参数】开始，不要在标题后重复一段营销介绍。\",\n            \"参数使用纯文本列表，只列已知字段；未知字段不要进入正文，可在运营补充项提醒补充。\"\
+          ,\n            \"只有允许品牌字段非空时才能输出品牌；关键词和型号暗示不等于品牌字段。\",\n            \"售后承诺如资料未提供，只写：保修及售后政策请以京东平台展示及购买页面说明为准；如有疑问，可咨询店铺客服。\"\
+          ,\n        ],\n        \"template\": \"【平台】京东\\n\\n【标题】\\n...\\n\\n【正文/详情/脚本】\\n【核心参数】\\n型号：...\\n...\\n\\n【售后承诺】\\\
+          n...\\n\\n【标签/关键词/Bullet Points】\\n...\\n\\n【运营补充项】\\n请在发布前补充：\\n- 颜色 SKU 及各颜色库存数量\\n- 实际售价（含京东价格政策、PLUS 会员优惠）\\\
+          n- 发货仓库与京东配送时效\\n- 是否参与京东自营或第三方资质说明\\n- 配件清单（充电器及数据线是否附赠，需在商详页注明）\\n- 实拍图及白底主图上传\",\n    },\n    \"ebay\": {\n \
+          \       \"language\": \"English\",\n        \"structure\": \"Title under 80 characters + Item Specifics + Product\
+          \ Description\",\n        \"rules\": [\n            \"Condition must be explicit only when known; if unknown, do\
+          \ not put a placeholder in public Item Specifics and remind the seller in 运营补充项.\",\n            \"Carrier lock,\
+          \ network compatibility, region/version, real photos, and accessories must not be guessed; unknowns belong in 运营补充项,\
+          \ not public fields.\",\n            \"Do not claim Unlocked, Global Version, Factory Sealed, warranty, shipping\
+          \ speed, genuine/authentic/original status, or compatibility unless explicitly provided.\",\n            \"Do not\
+          \ output To be confirmed, Unknown, N/A, TBD, or placeholder rows in public Item Specifics.\",\n            \"No\
+          \ Amazon/Taobao/AliExpress tone or promotional filler.\",\n        ],\n        \"template\": \"【平台】ebay\\n\\n【标题】\\\
+          n...\\n\\n【正文/详情/脚本】\\nItem Specifics:\\nBrand: ...\\nModel: ...\\nStorage Capacity: ...\\n[只填写有确认值的字段，未知字段整行删除，禁止占位行]\\\
+          n\\nProduct Description:\\n...\\n\\n【标签/关键词/Bullet Points】\\n...\\n\\n【运营补充项】\\n请在发布前补充：\\n- Condition（New / Seller\
+          \ Refurbished / For Parts — 必须明确，不可缺省）\\n- 颜色 SKU（每个颜色独立 Listing 或 Variation）\\n- 网络制式 / Carrier lock 状态\\n- 发货地及运费模板设置\\\
+          n- 退换货政策（Return policy 天数及条件）\\n- 实拍图或品牌授权图上传\",\n    },\n    \"速卖通\": {\n        \"language\": \"English\",\n \
+          \       \"structure\": \"Title under 128 characters + Product Specifications + Product Description\",\n        \"\
+          rules\": [\n            \"No Hot Sale, Best Quality, Free Shipping, Fast Shipping, Warranty, official after-sales\
+          \ wording, Genuine/Authentic/Original claims, all-caps spam, excessive punctuation, or platform references.\",\n\
+          \            \"Default to Generic/white-label wording unless official brand mode and explicit brand authorization\
+          \ are provided.\",\n            \"Product Specifications list only known fields; do not dump many To be confirmed\
+          \ rows into the public copy.\",\n            \"Unknown price, stock, logistics, warranty, color, dimensions, weight,\
+          \ RAM, OS, screen size should be raised in 运营补充项, not as public filler.\",\n            \"Use clean marketplace\
+          \ English, not AI consultant wording such as 'For accurate listing optimization'.\",\n        ],\n        \"template\"\
+          : \"【平台】速卖通\\n\\n【标题】\\n...\\n\\n【正文/详情/脚本】\\nProduct Specifications:\\n...\\n\\nProduct Description:\\n...\\n\\\
+          n【标签/关键词/Bullet Points】\\nkeyword, keyword, keyword\\n\\n【运营补充项】\\n请在发布前补充：\\n- Color variant（每色独立 SKU）\\n- Condition（New\
+          \ / Refurbished — 需明确）\\n- 网络制式 / Carrier lock 状态\\n- 发货地及预计送达时间\\n- 配件内容（是否含充电器、数据线）\\n- 目标市场频段兼容性说明\",\n    },\n\
+          \    \"独立站\": {\n        \"language\": \"Chinese or English matching product context; default English for cross-border\
+          \ pages\",\n        \"structure\": \"SEO info + hero copy + short description + detail modules + FAQ + image ALT\
+          \ + Product JSON-LD\",\n        \"rules\": [\n            \"Independent-site copy can be richer, but every module\
+          \ must be grounded in known facts.\",\n            \"Do not write 3nm, 29 hours, 6 meters, 30 minutes, USB-C, multi-focal,\
+          \ Smart HDR, eSIM, Wi-Fi/Bluetooth versions, optical zoom, GPU percentages, ProRAW, cinematic mode, grade 5 titanium,\
+          \ dimensions, weight, screen size, 4K, triple-lens/triple camera, year modifiers such as 2024, Waterproof, Medical\
+          \ Grade, Military Grade, FDA Approved, or placeholder URLs unless explicitly provided.\",\n            \"JSON-LD\
+          \ may include only name, description, sku/mpn if known, brand only if allowed_brand is non-empty, and image only\
+          \ if a real image URL is provided. Omit offers, price, availability, rating, reviews, shipping, and warranty when\
+          \ unknown.\",\n            \"Do not expose To be confirmed placeholders in public modules. Missing business fields\
+          \ belong in 运营补充项.\",\n        ],\n        \"template\": \"【平台】独立站\\n\\n【标题】\\nSEO Title: ...\\nH1: ...\\nURL Slug:\
+          \ ...\\nCTA: ...\\n\\n【正文/详情/脚本】\\nMeta Description: ...\\nShort Description: ...\\nCore Features:\\n...\\nSpecifications:\\\
+          n...\\nFAQ:\\n...\\nImage ALT:\\n...\\nProduct JSON-LD:\\n{...}\\n\\n【标签/关键词/Bullet Points】\\nPrimary Keyword: ...\\\
+          nSecondary Keywords: ...\\n\\n【运营补充项】\\n请在发布前补充：\\n- 实际售价（补充后可在 JSON-LD 中添加 offers 字段）\\n- 库存状态（补充后可添加 availability\
+          \ 字段）\\n- 颜色 SKU 及变体配置\\n- 实拍主图与场景图上传\\n- 退款与退换货政策页面链接\\n- 频段兼容性说明（按目标销售地区）\\n- 配件清单（是否含充电器，需在详情页注明）\",\n    },\n\
+          }\n\n\n\ndef _loads(text):\n    try:\n        return json.loads(text or \"{}\")\n    except Exception:\n       \
+          \ return {}\n\ndef _generic_product_desc(schema):\n    parts=[]\n    for key in [\"material\",\"chip\",\"camera_main\"\
+          ,\"battery_claim\",\"interaction\",\"water_resistance\",\"network\",\"storage\"]:\n        value=schema.get(key)\n\
+          \        if value:\n            parts.append(str(value))\n    return \"Generic white-label smartphone with \" +\
+          \ \", \".join(parts) + \".\" if parts else \"Generic white-label smartphone.\"\n\ndef _generic_keywords(schema):\n\
+          \    words=[\"white-label smartphone\", \"generic flagship smartphone\", \"5G smartphone\"]\n    if schema.get(\"\
+          camera_main\"): words.append(\"48MP camera phone\")\n    if schema.get(\"material\"): words.append(\"titanium-style\
+          \ phone\")\n    if schema.get(\"battery_claim\"): words.append(\"long battery life phone\")\n    return \", \".join(dict.fromkeys(words))\n\
+          \ndef normalize_platform(raw):\n    value = str(raw or \"\").strip()\n    value = re.sub(r\"^\\s*(?:\\d+[.)、．]?|[-*•]+)\\\
+          s*\", \"\", value)\n    value = re.sub(r\"\\s+\", \" \", value).strip(\" ：:，,;；\")\n    if not value:\n        return\
+          \ \"\"\n    key = value.lower()\n    return CANONICAL_PLATFORMS.get(key, CANONICAL_PLATFORMS.get(value, value))\n\
+          \n\ndef build_rules(platform):\n    cfg = PLATFORM_RULES.get(platform, {})\n    lines = [\n        f\"Platform:\
+          \ {platform}\",\n        f\"Language: {cfg.get('language', 'Match user context')}\",\n        f\"Required structure:\
+          \ {cfg.get('structure', 'Use fixed 5-section output')}\",\n        \"Rules:\",\n    ]\n    for rule in cfg.get(\"\
+          rules\", []):\n        lines.append(f\"- {rule}\")\n    return \"\\n\".join(lines)\n\n\ndef main(platforms: str,\
+          \ product_name: str, product_desc: str,\n         keywords: str, target_audience: str, product_angles=None, verified_facts:\
+          \ str = \"\", source_numbers: str = \"\", allowed_brand: str = \"\", can_generate: bool = True, preflight_report:\
+          \ str = \"\", evidence_pack: str = \"\", allowed_claims: str = \"\", canonical_product_schema: str = \"\", trusted_fields:\
+          \ str = \"\", forbidden_terms: str = \"\", trademark_guard: str = \"\", claim_controls: str = \"\", missing_field_strategies:\
+          \ str = \"\", generic_schema: str = \"\", brand_mode: str = \"\", brand_risk: str = \"\", strategy_mode: str = \"\
+          \", risk_level: str = \"\", risk_score: int = 0):\n    if not can_generate:\n        return {\"iteration_input\"\
+          : []}\n\n    \n    generic_obj = _loads(generic_schema)\n    strategy_mode = strategy_mode or (\"official_brand\"\
+          \ if brand_mode == \"official\" else \"white_label\" if brand_mode == \"generic\" else \"placeholder_safe\")\n \
+          \   effective_product_name = product_name\n    effective_product_desc = product_desc\n    effective_keywords = keywords\n\
+          \    effective_angles = product_angles or \"\"\n    if brand_mode == \"generic\":\n        effective_product_name\
+          \ = generic_obj.get(\"product_name\") or \"flagship smartphone\"\n        effective_product_desc = _generic_product_desc(generic_obj)\n\
+          \        effective_keywords = _generic_keywords(generic_obj)\n        effective_angles = \"Use only Generic Schema\
+          \ and allowed claims. Do not mention brand-specific model names or branded features.\"\n\n    platform_text = platforms\
+          \ or DEFAULT_PLATFORMS\n    platform_text = re.sub(r\"速\\s*卖\\s*通\", \"速卖通\", platform_text)\n    platform_text\
+          \ = re.sub(r\"ali\\s*express\", \"aliexpress\", platform_text, flags=re.I)\n    raw_platforms = [p.strip() for p\
+          \ in re.split(r\"[,，;；\\n]+\", platform_text) if p.strip()]\n\n    platform_list = []\n    for raw in raw_platforms:\n\
+          \        normalized = normalize_platform(raw)\n        if normalized and normalized not in platform_list:\n    \
+          \        platform_list.append(normalized)\n\n    if not platform_list:\n        platform_list = [normalize_platform(p)\
+          \ for p in DEFAULT_PLATFORMS.split(\",\")]\n\n    iteration_input = []\n    for p in platform_list:\n        cfg\
+          \ = PLATFORM_RULES.get(p, {})\n        mix = PLATFORM_MIX.get(p, {\"compliance\": 70, \"marketing\": 30, \"style\"\
+          : \"balanced copy\"})\n        strategy = {\n            \"platform\": p,\n            \"language\": cfg.get(\"\
+          language\", \"Match user context\"),\n            \"structure\": cfg.get(\"structure\", \"Use fixed 5-section output\"\
+          ),\n            \"rules\": cfg.get(\"rules\", []),\n            \"allow_brand\": bool(allowed_brand),\n        \
+          \    \"brand_mode\": brand_mode or \"placeholder\",\n            \"brand_risk\": brand_risk or \"high\",\n     \
+          \       \"risk_level\": risk_level or \"medium\",\n            \"risk_score\": int(risk_score or 0),\n         \
+          \   \"compliance_weight\": mix[\"compliance\"],\n            \"marketing_weight\": mix[\"marketing\"],\n       \
+          \     \"copy_style\": mix[\"style\"],\n            \"style_tags\": mix.get(\"style_tags\", []),\n            \"\
+          strategy_mode\": strategy_mode,\n            \"allowed_claims\": [line[2:] for line in str(allowed_claims or \"\"\
+          ).splitlines() if line.startswith(\"- \")],\n            \"forbidden_terms\": [line[2:] for line in str(forbidden_terms\
+          \ or \"\").splitlines() if line.startswith(\"- \")],\n            \"trademark_guard\": json.loads(trademark_guard\
+          \ or \"{}\"),\n            \"claim_controls\": json.loads(claim_controls or \"{}\"),\n            \"missing_field_strategy\"\
+          : json.loads(missing_field_strategies or \"{}\").get(p, \"style_note_only\"),\n        }\n        iteration_input.append({\n\
+          \            \"platform\": p,\n            \"product_name\": effective_product_name,\n            \"product_desc\"\
+          : effective_product_desc,\n            \"keywords\": effective_keywords,\n            \"target_audience\": target_audience,\n\
+          \            \"product_angles\": effective_angles,\n            \"verified_facts\": verified_facts or \"\",\n  \
+          \          \"source_numbers\": source_numbers or \"\",\n            \"allowed_brand\": allowed_brand or \"\",\n\
+          \            \"platform_rules\": build_rules(p),\n            \"format_template\": cfg.get(\"template\", \"【平台】...\\\
+          n\\n【标题】...\\n\\n【正文/详情/脚本】...\\n\\n【标签/关键词/Bullet Points】...\\n\\n【运营补充项】...\"),\n            \"evidence_pack\"\
+          : evidence_pack or \"\",\n            \"allowed_claims\": allowed_claims or \"\",\n            \"canonical_product_schema\"\
+          : canonical_product_schema or \"\",\n            \"trusted_fields\": trusted_fields or \"\",\n            \"generic_schema\"\
+          : generic_schema or \"\",\n            \"brand_mode\": brand_mode or \"placeholder\",\n            \"brand_risk\"\
+          : brand_risk or \"high\",\n            \"risk_level\": risk_level or \"medium\",\n            \"risk_score\": int(risk_score\
+          \ or 0),\n            \"compliance_weight\": mix[\"compliance\"],\n            \"marketing_weight\": mix[\"marketing\"\
+          ],\n            \"copy_style\": mix[\"style\"],\n            \"style_tags\": mix.get(\"style_tags\", []),\n    \
+          \        \"strategy_mode\": strategy_mode,\n            \"forbidden_terms\": forbidden_terms or \"\",\n        \
+          \    \"platform_strategy_json\": json.dumps(strategy, ensure_ascii=False, indent=2),\n            \"trademark_guard\"\
+          : trademark_guard or \"{}\",\n            \"claim_controls\": claim_controls or \"{}\",\n            \"missing_field_strategy\"\
+          : strategy.get(\"missing_field_strategy\", \"style_note_only\"),\n        })\n\n    return {\"iteration_input\"\
+          : iteration_input}"
+        code_language: python3
+        desc: ''
+        isInIteration: false
+        isInLoop: false
+        outputs:
+          iteration_input:
+            children: null
+            type: array[object]
+        selected: false
+        title: 平台 Router（单平台规则注入）
+        type: code
+        variables:
+        - value_selector:
+          - '1779902000003'
+          - product_name
+          value_type: string
+          variable: product_name
+        - value_selector:
+          - '1779902000003'
+          - product_desc
+          value_type: string
+          variable: product_desc
+        - value_selector:
+          - '1779902000003'
+          - keywords
+          value_type: string
+          variable: keywords
+        - value_selector:
+          - '1779902000003'
+          - target_audience
+          value_type: string
+          variable: target_audience
+        - value_selector:
+          - '1779902000003'
+          - platforms
+          value_type: string
+          variable: platforms
+        - value_selector:
+          - '1779898136632'
+          - text
+          value_type: string
+          variable: product_angles
+        - value_selector:
+          - '1779902000003'
+          - verified_facts
+          value_type: string
+          variable: verified_facts
+        - value_selector:
+          - '1779902000003'
+          - source_numbers
+          value_type: string
+          variable: source_numbers
+        - value_selector:
+          - '1779902000003'
+          - allowed_brand
+          value_type: string
+          variable: allowed_brand
+        - value_selector:
+          - '1779902500001'
+          - can_generate
+          value_type: boolean
+          variable: can_generate
+        - value_selector:
+          - '1779902500001'
+          - preflight_report
+          value_type: string
+          variable: preflight_report
+        - value_selector:
+          - '1779902500001'
+          - evidence_pack
+          value_type: string
+          variable: evidence_pack
+        - value_selector:
+          - '1779902500001'
+          - allowed_claims
+          value_type: string
+          variable: allowed_claims
+        - value_selector:
+          - '1779902500001'
+          - canonical_product_schema
+          value_type: string
+          variable: canonical_product_schema
+        - value_selector:
+          - '1779902500001'
+          - forbidden_terms
+          value_type: string
+          variable: forbidden_terms
+        - value_selector:
+          - '1779902500001'
+          - trademark_guard
+          value_type: string
+          variable: trademark_guard
+        - value_selector:
+          - '1779902500001'
+          - claim_controls
+          value_type: string
+          variable: claim_controls
+        - value_selector:
+          - '1779902500001'
+          - missing_field_strategies
+          value_type: string
+          variable: missing_field_strategies
+        - value_selector:
+          - '1779902500001'
+          - generic_schema
+          value_type: string
+          variable: generic_schema
+        - value_selector:
+          - '1779902500001'
+          - brand_mode
+          value_type: string
+          variable: brand_mode
+        - value_selector:
+          - '1779902500001'
+          - brand_risk
+          value_type: string
+          variable: brand_risk
+        - value_selector:
+          - '1779902500001'
+          - strategy_mode
+          value_type: string
+          variable: strategy_mode
+        - variable: risk_level
+          value_selector:
+          - '1779902500001'
+          - risk_level
+        - variable: risk_score
+          value_selector:
+          - '1779902500001'
+          - risk_score
+        - variable: trusted_fields
+          value_selector:
+          - '1779902500001'
+          - trusted_fields
+      height: 52
+      id: '17799009977710'
+      position:
+        x: 860
+        y: 220
+      positionAbsolute:
+        x: 860
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "import json\nimport re\n\n\ndef clean(value):\n    return str(value or \"\").strip()\n\n\ndef has_pending(value):\n\
+          \    return bool(re.search(r\"待确认|未识别|未提供|to be confirmed\", clean(value), flags=re.I))\n\n\ndef fact_map(verified_facts):\n\
+          \    facts = {}\n    for line in clean(verified_facts).splitlines():\n        m = re.match(r\"^-\\s*([^:：]+)[:：]\\\
+          s*(.+)$\", line.strip())\n        if m and not has_pending(m.group(2)):\n            facts[m.group(1).strip()] =\
+          \ m.group(2).strip()\n    return facts\n\n\ndef first_match(text, patterns):\n    for pattern, value in patterns:\n\
+          \        if re.search(pattern, text, flags=re.I):\n            return value\n    return None\n\n\n\ndef detect_product_category(text):\n\
+          \    t = text.lower()\n    if any(k in t for k in [\"keyboard\", \"键盘\", \"keycap\", \"hot-swap\", \"热插拔\", \"mechanical\"\
+          , \"轴体\", \"keychron\", \"tkl\"]):\n        return \"keyboard\"\n    if any(k in t for k in [\"laptop\", \"notebook\"\
+          , \"macbook\", \"笔记本\", \"chromebook\"]):\n        return \"laptop\"\n    if any(k in t for k in [\"earbuds\", \"\
+          headphone\", \"耳机\", \"speaker\", \"音响\", \"airpods\", \"tws\"]):\n        return \"audio\"\n    if any(k in t for\
+          \ k in [\"shoe\", \"鞋\", \"sneaker\", \"boots\", \"footwear\", \"运动鞋\"]):\n        return \"footwear\"\n    if any(k\
+          \ in t for k in [\"shirt\", \"服装\", \"jacket\", \"dress\", \"clothing\", \"apparel\", \"t-shirt\", \"衣服\"]):\n \
+          \       return \"apparel\"\n    if any(k in t for k in [\"phone\", \"手机\", \"iphone\", \"smartphone\", \"a17 pro\"\
+          , \"camera phone\"]):\n        return \"smartphone\"\n    return \"general\"\n\ndef build_canonical_schema(product_name,\
+          \ product_desc, keywords, target_audience, verified_facts, allowed_brand):\n    text = \"\\n\".join([clean(product_name),\
+          \ clean(product_desc), clean(keywords), clean(target_audience), clean(verified_facts)])\n    facts = fact_map(verified_facts)\n\
+          \    brand = clean(allowed_brand) or None\n    category = detect_product_category(text)\n    schema = {\n      \
+          \  \"brand\": brand,\n        \"authorized_brand\": bool(brand),\n        \"product_name\": clean(product_name)\
+          \ or None,\n        \"model\": clean(product_name) if clean(product_name) else None,\n        \"product_category\"\
+          : category,\n        \"target_audience\": clean(target_audience) or None,\n        \"verified_fact_keys\": list(facts.keys()),\n\
+          \        \"source_policy\": \"Only user-provided fields, verified_facts, and official-search facts may be used.\
+          \ Model memory is not a source.\",\n    }\n    if category == \"smartphone\":\n        schema.update({\n       \
+          \     \"storage\": first_match(text, [(r\"256\\s*GB|256GB\", \"256GB\")]),\n            \"chip\": first_match(text,\
+          \ [(r\"A17\\s*Pro\", \"A17 Pro\"), (r\"先进移动处理器|advanced mobile processor\", \"先进移动处理器 / advanced mobile processor\"\
+          )]),\n            \"camera_main\": first_match(text, [(r\"4800\\s*万|48\\s*MP|48MP\", \"4800万像素主摄 / 48MP main camera\"\
+          )]),\n            \"battery_claim\": first_match(text, [(r\"全天续航|all-day\", \"全天续航 / all-day battery life\")]),\n\
+          \            \"interaction\": first_match(text, [(r\"灵动岛|Dynamic Island\", \"灵动岛 / Dynamic Island\"), (r\"互动通知区域|interactive\
+          \ notification area\", \"互动通知区域 / interactive notification area\")]),\n            \"water_resistance\": first_match(text,\
+          \ [(r\"IP68\", \"IP68\")]),\n            \"network\": first_match(text, [(r\"(?<![A-Za-z0-9])5G(?![A-Za-z0-9])|支持5G\"\
+          , \"5G\")]),\n            \"material\": first_match(text, [(r\"钛金属|titanium\", \"钛金属 / titanium\")]),\n        })\n\
+          \    elif category == \"keyboard\":\n        schema.update({\n            \"layout\": first_match(text, [(r\"87\\\
+          s*[键Key]|TKL|tenkeyless|紧凑\", \"87键 / TKL紧凑布局\")]),\n            \"switch_type\": first_match(text, [(r\"热插拔|hot.?swap\"\
+          , \"热插拔轴体 / hot-swappable switches\")]),\n            \"connection\": first_match(text, [(r\"三模|tri.?mode|蓝牙.+2\\\
+          .4G|有线.+蓝牙|2\\.4G.+蓝牙\", \"三模连接（有线/蓝牙/2.4G）/ tri-mode wireless\")]),\n            \"backlight\": first_match(text,\
+          \ [(r\"RGB|1680万色|16\\.8M\", \"RGB背光 1680万色 / RGB backlight 16.8M colors\")]),\n            \"case_material\": first_match(text,\
+          \ [(r\"铝合金|aluminum|aluminium\", \"铝合金上盖 / aluminum top case\")]),\n            \"battery_life\": first_match(text,\
+          \ [(r\"2000\\s*小时|2000h\", \"续航约2000小时 / ~2000h battery life\"), (r\"(\\d+)\\s*小时续航\", \"超长续航\")]),\n          \
+          \  \"compatibility\": first_match(text, [(r\"Windows.+Mac|Mac.+Windows|全平台|cross.?platform\", \"兼容Windows/Mac /\
+          \ cross-platform\")]),\n        })\n    elif category == \"laptop\":\n        schema.update({\n            \"cpu\"\
+          : first_match(text, [(r\"M[123]\\s*(Pro|Max|Ultra)?\", \"Apple Silicon\"), (r\"Intel|i[579]\", \"Intel处理器\"), (r\"\
+          AMD|Ryzen\", \"AMD处理器\")]),\n            \"ram\": first_match(text, [(r\"(\\d+)\\s*GB\\s*(RAM|内存)\", \"大容量内存\")]),\n\
+          \            \"storage_ssd\": first_match(text, [(r\"(\\d+)\\s*(GB|TB)\\s*(SSD|固态)\", \"高速固态硬盘\")]),\n         \
+          \   \"display\": first_match(text, [(r'(\\d+\\.?\\d*)\\s*(inch|寸|英寸|\")', \"大屏显示\")]),\n        })\n    else:\n\
+          \        for key, value in facts.items():\n            if key not in schema:\n                schema[key] = value\n\
+          \    return schema\n\n\nTRADEMARK_REPLACEMENTS = {\n    \"Apple\": \"\",\n    \"苹果\": \"\",\n    \"iPhone\": \"\"\
+          ,\n    \"MagSafe\": \"\",\n    \"Dynamic Island\": \"interactive notification area\",\n    \"灵动岛\": \"互动通知区域\",\n\
+          \    \"Face ID\": \"\",\n    \"ProRAW\": \"\",\n    \"Retina\": \"high-resolution display\",\n    \"AirDrop\": \"\
+          \",\n    \"Lightning\": \"\",\n}\n\nCLAIM_CONTROLS = {\n    \"256GB storage\": {\n        \"allowed_phrases\": [\"\
+          256GB storage\", \"storage capacity for apps, photos, videos, and files\"],\n        \"forbidden_expansions\": [\"\
+          unlimited storage\", \"expandable storage\"],\n    },\n    \"titanium-style metal body\": {\n        \"allowed_phrases\"\
+          : [\"titanium-style metal body\", \"premium metal-style body\", \"metal-style body\"],\n        \"forbidden_expansions\"\
+          : [\"titanium body\", \"real titanium\", \"grade 5 titanium\", \"aerospace-grade\", \"scratch-proof\", \"indestructible\"\
+          ],\n    },\n    \"titanium body/material\": {\n        \"allowed_phrases\": [\"titanium body\", \"titanium material\"\
+          , \"premium metal body\"],\n        \"forbidden_expansions\": [\"grade 5 titanium\", \"aerospace-grade\", \"scratch-proof\"\
+          , \"indestructible\"],\n    },\n    \"advanced mobile processor\": {\n        \"allowed_phrases\": [\"advanced mobile\
+          \ processor\", \"smooth multitasking\", \"responsive everyday performance\"],\n        \"forbidden_expansions\"\
+          : [\"A17 Pro\", \"3nm\", \"desktop-class\", \"GPU percentage\", \"ray tracing\"],\n    },\n    \"A17 Pro chip\"\
+          : {\n        \"allowed_phrases\": [\"A17 Pro chip\", \"smooth multitasking\", \"powerful performance\"],\n     \
+          \   \"forbidden_expansions\": [\"3nm\", \"desktop-class\", \"GPU percentage\", \"ray tracing\"],\n    },\n    \"\
+          48MP main camera\": {\n        \"allowed_phrases\": [\"48MP main camera\", \"detailed photos\", \"high-resolution\
+          \ photos\"],\n        \"forbidden_expansions\": [\"DSLR-grade\", \"cinema-level\", \"industry-leading\", \"ProRAW\"\
+          , \"cinematic mode\"],\n    },\n    \"all-day battery life\": {\n        \"allowed_phrases\": [\"all-day battery\
+          \ life\", \"supports a full day of typical use\"],\n        \"forbidden_expansions\": [\"29 hours\", \"specific\
+          \ battery capacity\", \"fast charging wattage\"],\n    },\n    \"Dynamic Island interaction\": {\n        \"allowed_phrases\"\
+          : [\"Dynamic Island\", \"interactive notifications through Dynamic Island\"],\n        \"forbidden_expansions\"\
+          : [\"smart notification interaction\"],\n    },\n    \"interactive notification area\": {\n        \"allowed_phrases\"\
+          : [\"interactive notification area\", \"quick access to alerts\", \"glanceable notifications\"],\n        \"forbidden_expansions\"\
+          : [\"Dynamic Island\", \"smart notification interaction\"],\n    },\n    \"IP68 water resistance\": {\n        \"\
+          allowed_phrases\": [\"IP68 water resistance\", \"protection for everyday splashes\"],\n        \"forbidden_expansions\"\
+          : [\"6 meters\", \"30 minutes\", \"waterproof guarantee\"],\n    },\n    \"5G connectivity\": {\n        \"allowed_phrases\"\
+          : [\"5G connectivity\", \"fast mobile network support\"],\n        \"forbidden_expansions\": [\"all carriers\",\
+          \ \"global bands\", \"unlocked\"],\n    },\n}\n\nMISSING_FIELD_STRATEGIES = {\n    \"Amazon\": \"omit_missing_public_fields\"\
+          ,\n    \"淘宝\": \"style_note_only\",\n    \"京东\": \"style_note_parameter_pending\",\n    \"ebay\": \"omit_missing_public_fields_style_note\"\
+          ,\n    \"速卖通\": \"omit_missing_public_fields_style_note\",\n    \"独立站\": \"delete_missing_fields\",\n}\n\nBRAND_ANCHOR_PATTERNS\
+          \ = [\n    r\"\\biPhone\\b\", r\"\\bPhone\\s*15\\s*Pro\\s*Max\\b\", r\"15\\s*Pro\\s*Max\",\n    r\"\\bA17\\s*Pro\\\
+          b\", r\"Dynamic Island\", r\"灵动岛\", r\"ProRAW\", r\"MagSafe\", r\"Face ID\"\n]\nGENERIC_INTENT_PATTERN = r\"白牌|通用|去品牌|无品牌|generic|white[-\
+          \ ]?label|debrand\"\n\nSAFE_MARKETING_TERMS = [\"premium feel\", \"smooth multitasking\", \"everyday use\", \"responsive\
+          \ performance\", \"comfortable to hold\"]\nINFERRED_FORBIDDEN_TERMS = [\"lightweight\", \"ultra-thin\", \"best battery\"\
+          , \"flagship-level\", \"professional-grade\", \"gaming performance\"]\n\n\ndef normalize_strategy_mode(value):\n\
+          \    v = clean(value).lower().replace(\"-\", \"_\").replace(\" \", \"_\")\n    mapping = {\n        \"official\"\
+          : \"official_brand\",\n        \"authorized\": \"official_brand\",\n        \"authorized_brand\": \"official_brand\"\
+          ,\n        \"brand_authorized\": \"official_brand\",\n        \"正规品牌\": \"official_brand\",\n        \"官方品牌\": \"\
+          official_brand\",\n        \"授权品牌\": \"official_brand\",\n        \"generic\": \"white_label\",\n        \"white_label\"\
+          : \"white_label\",\n        \"whitelabel\": \"white_label\",\n        \"debrand\": \"white_label\",\n        \"\
+          白牌\": \"white_label\",\n        \"通用\": \"white_label\",\n        \"去品牌\": \"white_label\",\n        \"safe\": \"\
+          placeholder_safe\",\n        \"placeholder\": \"placeholder_safe\",\n        \"placeholder_safe\": \"placeholder_safe\"\
+          ,\n        \"安全中断\": \"placeholder_safe\",\n    }\n    return mapping.get(v, \"auto\")\n\n\ndef detect_brand_policy(product_name,\
+          \ product_desc, keywords, verified_facts, allowed_brand, requested_mode=\"auto\"):\n    text = \"\\n\".join([clean(product_name),\
+          \ clean(product_desc), clean(keywords), clean(verified_facts)])\n    requested_mode = normalize_strategy_mode(requested_mode)\n\
+          \    if requested_mode == \"official_brand\":\n        return \"official\", \"low\" if clean(allowed_brand) else\
+          \ \"medium\", []\n    if requested_mode == \"white_label\":\n        anchors = [pattern for pattern in BRAND_ANCHOR_PATTERNS\
+          \ if re.search(pattern, text, flags=re.I)]\n        return \"generic\", \"medium\" if anchors else \"low\", anchors\n\
+          \    if requested_mode == \"placeholder_safe\":\n        anchors = [pattern for pattern in BRAND_ANCHOR_PATTERNS\
+          \ if re.search(pattern, text, flags=re.I)]\n        return \"placeholder\", \"high\", anchors\n    if clean(allowed_brand):\n\
+          \        return \"official\", \"low\", []\n    anchors = []\n    for pattern in BRAND_ANCHOR_PATTERNS:\n       \
+          \ if re.search(pattern, text, flags=re.I):\n            anchors.append(pattern)\n    generic_intent = bool(re.search(GENERIC_INTENT_PATTERN,\
+          \ text, flags=re.I))\n    if anchors and generic_intent:\n        return \"generic\", \"medium\", anchors\n    if\
+          \ anchors:\n        return \"placeholder\", \"high\", anchors\n    return \"generic\", \"low\", []\n\n\n_FIELD_SPECS_BASE\
+          \ = [\n    (\"brand\", \"brand\", \"品牌\"),\n    (\"product_name\", \"product_name\", \"产品名称\"),\n    (\"model\"\
+          , \"model\", \"型号\"),\n    (\"target_audience\", \"target_audience\", \"目标人群\"),\n]\n_FIELD_SPECS_SMARTPHONE = _FIELD_SPECS_BASE\
+          \ + [\n    (\"storage\", \"storage\", \"存储容量\"),\n    (\"chip\", \"chip\", \"处理器\"),\n    (\"camera_main\", \"camera_main\"\
+          , \"主摄像头像素\"),\n    (\"battery_claim\", \"battery_claim\", \"电池续航\"),\n    (\"interaction\", \"interaction\", \"\
+          交互特性\"),\n    (\"water_resistance\", \"water_resistance\", \"防水等级\"),\n    (\"network\", \"network\", \"网络支持\"),\n\
+          \    (\"material\", \"material\", \"机身材料\"),\n]\n_FIELD_SPECS_KEYBOARD = _FIELD_SPECS_BASE + [\n    (\"layout\"\
+          , \"layout\", \"键位布局\"),\n    (\"switch_type\", \"switch_type\", \"轴体类型\"),\n    (\"connection\", \"connection\"\
+          , \"连接方式\"),\n    (\"backlight\", \"backlight\", \"背光\"),\n    (\"case_material\", \"case_material\", \"机身材质\"),\n\
+          \    (\"battery_life\", \"battery_life\", \"续航时间\"),\n    (\"compatibility\", \"compatibility\", \"兼容系统\"),\n]\n\
+          _FIELD_SPECS_LAPTOP = _FIELD_SPECS_BASE + [\n    (\"cpu\", \"cpu\", \"处理器\"),\n    (\"ram\", \"ram\", \"内存\"),\n\
+          \    (\"storage_ssd\", \"storage_ssd\", \"存储\"),\n    (\"display\", \"display\", \"屏幕\"),\n]\nFIELD_SPECS = _FIELD_SPECS_SMARTPHONE\n\
+          \ndef get_field_specs(category):\n    if category == \"smartphone\":\n        return _FIELD_SPECS_SMARTPHONE\n \
+          \   if category == \"keyboard\":\n        return _FIELD_SPECS_KEYBOARD\n    if category == \"laptop\":\n       \
+          \ return _FIELD_SPECS_LAPTOP\n    return _FIELD_SPECS_BASE\n\n\ndef field_state(key, value, facts, brand_mode):\n\
+          \    if not value or has_pending(value):\n        return \"missing\", \"none\", False\n    verified_keys = set(facts.keys())\n\
+          \    fact_aliases = {alias for _, _, alias in FIELD_SPECS if alias in verified_keys}\n    alias = next((alias for\
+          \ k, _, alias in FIELD_SPECS if k == key), \"\")\n    if alias in fact_aliases:\n        return \"verified\", \"\
+          verified_specs_json\", True\n    if key in {\"brand\", \"model\"} and brand_mode != \"official\":\n        return\
+          \ \"forbidden\", \"brand_policy\", False\n    if key in {\"chip\", \"interaction\"} and brand_mode == \"placeholder\"\
+          \ and re.search(r\"A17\\s*Pro|Dynamic Island|灵动岛\", str(value), flags=re.I):\n        return \"needs_review\", \"\
+          brand_policy\", False\n    if key in {\"chip\", \"interaction\"} and brand_mode == \"generic\" and re.search(r\"\
+          A17\\s*Pro|Dynamic Island|灵动岛\", str(value), flags=re.I):\n        return \"forbidden\", \"brand_policy\", False\n\
+          \    if key in {\"product_name\", \"target_audience\"}:\n        return \"user_provided\", \"user_or_file\", True\n\
+          \    return \"user_provided\", \"user_or_file\", True\n\n\ndef build_trusted_fields(schema, facts, brand_mode):\n\
+          \    trusted = {\n        \"_policy\": {\n            \"safe_marketing\": {\"terms\": SAFE_MARKETING_TERMS, \"allowed_in\"\
+          : [\"body\", \"bullet\"], \"forbidden_in\": [\"title\", \"core_specs\", \"json_ld\"]},\n            \"inferred_forbidden\"\
+          : {\"terms\": INFERRED_FORBIDDEN_TERMS, \"action\": \"delete\"},\n        }\n    }\n    category = schema.get(\"\
+          product_category\", \"general\")\n    specs = get_field_specs(category)\n    for key, schema_key, label in specs:\n\
+          \        value = schema.get(schema_key)\n        state, source, publishable = field_state(key, value, facts, brand_mode)\n\
+          \        trusted[key] = {\n            \"label\": label,\n            \"value\": value,\n            \"state\":\
+          \ state,\n            \"verified\": state == \"verified\",\n            \"source\": source,\n            \"publishable\"\
+          : publishable and state in {\"verified\", \"user_provided\"},\n        }\n    return trusted\n\n\ndef build_generic_schema(schema):\n\
+          \    category = schema.get(\"product_category\", \"general\")\n    generic = {\n        \"product_category\": category,\n\
+          \        \"product_name\": schema.get(\"product_name\") or \"generic product\",\n        \"model\": None,\n    \
+          \    \"brand\": None,\n        \"authorized_brand\": False,\n        \"target_audience\": schema.get(\"target_audience\"\
+          ),\n    }\n    if category == \"smartphone\":\n        generic.update({\n            \"product_type\": \"smartphone\"\
+          ,\n            \"storage\": schema.get(\"storage\"),\n            \"material\": \"titanium-style metal body\" if\
+          \ schema.get(\"material\") else None,\n            \"chip\": \"advanced mobile processor\" if schema.get(\"chip\"\
+          ) else None,\n            \"camera_main\": schema.get(\"camera_main\"),\n            \"battery_claim\": schema.get(\"\
+          battery_claim\"),\n            \"interaction\": \"interactive notification area\" if schema.get(\"interaction\"\
+          ) else None,\n            \"water_resistance\": schema.get(\"water_resistance\"),\n            \"network\": schema.get(\"\
+          network\"),\n        })\n    elif category == \"keyboard\":\n        generic.update({\n            \"layout\": schema.get(\"\
+          layout\"),\n            \"switch_type\": schema.get(\"switch_type\"),\n            \"connection\": schema.get(\"\
+          connection\"),\n            \"backlight\": schema.get(\"backlight\"),\n            \"case_material\": schema.get(\"\
+          case_material\"),\n            \"battery_life\": schema.get(\"battery_life\"),\n            \"compatibility\": schema.get(\"\
+          compatibility\"),\n        })\n    elif category == \"laptop\":\n        generic.update({\n            \"cpu\":\
+          \ schema.get(\"cpu\"),\n            \"ram\": schema.get(\"ram\"),\n            \"storage_ssd\": schema.get(\"storage_ssd\"\
+          ),\n            \"display\": schema.get(\"display\"),\n        })\n    else:\n        meta_keys = {\"brand\", \"\
+          authorized_brand\", \"product_name\", \"model\", \"product_category\",\n                     \"target_audience\"\
+          , \"verified_fact_keys\", \"source_policy\"}\n        for key, value in schema.items():\n            if key not\
+          \ in generic and key not in meta_keys and value:\n                generic[key] = value\n    return generic\n\ndef\
+          \ infer_claims(schema):\n    category = schema.get(\"product_category\", \"general\")\n    if category == \"smartphone\"\
+          :\n        claim_map = [\n            (\"storage\", \"256GB storage\"),\n            (\"material\", \"titanium-style\
+          \ metal body\" if schema.get(\"material\") == \"titanium-style metal body\" else \"titanium body/material\"),\n\
+          \            (\"chip\", \"A17 Pro chip\" if schema.get(\"chip\") == \"A17 Pro\" else \"advanced mobile processor\"\
+          ),\n            (\"camera_main\", \"48MP main camera\"),\n            (\"battery_claim\", \"all-day battery life\"\
+          ),\n            (\"interaction\", \"interactive notification area\" if schema.get(\"interaction\") == \"interactive\
+          \ notification area\" else \"Dynamic Island interaction\"),\n            (\"water_resistance\", \"IP68 water resistance\"\
+          ),\n            (\"network\", \"5G connectivity\"),\n        ]\n        return [claim for key, claim in claim_map\
+          \ if schema.get(key)]\n    if category == \"keyboard\":\n        claim_map = [\n            (\"layout\", \"87键紧凑布局\
+          \ / compact 87-key layout\"),\n            (\"switch_type\", \"热插拔轴体 / hot-swappable switches\"),\n            (\"\
+          connection\", \"三模无线连接 / tri-mode wireless\"),\n            (\"backlight\", \"RGB背光 / RGB backlight\"),\n      \
+          \      (\"case_material\", \"铝合金外壳 / aluminum case\"),\n            (\"battery_life\", \"超长续航 / long battery life\"\
+          ),\n            (\"compatibility\", \"全平台兼容 / cross-platform\"),\n        ]\n        return [claim for key, claim\
+          \ in claim_map if schema.get(key)]\n    if category == \"laptop\":\n        claim_map = [\n            (\"cpu\"\
+          , \"高性能处理器 / high-performance CPU\"),\n            (\"ram\", \"大容量内存 / ample RAM\"),\n            (\"storage_ssd\"\
+          , \"高速固态存储 / fast SSD\"),\n            (\"display\", \"大屏显示 / large display\"),\n        ]\n        return [claim\
+          \ for key, claim in claim_map if schema.get(key)]\n    meta_keys = {\"brand\", \"authorized_brand\", \"product_name\"\
+          , \"model\", \"product_category\",\n                 \"target_audience\", \"verified_fact_keys\", \"source_policy\"\
+          }\n    return [f\"{k}: {v}\" for k, v in schema.items() if v and k not in meta_keys]\n\n\ndef calc_risk_score(can_generate,\
+          \ brand_mode, brand_risk, missing, warnings, allowed_claims):\n    score = 10\n    if not can_generate:\n      \
+          \  score += 55\n    if brand_mode == \"placeholder\":\n        score += 30\n    elif brand_mode == \"generic\":\n\
+          \        score += 12\n    if brand_risk == \"high\":\n        score += 20\n    elif brand_risk == \"medium\":\n\
+          \        score += 10\n    score += min(len(missing) * 10, 30)\n    score += min(len(warnings) * 4, 12)\n    if len(allowed_claims)\
+          \ < 3:\n        score += 8\n    return max(0, min(score, 100))\n\n\ndef main(product_name: str, product_desc: str,\
+          \ keywords: str, target_audience: str,\n         platforms: str, verified_facts: str, allowed_brand: str = \"\"\
+          , brand_strategy_mode: str = \"auto\"):\n    missing = []\n    warnings = []\n\n    schema = build_canonical_schema(product_name,\
+          \ product_desc, keywords, target_audience, verified_facts, allowed_brand)\n    requested_strategy_mode = normalize_strategy_mode(brand_strategy_mode)\n\
+          \    brand_mode, brand_risk, brand_anchors = detect_brand_policy(product_name, product_desc, keywords, verified_facts,\
+          \ allowed_brand, requested_strategy_mode)\n    generic_schema = build_generic_schema(schema)\n    facts = fact_map(verified_facts)\n\
+          \    trusted_fields = build_trusted_fields(schema, facts, brand_mode)\n    effective_schema = schema if brand_mode\
+          \ == \"official\" else generic_schema if brand_mode == \"generic\" else schema\n    allowed_claims = [] if brand_mode\
+          \ == \"placeholder\" else infer_claims(effective_schema)\n\n    if not schema.get(\"product_name\") or has_pending(schema.get(\"\
+          product_name\")):\n        missing.append(\"产品名称\")\n    if not clean(product_desc) or has_pending(product_desc):\n\
+          \        missing.append(\"产品描述/原始卖点\")\n    if brand_mode == \"official\" and requested_strategy_mode == \"official_brand\"\
+          \ and not clean(allowed_brand):\n        missing.append(\"已选择官方品牌模式，但未提供明确 brand/品牌字段；请在已核实参数 JSON 中补充品牌\")\n  \
+          \  if brand_mode == \"placeholder\":\n        missing.append(\"疑似品牌商品但未提供品牌授权；请补充 brand/授权字段，或明确选择白牌/通用模式\")\n\n\
+          \    if len(allowed_claims) < 3 and len(schema.get(\"verified_fact_keys\") or []) < 2:\n        missing.append(\"\
+          至少 3 条可验证核心卖点或 2 条已核实参数\")\n\n    if not clean(platforms):\n        warnings.append(\"平台列表为空，将使用默认平台。\")\n    if\
+          \ not schema.get(\"authorized_brand\"):\n        warnings.append(\"未提供显式品牌字段；系统将根据品牌策略选择白牌模式或安全中断。\")\n    if not\
+          \ clean(target_audience) or has_pending(target_audience):\n        warnings.append(\"目标受众缺失，平台文案会减少人群化表达。\")\n\n\
+          \    forbidden_terms = [\n        \"Apple\", \"苹果\", \"3nm\", \"29 hours\", \"6 meters\", \"30 minutes\", \"USB-C\"\
+          ,\n        \"Dual SIM\", \"Unlocked\", \"Global Version\", \"Factory Sealed\", \"Free Shipping\",\n        \"Fast\
+          \ Shipping\", \"Warranty\", \"official authorization\", \"赠品\", \"包邮\", \"现货\", \"官方授权\",\n        \"ProRAW\", \"\
+          cinematic mode\", \"grade 5 titanium\", \"Smart HDR\", \"eSIM\",\n        \"dimensions\", \"weight\", \"screen size\"\
+          , \"triple lens\", \"4K\", \"2024\",\n        \"lightweight\", \"ultra-thin\", \"best battery\", \"flagship-level\"\
+          , \"professional-grade\", \"gaming performance\",\n        \"159.9\", \"76.7\", \"8.25\", \"221g\", \"221 g\"\n\
+          \    ]\n    if schema.get(\"authorized_brand\"):\n        forbidden_terms = [t for t in forbidden_terms if t not\
+          \ in {schema.get(\"brand\"), \"Apple\", \"苹果\"}]\n\n    can_generate = len(missing) == 0\n    risk_score = calc_risk_score(can_generate,\
+          \ brand_mode, brand_risk, missing, warnings, allowed_claims)\n    risk_level = \"low\" if risk_score < 30 else \"\
+          medium\" if risk_score < 65 else \"high\"\n\n    evidence = {\n        \"canonical_product_schema\": schema,\n \
+          \       \"allowed_claims\": allowed_claims,\n        \"forbidden_terms\": forbidden_terms,\n        \"trademark_replacements\"\
+          : TRADEMARK_REPLACEMENTS,\n        \"claim_controls\": {k: CLAIM_CONTROLS[k] for k in allowed_claims if k in CLAIM_CONTROLS},\n\
+          \        \"strategy_mode\": \"official_brand\" if brand_mode == \"official\" else \"white_label\" if brand_mode\
+          \ == \"generic\" else \"placeholder_safe\",\n        \"missing_field_strategies\": MISSING_FIELD_STRATEGIES,\n \
+          \       \"missing_required_fields\": missing,\n        \"warnings\": warnings,\n        \"risk_level\": risk_level,\n\
+          \        \"risk_score\": risk_score,\n        \"can_generate\": can_generate,\n        \"brand_mode\": brand_mode,\n\
+          \        \"brand_risk\": brand_risk,\n        \"strategy_mode\": \"official_brand\" if brand_mode == \"official\"\
+          \ else \"white_label\" if brand_mode == \"generic\" else \"placeholder_safe\",\n        \"brand_anchors\": brand_anchors,\n\
+          \        \"generic_schema\": generic_schema,\n        \"trusted_fields\": trusted_fields,\n    }\n\n    lines =\
+          \ [\"# Preflight Validation\", \"\"]\n    lines.append(\"✅ 通过：已具备生成可用 Listing 的最低信息。\" if can_generate else \"❌\
+          \ 未通过：当前缺少生成可发布 Listing 的最低信息，已中断文案生成。\")\n    lines.append(\"\")\n    if missing:\n        lines.append(\"## 缺失必要字段\"\
+          )\n        lines.extend(f\"- {item}\" for item in missing)\n        lines.append(\"\")\n    if warnings:\n     \
+          \   lines.append(\"## 风险提示\")\n        lines.extend(f\"- {item}\" for item in warnings)\n        lines.append(\"\
+          \")\n    lines.append(\"## Brand Policy\")\n    lines.append(f\"- requested_mode: {requested_strategy_mode}\")\n\
+          \    lines.append(f\"- mode: {brand_mode}\")\n    lines.append(f\"- risk: {brand_risk}\")\n    lines.append(f\"\
+          - risk_score: {risk_score}\")\n    if brand_anchors:\n        lines.append(\"- anchors: \" + \", \".join(brand_anchors))\n\
+          \    lines.append(\"\")\n    lines.append(\"## Trusted Fields\")\n    lines.append(json.dumps(trusted_fields, ensure_ascii=False,\
+          \ indent=2))\n    lines.append(\"\")\n    lines.append(\"## Canonical Product Schema\")\n    lines.append(json.dumps(schema,\
+          \ ensure_ascii=False, indent=2))\n    lines.append(\"\")\n    lines.append(\"## Generic Schema\")\n    lines.append(json.dumps(generic_schema,\
+          \ ensure_ascii=False, indent=2))\n    lines.append(\"\")\n    lines.append(\"## 允许生成的声明\")\n    lines.extend(f\"\
+          - {claim}\" for claim in allowed_claims) if allowed_claims else lines.append(\"- 暂无\")\n\n    return {\n       \
+          \ \"can_generate\": can_generate,\n        \"risk_level\": risk_level,\n        \"risk_score\": risk_score,\n  \
+          \      \"missing_required_fields\": \"\\n\".join(missing),\n        \"allowed_claims\": \"\\n\".join(f\"- {c}\"\
+          \ for c in allowed_claims) if allowed_claims else \"暂无\",\n        \"forbidden_terms\": \"\\n\".join(f\"- {t}\"\
+          \ for t in forbidden_terms),\n        \"trademark_guard\": json.dumps(TRADEMARK_REPLACEMENTS, ensure_ascii=False,\
+          \ indent=2),\n        \"claim_controls\": json.dumps({k: CLAIM_CONTROLS[k] for k in allowed_claims if k in CLAIM_CONTROLS},\
+          \ ensure_ascii=False, indent=2),\n        \"missing_field_strategies\": json.dumps(MISSING_FIELD_STRATEGIES, ensure_ascii=False,\
+          \ indent=2),\n        \"canonical_product_schema\": json.dumps(schema, ensure_ascii=False, indent=2),\n        \"\
+          trusted_fields\": json.dumps(trusted_fields, ensure_ascii=False, indent=2),\n        \"generic_schema\": json.dumps(generic_schema,\
+          \ ensure_ascii=False, indent=2),\n        \"brand_mode\": brand_mode,\n        \"brand_risk\": brand_risk,\n   \
+          \     \"strategy_mode\": \"official_brand\" if brand_mode == \"official\" else \"white_label\" if brand_mode ==\
+          \ \"generic\" else \"placeholder_safe\",\n        \"evidence_pack\": json.dumps(evidence, ensure_ascii=False, indent=2),\n\
+          \        \"preflight_report\": \"\\n\".join(lines).strip(),\n    }"
+        code_language: python3
+        desc: 生成 Evidence Pack，判断是否达到最低发布信息标准
+        outputs:
+          can_generate:
+            children: null
+            type: boolean
+          risk_level:
+            children: null
+            type: string
+          missing_required_fields:
+            children: null
+            type: string
+          allowed_claims:
+            children: null
+            type: string
+          evidence_pack:
+            children: null
+            type: string
+          preflight_report:
+            children: null
+            type: string
+          forbidden_terms:
+            children: null
+            type: string
+          canonical_product_schema:
+            children: null
+            type: string
+          trademark_guard:
+            children: null
+            type: string
+          claim_controls:
+            children: null
+            type: string
+          missing_field_strategies:
+            children: null
+            type: string
+          generic_schema:
+            children: null
+            type: string
+          brand_mode:
+            children: null
+            type: string
+          brand_risk:
+            children: null
+            type: string
+          strategy_mode:
+            children: null
+            type: string
+          risk_score:
+            children: null
+            type: number
+          trusted_fields:
+            children: null
+            type: string
+        selected: false
+        title: Evidence Pack / Preflight
+        type: code
+        variables:
+        - value_selector:
+          - '1779902000003'
+          - product_name
+          value_type: string
+          variable: product_name
+        - value_selector:
+          - '1779902000003'
+          - product_desc
+          value_type: string
+          variable: product_desc
+        - value_selector:
+          - '1779902000003'
+          - keywords
+          value_type: string
+          variable: keywords
+        - value_selector:
+          - '1779902000003'
+          - target_audience
+          value_type: string
+          variable: target_audience
+        - value_selector:
+          - '1779902000003'
+          - platforms
+          value_type: string
+          variable: platforms
+        - value_selector:
+          - '1779902000003'
+          - verified_facts
+          value_type: string
+          variable: verified_facts
+        - value_selector:
+          - '1779902000003'
+          - allowed_brand
+          value_type: string
+          variable: allowed_brand
+        - variable: brand_strategy_mode
+          value_selector:
+          - '1779902000003'
+          - brand_strategy_mode
+      height: 92
+      id: '1779902500001'
+      position:
+        x: 260
+        y: 220
+      positionAbsolute:
+        x: 260
+        y: 220
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 1120
+      y: 180
+      zoom: 0.55
+  rag_pipeline_variables: []
