@@ -358,8 +358,7 @@
       background: rgba(255,255,255,0.07);
       border: 1px solid rgba(255,255,255,0.10);
       border-radius: 16px;
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 14px;
+      padding: 12px 14px;
       backdrop-filter: blur(8px);
       animation: fadeInUp 0.3s ease;
     }
@@ -367,21 +366,23 @@
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    .history-item-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px;
+    }
     .history-thumb {
-      width: 52px; height: 36px; border-radius: 8px;
+      width: 56px; height: 38px; border-radius: 8px;
       object-fit: cover; flex-shrink: 0;
       border: 1px solid rgba(255,255,255,0.12);
     }
-    .history-info {
+    .history-item-name {
       flex: 1; min-width: 0;
-    }
-    .history-info-name {
-      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.88);
+      font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.92);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    .history-info-meta {
-      font-size: 11.5px; color: rgba(255,255,255,0.42);
-      margin-top: 2px;
+    .history-item-time {
+      font-size: 11px; color: rgba(255,255,255,0.35);
+      flex-shrink: 0;
     }
     .history-badge {
       flex-shrink: 0;
@@ -392,10 +393,27 @@
       padding: 3px 9px;
       border-radius: 20px;
     }
-    .history-info-phone {
-      font-size: 11px; color: rgba(255,255,255,0.55);
-      margin-top: 2px;
-      font-variant-numeric: tabular-nums;
+    .history-fields {
+      display: flex; flex-direction: column; gap: 0;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .history-field {
+      display: flex; align-items: baseline;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .history-field:last-child { border-bottom: none; }
+    .history-field-label {
+      font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.35);
+      flex-shrink: 0; min-width: 52px;
+    }
+    .history-field-value {
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.82);
+      word-break: break-all;
     }
     .history-empty {
       text-align: center;
@@ -599,21 +617,40 @@
       const timeStr = new Date(item.time).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
       const c = item.card || {};
       const primaryName = c.name || item.filename;
-      const metaParts = [];
-      if (c.company) metaParts.push(c.company);
-      if (c.title) metaParts.push(c.title);
-      const metaStr = metaParts.length ? metaParts.join(' · ') : (timeStr + (item.sales ? ' · ' + item.sales : ''));
-      const phoneHtml = c.phone
-        ? '<div class="history-info-phone">' + escHtml(c.phone) + (c.email ? '  ' + escHtml(c.email) : '') + '</div>'
-        : '';
+      // 已知字段的中文标签和显示顺序
+      const LABELS = { company:'公司', title:'职位', phone:'电话', email:'邮箱',
+                       country:'国家', address:'地址', website:'官网',
+                       wechat:'微信', linkedin:'LinkedIn', fax:'传真',
+                       department:'部门', mobile:'手机', tel:'座机' };
+      const SKIP = new Set(['name']);
+      // 先按已知顺序，再追加未知字段
+      const ORDER = ['company','title','phone','mobile','tel','fax','email','wechat','linkedin','website','address','department','country'];
+      const shown = new Set();
+      let fieldsHtml = '';
+      function rowHtml(label, val) {
+        if (!val) return '';
+        return '<div class="history-field"><span class="history-field-label">' +
+               escHtml(label) + '</span><span class="history-field-value">' +
+               escHtml(String(val)) + '</span></div>';
+      }
+      ORDER.forEach(k => {
+        if (c[k]) { fieldsHtml += rowHtml(LABELS[k] || k, c[k]); shown.add(k); }
+      });
+      // 动态追加名片里有但 ORDER 没列出的字段
+      Object.keys(c).forEach(k => {
+        if (!shown.has(k) && !SKIP.has(k) && c[k]) {
+          fieldsHtml += rowHtml(LABELS[k] || k, c[k]);
+        }
+      });
+      if (item.sales) fieldsHtml += rowHtml('负责销售', item.sales);
       div.innerHTML =
-        '<img class="history-thumb" src="' + (item.thumb || '') + '" alt="">' +
-        '<div class="history-info">' +
-          '<div class="history-info-name">' + escHtml(primaryName) + '</div>' +
-          '<div class="history-info-meta">' + escHtml(metaStr) + '</div>' +
-          phoneHtml +
+        '<div class="history-item-header">' +
+          '<img class="history-thumb" src="' + (item.thumb || '') + '" alt="">' +
+          '<span class="history-item-name">' + escHtml(primaryName) + '</span>' +
+          '<span class="history-item-time">' + timeStr + '</span>' +
+          '<span class="history-badge">已入库</span>' +
         '</div>' +
-        '<span class="history-badge">已入库</span>';
+        '<div class="history-fields">' + fieldsHtml + '</div>';
       listEl.appendChild(div);
     });
   }
