@@ -392,6 +392,11 @@
       padding: 3px 9px;
       border-radius: 20px;
     }
+    .history-info-phone {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
     .history-empty {
       text-align: center;
       font-size: 13px; color: rgba(255,255,255,0.28);
@@ -586,29 +591,38 @@
       return;
     }
     emptyEl.style.display = 'none';
-    // Rebuild list (newest first)
     const existing = listEl.querySelectorAll('.history-item');
     existing.forEach(el => el.remove());
     list.slice().reverse().forEach(item => {
       const div = document.createElement('div');
       div.className = 'history-item';
       const timeStr = new Date(item.time).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      const c = item.card || {};
+      const primaryName = c.name || item.filename;
+      const metaParts = [];
+      if (c.company) metaParts.push(c.company);
+      if (c.title) metaParts.push(c.title);
+      const metaStr = metaParts.length ? metaParts.join(' · ') : (timeStr + (item.sales ? ' · ' + item.sales : ''));
+      const phoneHtml = c.phone
+        ? '<div class="history-info-phone">' + escHtml(c.phone) + (c.email ? '  ' + escHtml(c.email) : '') + '</div>'
+        : '';
       div.innerHTML =
-        '<img class="history-thumb" src="' + item.thumb + '" alt="">' +
+        '<img class="history-thumb" src="' + (item.thumb || '') + '" alt="">' +
         '<div class="history-info">' +
-          '<div class="history-info-name">' + escHtml(item.filename) + '</div>' +
-          '<div class="history-info-meta">' + timeStr + (item.sales ? ' · ' + escHtml(item.sales) : '') + '</div>' +
+          '<div class="history-info-name">' + escHtml(primaryName) + '</div>' +
+          '<div class="history-info-meta">' + escHtml(metaStr) + '</div>' +
+          phoneHtml +
         '</div>' +
         '<span class="history-badge">已入库</span>';
       listEl.appendChild(div);
     });
   }
   function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
-  function addHistory(filename, thumb, sales) {
+  function addHistory(filename, thumb, sales, card) {
     const list = loadHistory();
-    list.push({ filename, thumb, sales: sales || '', time: Date.now() });
+    list.push({ filename, thumb, sales: sales || '', card: card || null, time: Date.now() });
     saveHistory(list);
     renderHistory();
   }
@@ -673,10 +687,14 @@
     toastSuccess.classList.remove('visible');
     toastError.classList.remove('visible');
   }
-  function showSuccess() {
+  function showSuccess(nameHint) {
     hideToasts();
+    const msgEl = toastSuccess.querySelector('span');
+    msgEl.textContent = nameHint
+      ? `识别完成 ${nameHint}，已写入线索库，可继续上传下一张。`
+      : '名片已识别并入库，可继续上传下一张。';
     toastSuccess.classList.add('visible');
-    toastSuccess.scrollIntoView && window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   function showError(msg) {
     hideToasts();
@@ -717,9 +735,16 @@
     try {
       const res = await fetch(N8N_URL, { method: 'POST', body: fd });
       if (res.ok) {
-        // Save to history before resetting
-        addHistory(selectedFile.name, selectedFileDataUrl, salesInput.value.trim());
-        showSuccess();
+        // Parse OCR result from response
+        let card = null;
+        try {
+          const data = await res.json();
+          if (data && data.card) card = data.card;
+        } catch(e) {}
+        addHistory(selectedFile.name, selectedFileDataUrl, salesInput.value.trim(), card);
+        // Show success with recognized name if available
+        const nameHint = card && card.name ? `「${card.name}」` : '';
+        showSuccess(nameHint);
         // Reset
         selectedFile = null;
         selectedFileDataUrl = null;
