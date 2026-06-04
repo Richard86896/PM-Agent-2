@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Listing 生成体验 · 智目科技</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-start: #0a1628;
+      --bg-end: #142240;
+      --card-bg: #fff;
+      --accent: #C2511E;
+      --accent-2: #E0742F;
+      --accent-dark: #8F3A12;
+      --pine: #2C6B5A;
+      --pine-soft: #DDEBE5;
+      --text-primary: #17130E;
+      --text-secondary: #4A433B;
+      --text-muted: #857C70;
+      --border: #E6DFD4;
+      --surface: #FAF7F2;
+      --surface-2: #F3EEE6;
+      --shadow-card: 0 24px 64px rgba(10,15,25,.25), 0 4px 16px rgba(10,15,25,.12);
+      --radius-card: 22px;
+      --radius-input: 12px;
+      --font: 'Plus Jakarta Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    html, body {
+      min-height: 100%; font-family: var(--font);
+      background: linear-gradient(155deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      background-attachment: fixed;
+    }
+    body {
+      min-height: 100dvh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 48px;
+    }
+
+    .bg-glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .glow-circle { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .14; }
+    .gc1 { width: 500px; height: 500px; background: #C2511E; top: -160px; right: -100px; }
+    .gc2 { width: 350px; height: 350px; background: #2C6B5A; bottom: 0; left: -100px; }
+    .gc3 { width: 250px; height: 250px; background: #B8862B; top: 50%; left: 45%; }
+
+    /* ── 布局 ── */
+    .layout {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 680px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    /* ── 页头 ── */
+    .page-header { text-align: center; padding: 4px 0 8px; }
+    .page-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent-2); margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .page-eyebrow::before, .page-eyebrow::after {
+      content: ''; width: 24px; height: 1.5px; background: var(--accent-2); opacity: .6;
+    }
+    .page-title {
+      font-size: clamp(22px, 4vw, 30px); font-weight: 800;
+      color: #fff; letter-spacing: -.3px; margin-bottom: 10px;
+    }
+    .page-sub { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.6; }
+
+    /* ── 表单卡片 ── */
+    .form-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #1a1008 0%, #2d1a0a 50%, #1e1208 100%);
+      padding: 22px 26px 20px;
+      display: flex; align-items: center; gap: 14px;
+      border-bottom: 1px solid rgba(194,81,30,.25);
+    }
+    .brand-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: rgba(194,81,30,.2); border: 1.5px solid rgba(194,81,30,.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .card-header-text { flex: 1; }
+    .card-header-text h2 { font-size: 16px; font-weight: 800; color: #fff; }
+    .card-header-text p { font-size: 12.5px; color: rgba(255,255,255,.45); margin-top: 2px; }
+
+    /* ── 表单主体 ── */
+    .form-body { padding: 26px 26px 22px; display: flex; flex-direction: column; gap: 18px; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media(max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
+
+    .field label {
+      display: block; font-size: 13px; font-weight: 700;
+      color: var(--text-secondary); margin-bottom: 7px;
+    }
+    .field label .opt { font-weight: 400; color: var(--text-muted); font-size: 12px; margin-left: 4px; }
+    .field label .hint-tag {
+      font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 4px;
+      margin-left: 6px; background: var(--surface-2); color: var(--text-muted);
+    }
+
+    input[type="text"], textarea, select {
+      width: 100%; font-family: var(--font);
+      font-size: 14px; font-weight: 500; color: var(--text-primary);
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-input); outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input[type="text"] { padding: 12px 14px; }
+    textarea { padding: 12px 14px; resize: vertical; line-height: 1.6; }
+    select { padding: 12px 14px; cursor: pointer; }
+
+    input[type="text"]:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(194,81,30,.12);
+      background: #fff;
+    }
+    input::placeholder, textarea::placeholder { color: var(--text-muted); font-weight: 400; }
+
+    .plat-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .plat-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 12px;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 8px; cursor: pointer; user-select: none;
+      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+      transition: all .15s;
+    }
+    .plat-chip input { display: none; }
+    .plat-chip.checked {
+      background: rgba(194,81,30,.08); border-color: var(--accent);
+      color: var(--accent);
+    }
+    .plat-chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+    .plat-chip.checked .dot { background: var(--accent); }
+
+    .divider-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+    .divider-label::before, .divider-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── 提交按钮 ── */
+    .submit-btn {
+      width: 100%; padding: 16px;
+      font-family: var(--font); font-size: 16px; font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent) 0%, #d4622a 50%, var(--accent-dark) 100%);
+      background-size: 200% 200%;
+      border: none; border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(194,81,30,.38);
+      transition: transform .15s, box-shadow .15s, background-position .4s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(194,81,30,.48);
+      background-position: right center;
+    }
+    .submit-btn:active:not(:disabled) { transform: scale(.98); }
+    .submit-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .submit-btn svg { width: 18px; height: 18px; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.3); border-top-color: #fff;
+      border-radius: 50%; animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Toast ── */
+    .toast {
+      border-radius: 12px; padding: 13px 16px;
+      font-size: 13.5px; font-weight: 500; line-height: 1.5;
+      display: none; gap: 10px; align-items: flex-start;
+    }
+    .toast.visible { display: flex; }
+    .toast svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+    .toast.error { background: #fff1f2; border: 1px solid #fca5a5; color: #dc2626; }
+
+    /* ── 结果卡 ── */
+    .result-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: none;
+    }
+    .result-card.show { display: block; }
+
+    .result-header {
+      background: var(--surface-2); border-bottom: 1px solid var(--border);
+      padding: 18px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .result-header h3 { font-size: 16px; font-weight: 800; color: var(--text-primary); }
+    .result-copy-btn {
+      font-family: var(--font); font-size: 13px; font-weight: 600;
+      padding: 8px 16px; border: 1.5px solid var(--border);
+      border-radius: 8px; background: #fff;
+      color: var(--text-secondary); cursor: pointer;
+      display: flex; align-items: center; gap: 6px; transition: all .15s;
+    }
+    .result-copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .result-copy-btn svg { width: 14px; height: 14px; }
+
+    .result-body {
+      padding: 24px;
+      font-size: 14px; color: var(--text-primary); line-height: 1.8;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 600px; overflow-y: auto;
+    }
+
+    /* ── Demo badge ── */
+    .demo-mode-badge {
+      display: none; align-items: center; gap: 8px;
+      background: rgba(184,134,43,.12); border: 1px solid rgba(184,134,43,.35);
+      border-radius: 10px; padding: 10px 14px;
+      font-size: 13px; color: #92620a;
+    }
+    .demo-mode-badge.show { display: flex; }
+    .demo-mode-badge svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* ── 信息卡 ── */
+    /* ── 进阶选项折叠 ── */
+    .advanced-section { border: none; }
+    .advanced-section > summary {
+      cursor: pointer; list-style: none; user-select: none;
+    }
+    .advanced-section > summary::-webkit-details-marker { display: none; }
+    .advanced-section > summary .toggle-icon {
+      display: inline-block; transition: transform .2s; margin-right: 4px;
+    }
+    .advanced-section[open] > summary .toggle-icon { transform: rotate(90deg); }
+    .advanced-section .advanced-content { padding-top: 14px; }
+
+    /* ── 推断参数预览卡 ── */
+    .inferred-card {
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .inferred-header {
+      background: var(--surface-2); border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 14px; font-weight: 700; color: var(--text-primary);
+    }
+    .risk-badge {
+      font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 6px;
+    }
+    .risk-badge.low { background: #dcfce7; color: #15803d; }
+    .risk-badge.medium { background: #fef9c3; color: #a16207; }
+    .risk-badge.high { background: #fee2e2; color: #dc2626; }
+    .inferred-body {
+      padding: 16px 20px;
+      font-size: 13px; color: var(--text-secondary); line-height: 1.8;
+      white-space: pre-wrap; word-break: break-word;
+      max-height: 280px; overflow-y: auto;
+    }
+    .inferred-toggle {
+      font-family: var(--font); font-size: 13px; font-weight: 600;
+      padding: 6px 14px; border: 1.5px solid var(--border);
+      border-radius: 8px; background: #fff;
+      color: var(--text-muted); cursor: pointer;
+      transition: all .15s;
+    }
+    .inferred-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    .info-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px; padding: 16px 18px;
+      font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.7;
+    }
+    .info-card b { color: rgba(255,255,255,.75); }
+    .info-card code {
+      font-family: 'Menlo', 'Monaco', monospace; font-size: 12px;
+      background: rgba(255,255,255,.1); padding: 2px 6px; border-radius: 4px;
+      color: rgba(255,255,255,.75);
+    }
+
+    .footer {
+      position: relative; z-index: 1; text-align: center;
+      font-size: 12px; color: rgba(255,255,255,.3);
+    }
+    .footer a { color: rgba(255,255,255,.4); text-decoration: none; }
+    .footer a:hover { color: rgba(255,255,255,.65); }
+  </style>
+  <script>
+    (function(){
+      var co = new URLSearchParams(location.search).get('co') || '贵公司';
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+        document.title = document.title.replace('智目科技', co);
+      });
+    })();
+  </script>
+</head>
+<body>
+
+<div class="bg-glow">
+  <div class="glow-circle gc1"></div>
+  <div class="glow-circle gc2"></div>
+  <div class="glow-circle gc3"></div>
+</div>
+
+<div class="layout">
+
+  <div class="page-header">
+    <div class="page-eyebrow"><span data-co>贵公司</span> · AI 赋能官试点</div>
+    <div class="page-title">多平台 Listing 一键生成</div>
+    <div class="page-sub">填写产品信息，AI 自动按平台规则生成合规文案，全程不编造未提供参数</div>
+  </div>
+
+  <!-- Demo 模式提示 -->
+  <div class="demo-mode-badge" id="demoBadge">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    演示模式：未配置 Dify API，将展示示例结果。接入真实 Dify 后可生成实际文案。
+  </div>
+
+  <div class="form-card">
+    <div class="card-header">
+      <div class="brand-icon">📋</div>
+      <div class="card-header-text">
+        <h2>录入产品信息</h2>
+        <p>Dify 工作流 · 三层防编造护栏 · 按平台规则独立生成</p>
+      </div>
+    </div>
+
+    <div class="form-body">
+
+      <div class="toast error" id="toastErr">
+        <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+        <span id="errText">请求失败，请重试。</span>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="productName">产品名称</label>
+          <input type="text" id="productName" placeholder="例：RGB 机械键盘 TK-87 无线版">
+        </div>
+        <div class="field">
+          <label for="targetAudience">目标人群</label>
+          <input type="text" id="targetAudience" placeholder="例：18-35岁游戏玩家、程序员、办公用户">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="productDesc">产品描述 / 原始卖点</label>
+        <textarea id="productDesc" rows="3" placeholder="例：87键紧凑布局，热插拔轴体，三模连接（有线/蓝牙/2.4G），RGB背光1680万色，铝合金上盖，续航约2000小时，兼容Windows/Mac"></textarea>
+      </div>
+
+      <div class="field">
+        <label for="keywords">核心关键词 <span class="opt">（逗号分隔）</span></label>
+        <input type="text" id="keywords" placeholder="例：机械键盘，热插拔，三模，RGB，无线，游戏外设">
+      </div>
+
+      <div class="field">
+        <label>生成平台</label>
+        <div class="plat-chips" id="platChips">
+          <label class="plat-chip checked" data-val="Amazon"><input type="checkbox" checked><span class="dot"></span>Amazon</label>
+          <label class="plat-chip" data-val="淘宝"><input type="checkbox"><span class="dot"></span>淘宝</label>
+          <label class="plat-chip" data-val="京东"><input type="checkbox"><span class="dot"></span>京东</label>
+          <label class="plat-chip" data-val="ebay"><input type="checkbox"><span class="dot"></span>eBay</label>
+          <label class="plat-chip" data-val="速卖通"><input type="checkbox"><span class="dot"></span>速卖通</label>
+          <label class="plat-chip" data-val="独立站"><input type="checkbox"><span class="dot"></span>独立站</label>
+        </div>
+      </div>
+
+      <details class="advanced-section" id="advancedSection">
+        <summary class="divider-label">
+          <span class="toggle-icon">▶</span>进阶选项（选填，留空 AI 自动推断）
+        </summary>
+        <div class="advanced-content">
+          <div class="field">
+            <label for="verifiedSpecs">手动指定商品参数 JSON <span class="opt">（最高可信来源，留空则由 AI 从描述中自动推断）</span></label>
+            <textarea id="verifiedSpecs" rows="3" placeholder='{"颜色":"深空灰","重量":"1.2kg","接口":"USB-C"}'></textarea>
+          </div>
+        </div>
+      </details>
+
+      <input type="hidden" id="brandMode" value="white_label">
+
+      <button class="submit-btn" id="submitBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="btnIcon">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <span id="btnText">生成 Listing</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- 推断参数预览卡 -->
+  <div class="inferred-card" id="inferredCard" style="display:none;">
+    <div class="inferred-header">
+      <span>🔍 AI 推断参数</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="risk-badge" id="riskBadge"></span>
+        <button class="inferred-toggle" id="inferredToggle">收起</button>
+      </div>
+    </div>
+    <div class="inferred-body" id="inferredBody"></div>
+  </div>
+
+  <!-- 结果卡 -->
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <h3>✅ 生成完成 · 全平台 Listing</h3>
+      <button class="result-copy-btn" id="copyBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        复制全文
+      </button>
+    </div>
+    <div class="result-body" id="resultBody"></div>
+  </div>
+
+  <div class="info-card">
+    <b>三层护栏保障：</b>已核实参数 &gt; 规则库 &gt; 内置平台规则；QA 报告拦截异常数字、禁用声明、思考链泄露。未提供的参数一律留空标注，不编造。
+  </div>
+
+  <div class="footer">
+    <a href="plan-listing.html">← 查看完整方案</a>
+    &nbsp;·&nbsp;
+    <span data-co>贵公司</span> · 多平台 Listing 自动生成
+  </div>
+
+</div>
+
+<script>
+(function () {
+  // ── 配置区 ──────────────────────────────
+  // 填入你的 Dify 工作流 API 地址和密钥即可接通真实 Dify
+  // 示例：https://api.dify.ai/v1/workflows/run
+  const DIFY_API_URL = 'https://api.dify.ai/v1/workflows/run';
+  const DIFY_API_KEY = 'app-hgNLIxT2L6lU7dqlUBhsCGJn';
+  // ────────────────────────────────────────
+
+  const isDemoMode = !DIFY_API_URL || !DIFY_API_KEY;
+  if (isDemoMode) document.getElementById('demoBadge').classList.add('show');
+
+  // 平台 chips 交互
+  document.getElementById('platChips').addEventListener('click', function (e) {
+    const chip = e.target.closest('.plat-chip');
+    if (!chip) return;
+    const cb = chip.querySelector('input[type="checkbox"]');
+    cb.checked = !cb.checked;
+    chip.classList.toggle('checked', cb.checked);
+  });
+
+  function getSelectedPlatforms() {
+    return Array.from(document.querySelectorAll('.plat-chip.checked')).map(c => c.dataset.val).join(',');
+  }
+
+  const submitBtn    = document.getElementById('submitBtn');
+  const btnText      = document.getElementById('btnText');
+  const btnIcon      = document.getElementById('btnIcon');
+  const toastErr     = document.getElementById('toastErr');
+  const errText      = document.getElementById('errText');
+  const resultCard   = document.getElementById('resultCard');
+  const resultBody   = document.getElementById('resultBody');
+  const inferredCard = document.getElementById('inferredCard');
+  const inferredBody = document.getElementById('inferredBody');
+  const riskBadge    = document.getElementById('riskBadge');
+  const inferredToggle = document.getElementById('inferredToggle');
+
+  // 推断参数卡展开/收起
+  inferredToggle.addEventListener('click', function () {
+    const isHidden = inferredBody.style.display === 'none';
+    inferredBody.style.display = isHidden ? '' : 'none';
+    this.textContent = isHidden ? '收起' : '展开查看';
+  });
+
+  function showInferredParams(outputs) {
+    const schema = outputs.canonical_product_schema || outputs.verified_specs_json || '';
+    const report = outputs.preflight_report || '';
+    const riskLevel = outputs.risk_level || 'low';
+    const riskScore = outputs.risk_score;
+
+    // 从 preflight_report 中提取 Canonical Product Schema 部分
+    let schemaText = schema || '';
+    if (!schemaText && report) {
+      const match = report.match(/##\s*Canonical Product Schema\s*\n([\s\S]*?)(?=\n##|$)/i)
+                 || report.match(/##\s*Trusted Fields\s*\n([\s\S]*?)(?=\n##|$)/i);
+      if (match) schemaText = match[1].trim();
+    }
+    if (!schemaText) schemaText = report || '（参数推断完成，已注入生成流程）';
+
+    inferredBody.textContent = schemaText;
+    riskBadge.textContent = riskScore != null
+      ? `风险分 ${riskScore} · ${riskLevel}`
+      : riskLevel;
+    riskBadge.className = 'risk-badge ' + (riskLevel === 'high' ? 'high' : riskLevel === 'medium' ? 'medium' : 'low');
+    inferredCard.style.display = '';
+    inferredCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function hideErr() { toastErr.classList.remove('visible'); }
+  function showErr(m) { errText.textContent = m; toastErr.classList.add('visible'); }
+
+  function setLoading(on, msg) {
+    submitBtn.disabled = on;
+    const sp = document.getElementById('btnSpinner');
+    if (on) {
+      btnIcon.style.display = 'none';
+      btnText.textContent = msg || 'AI 生成中…';
+      if (!sp) {
+        const s = document.createElement('div');
+        s.className = 'spinner'; s.id = 'btnSpinner';
+        submitBtn.insertBefore(s, btnText);
+      } else {
+        btnText.textContent = msg || btnText.textContent;
+      }
+    } else {
+      if (sp) sp.remove();
+      btnIcon.style.display = '';
+      btnText.textContent = '生成 Listing';
+    }
+  }
+
+  submitBtn.addEventListener('click', async function () {
+    hideErr();
+    const productName    = document.getElementById('productName').value.trim();
+    const productDesc    = document.getElementById('productDesc').value.trim();
+    const keywords       = document.getElementById('keywords').value.trim();
+    const targetAudience = document.getElementById('targetAudience').value.trim();
+    const platforms      = getSelectedPlatforms();
+    const verifiedSpecs  = document.getElementById('verifiedSpecs').value.trim();
+    const brandMode      = document.getElementById('brandMode').value;
+
+    if (!productName || !productDesc) {
+      showErr('请至少填写「产品名称」和「产品描述」。');
+      return;
+    }
+    if (!platforms) {
+      showErr('请至少选择一个生成平台。');
+      return;
+    }
+
+    setLoading(true, 'AI 生成中…');
+    resultCard.classList.remove('show');
+    inferredCard.style.display = 'none';
+    inferredBody.textContent = '';
+    inferredBody.style.display = '';
+
+    if (isDemoMode) {
+      await new Promise(r => setTimeout(r, 2000));
+      resultBody.textContent = generateDemoResult(productName, productDesc, keywords, platforms.split(','));
+      resultCard.classList.add('show');
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // ── 运行工作流（直接传文本，无需文件上传）──
+      const inputs = {
+        product_name: productName,
+        product_desc: productDesc,
+        keywords: keywords,
+        target_audience: targetAudience,
+        platforms: platforms,
+        brand_strategy_mode: brandMode,
+      };
+      if (verifiedSpecs) inputs.verified_specs_json = verifiedSpecs;
+
+      const res = await fetch(DIFY_API_URL, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + DIFY_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ inputs, response_mode: 'blocking', user: 'listing-demo' }),
+      });
+
+      if (!res.ok) {
+        const t = await res.text().catch(() => '');
+        showErr('Dify 返回 ' + res.status + (t ? '：' + t.slice(0, 100) : ''));
+        return;
+      }
+
+      const json = await res.json();
+      const outputs = json.data?.outputs || {};
+      const status = json.data?.status || '';
+      const text = outputs.final_output || outputs.text || outputs.result || outputs.listing || '';
+
+      // 展示 preflight 推断参数
+      if (outputs.preflight_report !== undefined || outputs.canonical_product_schema !== undefined) {
+        showInferredParams(outputs);
+      }
+
+      const isInterrupted = text && text.includes('生成中断');
+      const resultHeader = document.querySelector('.result-header h3');
+      if (text) {
+        resultBody.textContent = text;
+        resultHeader.textContent = isInterrupted
+          ? '⚠️ 护栏拦截 · 生成已中断'
+          : '✅ 生成完成 · 全平台 Listing';
+      } else {
+        resultBody.textContent = `⚠️ 工作流状态: ${status || '未完成'}\n\n${JSON.stringify(json.data, null, 2)}`;
+        resultHeader.textContent = '⚠️ 输出异常';
+      }
+      resultCard.classList.add('show');
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      showErr('网络错误：' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  });
+
+  // 复制
+  document.getElementById('copyBtn').addEventListener('click', function () {
+    const text = resultBody.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      this.textContent = '✓ 已复制';
+      setTimeout(() => {
+        this.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> 复制全文';
+      }, 2000);
+    });
+  });
+
+  // ── 演示结果生成 ──
+  function generateDemoResult(name, desc, kw, platforms) {
+    const lines = [];
+    lines.push('【AI 生成结果 · 演示模式】');
+    lines.push('产品：' + name);
+    lines.push('');
+    lines.push('─'.repeat(50));
+    lines.push('');
+
+    if (platforms.includes('Amazon')) {
+      lines.push('═══ Amazon ═══');
+      lines.push('Title: ' + name + ' | High Performance | Premium Build (under 200 chars)');
+      lines.push('');
+      lines.push('Bullet Points:');
+      lines.push('• ' + (desc.slice(0, 40)) + '…');
+      lines.push('• Advanced technology for superior performance');
+      lines.push('• [Price/Delivery: to be filled by sales]');
+      lines.push('');
+    }
+    if (platforms.includes('淘宝')) {
+      lines.push('═══ 淘宝 ═══');
+      lines.push('标题：' + name + ' ' + (kw || '高品质').split('，')[0]);
+      lines.push('');
+      lines.push('卖点：' + desc.slice(0, 60) + '…');
+      lines.push('⚠️ 护栏提醒：赠品/库存/发货时效由卖家补充，AI 未编造');
+      lines.push('');
+    }
+    if (platforms.includes('京东')) {
+      lines.push('═══ 京东 ═══');
+      lines.push('商品名：' + name);
+      lines.push('规格描述：' + desc.slice(0, 60) + '…');
+      lines.push('⚠️ 护栏提醒：国家三包/官方授权信息请卖家核实后填写');
+      lines.push('');
+    }
+    if (platforms.includes('ebay')) {
+      lines.push('═══ eBay ═══');
+      lines.push('Title: ' + name + ' (under 80 chars)');
+      lines.push('Item Specifics:');
+      lines.push('  Brand: [as per listing]');
+      lines.push('  Type: [to be specified]');
+      lines.push('');
+    }
+    if (platforms.includes('速卖通')) {
+      lines.push('═══ 速卖通 ═══');
+      lines.push('标题（≤128字符）：' + name);
+      lines.push('多语关键词：' + (kw || name).slice(0, 50));
+      lines.push('');
+    }
+    if (platforms.includes('独立站')) {
+      lines.push('═══ 独立站 ═══');
+      lines.push('品牌长文：\n' + desc);
+      lines.push('⚠️ 护栏提醒：未提供的参数（屏幕/电池/Wi-Fi等）均未编造');
+      lines.push('');
+    }
+
+    lines.push('─'.repeat(50));
+    lines.push('');
+    lines.push('✅ 合规 QA 报告：本次生成无异常数字、禁用声明，已核实参数优先使用。');
+    lines.push('📄 接入真实 Dify 后，飞书/钉钉文档链接将在此处返回。');
+    lines.push('');
+    lines.push('⚙️  配置说明：将 DIFY_API_URL 和 DIFY_API_KEY 填入页面脚本即可接通真实工作流。');
+
+    return lines.join('\n');
+  }
+})();
+</script>
+</body>
+</html>

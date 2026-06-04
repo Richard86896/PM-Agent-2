@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>展会名片录入 · 智目科技</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-start: #0f1629;
+      --bg-end: #1e2d5a;
+      --card-bg: #ffffff;
+      --accent: #4a7cf8;
+      --accent-2: #6c9dff;
+      --accent-dark: #2f5ce0;
+      --text-primary: #0f1629;
+      --text-secondary: #5a6480;
+      --text-muted: #9aa0b4;
+      --border: #e4e8f4;
+      --drop-hover: #eef3ff;
+      --success-bg: #f0fdf4;
+      --success-border: #86efac;
+      --success-text: #15803d;
+      --error-bg: #fff1f2;
+      --error-border: #fda4af;
+      --error-text: #be123c;
+      --radius-card: 24px;
+      --radius-btn: 16px;
+      --radius-input: 14px;
+      --shadow-card: 0 24px 64px rgba(10, 20, 60, 0.22), 0 4px 16px rgba(10, 20, 60, 0.10);
+      --shadow-btn: 0 8px 24px rgba(74, 124, 248, 0.38);
+      --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      background: linear-gradient(155deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      background-attachment: fixed;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+    }
+
+    /* ─── Background particles ─── */
+    .bg-glow {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .glow-circle {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18;
+    }
+    .gc1 { width: 420px; height: 420px; background: #4a7cf8; top: -120px; right: -80px; }
+    .gc2 { width: 300px; height: 300px; background: #7c4af8; bottom: 60px; left: -80px; }
+    .gc3 { width: 200px; height: 200px; background: #4af8d0; top: 40%; left: 40%; }
+
+    /* ─── Main card ─── */
+    .card {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 440px;
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      background: linear-gradient(135deg, #1a2550 0%, #2a3d7a 50%, #1e3060 100%);
+      padding: 36px 28px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 60% 20%, rgba(74,124,248,0.25) 0%, transparent 60%);
+    }
+    .hero-icon-wrap {
+      position: relative; z-index: 1;
+      width: 80px; height: 80px;
+      margin: 0 auto 20px;
+      background: rgba(255,255,255,0.10);
+      border: 1.5px solid rgba(255,255,255,0.20);
+      border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+    .hero-icon-wrap svg { width: 44px; height: 44px; }
+    .hero h1 {
+      position: relative; z-index: 1;
+      font-size: 20px; font-weight: 800;
+      color: #fff; letter-spacing: -0.3px;
+      margin-bottom: 8px;
+      text-wrap: pretty;
+    }
+    .hero p {
+      position: relative; z-index: 1;
+      font-size: 13.5px; font-weight: 400;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.5;
+    }
+
+    /* ─── Body ─── */
+    .body {
+      padding: 28px 24px 24px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    /* ─── Upload zone ─── */
+    .upload-zone {
+      border: 2px dashed var(--border);
+      border-radius: 18px;
+      background: #f8faff;
+      min-height: 180px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      padding: 24px 20px;
+      position: relative;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--accent);
+      background: var(--drop-hover);
+    }
+    .upload-zone.drag-over { transform: scale(1.01); }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .upload-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, #eef3ff, #dce8ff);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+    .upload-zone:hover .upload-icon { transform: scale(1.06); }
+    .upload-icon svg { width: 26px; height: 26px; color: var(--accent); }
+    .upload-label {
+      text-align: center;
+    }
+    .upload-label strong {
+      display: block;
+      font-size: 15px; font-weight: 700; color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .upload-label span {
+      font-size: 12.5px; color: var(--text-muted);
+    }
+
+    /* ─── Camera button (mobile) ─── */
+    .camera-btn-wrap {
+      display: flex; justify-content: center;
+    }
+    .camera-btn {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 22px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-family: var(--font);
+      font-size: 14px; font-weight: 600;
+      border: none; border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(74,124,248,0.32);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .camera-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(74,124,248,0.42); }
+    .camera-btn:active { transform: scale(0.97); }
+    .camera-btn svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .camera-btn input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+
+    /* ─── Preview ─── */
+    .preview-wrap {
+      display: none;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: #f0f4ff;
+    }
+    .preview-wrap.visible { display: block; }
+    .preview-wrap img {
+      width: 100%; max-height: 220px;
+      object-fit: cover; display: block;
+    }
+    .preview-change {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(15, 22, 41, 0.72);
+      color: #fff;
+      font-family: var(--font);
+      font-size: 12px; font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px; border: none;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: background 0.2s;
+    }
+    .preview-change:hover { background: rgba(15,22,41,0.88); }
+    .preview-filename {
+      padding: 10px 14px;
+      font-size: 12.5px; color: var(--text-secondary);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .preview-filename svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--accent); }
+
+    /* ─── Divider ─── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--text-muted); font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ─── Input ─── */
+    .field label {
+      display: block;
+      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-wrap svg {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; color: var(--text-muted);
+      pointer-events: none;
+    }
+    .field input[type="text"] {
+      width: 100%;
+      padding: 13px 16px 13px 42px;
+      font-family: var(--font);
+      font-size: 14.5px; font-weight: 500;
+      color: var(--text-primary);
+      background: #f8faff;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-input);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input[type="text"]::placeholder { color: var(--text-muted); font-weight: 400; }
+    .field input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(74,124,248,0.12);
+      background: #fff;
+    }
+
+    /* ─── Submit btn ─── */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      font-family: var(--font);
+      font-size: 16px; font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent) 0%, #5e8fff 50%, var(--accent-dark) 100%);
+      background-size: 200% 200%;
+      border: none; border-radius: var(--radius-btn);
+      cursor: pointer;
+      box-shadow: var(--shadow-btn);
+      transition: transform 0.15s, box-shadow 0.15s, background-position 0.4s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      letter-spacing: 0.2px;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(74,124,248,0.46);
+      background-position: right center;
+    }
+    .submit-btn:active:not(:disabled) { transform: scale(0.98); }
+    .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+    .submit-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+    /* ─── Spinner ─── */
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Toast ─── */
+    .toast {
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-size: 13.5px; font-weight: 500;
+      line-height: 1.5;
+      display: none;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .toast.visible { display: flex; }
+    .toast svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+    .toast.success {
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--success-text);
+    }
+    .toast.error {
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: var(--error-text);
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      position: relative; z-index: 1;
+      margin-top: 20px;
+      font-size: 12px; color: rgba(255,255,255,0.32);
+      text-align: center; letter-spacing: 0.3px;
+    }
+    .footer span { color: rgba(255,255,255,0.50); font-weight: 600; }
+
+    /* ─── Pulse on drag ─── */
+    @keyframes pulse-border {
+      0%, 100% { border-color: var(--accent); }
+      50% { border-color: var(--accent-2); }
+    }
+    .upload-zone.drag-over { animation: pulse-border 1s ease-in-out infinite; }
+
+    /* ─── Hide upload zone when preview is active ─── */
+    .upload-zone.hidden { display: none; }
+
+    /* ─── History section ─── */
+    .history-section {
+      width: 100%; max-width: 440px;
+      position: relative; z-index: 1;
+      margin-top: 16px;
+    }
+    .history-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .history-title {
+      font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.85);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .history-title svg { width: 15px; height: 15px; opacity: 0.75; }
+    .history-count {
+      font-size: 12px; color: rgba(255,255,255,0.45);
+    }
+    .history-list {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .history-item {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 16px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px;
+      backdrop-filter: blur(8px);
+      animation: fadeInUp 0.3s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .history-thumb {
+      width: 52px; height: 36px; border-radius: 8px;
+      object-fit: cover; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .history-info {
+      flex: 1; min-width: 0;
+    }
+    .history-info-name {
+      font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.88);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .history-info-meta {
+      font-size: 11.5px; color: rgba(255,255,255,0.42);
+      margin-top: 2px;
+    }
+    .history-badge {
+      flex-shrink: 0;
+      background: rgba(74,124,248,0.20);
+      border: 1px solid rgba(74,124,248,0.35);
+      color: #8db4ff;
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .history-info-phone {
+      font-size: 11px; color: rgba(255,255,255,0.55);
+      margin-top: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .history-empty {
+      text-align: center;
+      font-size: 13px; color: rgba(255,255,255,0.28);
+      padding: 20px 0;
+    }
+  </style>
+<script>
+  (function(){
+    var co = new URLSearchParams(location.search).get('co') || '贵公司';
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+      document.title = document.title.replace('智目科技', co);
+    });
+  })();
+</script>
+</head>
+<body>
+
+<div class="bg-glow">
+  <div class="glow-circle gc1"></div>
+  <div class="glow-circle gc2"></div>
+  <div class="glow-circle gc3"></div>
+</div>
+
+<div class="card">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-icon-wrap">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Business card with scan lines -->
+        <rect x="6" y="13" width="36" height="22" rx="3.5" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.2"/>
+        <rect x="6" y="13" width="36" height="22" rx="3.5" fill="rgba(255,255,255,0.06)"/>
+        <line x1="6" y1="20" x2="42" y2="20" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+        <rect x="12" y="23" width="14" height="2" rx="1" fill="rgba(255,255,255,0.7)"/>
+        <rect x="12" y="27" width="9" height="1.5" rx="0.75" fill="rgba(255,255,255,0.4)"/>
+        <circle cx="34" cy="26.5" r="4.5" fill="none" stroke="#6c9dff" stroke-width="1.8"/>
+        <line x1="37.2" y1="29.7" x2="39.5" y2="32" stroke="#6c9dff" stroke-width="2" stroke-linecap="round"/>
+        <!-- Corner scan marks -->
+        <path d="M3 18 L3 14 L7 14" stroke="#4a7cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M45 18 L45 14 L41 14" stroke="#4a7cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3 30 L3 34 L7 34" stroke="#4a7cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M45 30 L45 34 L41 34" stroke="#4a7cf8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1><span data-co>贵公司</span> · 展会名片录入</h1>
+    <p>拍照上传，AI 自动识别并写入线索库</p>
+  </div>
+
+  <!-- Form body -->
+  <div class="body">
+
+    <!-- Toast area -->
+    <div class="toast success" id="toastSuccess">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      <span>名片已提交，系统正在识别并入库，可继续上传下一张。</span>
+    </div>
+    <div class="toast error" id="toastError">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+      <span id="errorText">提交失败，请重试。</span>
+    </div>
+
+    <!-- Upload zone -->
+    <div class="upload-zone" id="dropZone">
+      <input type="file" id="fileInput" name="名片照片" accept=".jpg,.jpeg,.png" required>
+      <div class="upload-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </div>
+      <div class="upload-label">
+        <strong>点击或拖拽上传名片</strong>
+        <span>支持 JPG、PNG 格式</span>
+      </div>
+    </div>
+
+    <!-- Camera button (visible on mobile via JS) -->
+    <div class="camera-btn-wrap" id="cameraBtnWrap" style="display:none">
+      <button type="button" class="camera-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        立即拍照
+        <input type="file" id="cameraInput" accept="image/*" capture="environment">
+      </button>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-wrap" id="previewWrap">
+      <img id="previewImg" src="" alt="名片预览">
+      <button type="button" class="preview-change" id="previewChange">更换图片</button>
+      <div class="preview-filename">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span id="fileName">—</span>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider">填写销售信息（选填）</div>
+
+    <!-- Sales field -->
+    <div class="field">
+      <label for="salesInput">负责销售</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <input type="text" id="salesInput" name="负责销售" placeholder="请输入负责跟进的销售姓名">
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="button" class="submit-btn" id="submitBtn" disabled>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="btnIcon">
+        <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1"/>
+        <polyline points="16 6 12 2 8 6"/>
+        <line x1="12" y1="2" x2="12" y2="15"/>
+      </svg>
+      <span id="btnText">请先上传名片</span>
+    </button>
+
+  </div>
+</div>
+
+<div class="footer">由 <span data-co>贵公司</span> AI 驱动识别入库</div>
+
+<!-- History section -->
+<div class="history-section" id="historySection">
+  <div class="history-header">
+    <div class="history-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+      </svg>
+      本次已录入
+    </div>
+    <span class="history-count" id="historyCount">0 张</span>
+  </div>
+  <div class="history-list" id="historyList">
+    <div class="history-empty" id="historyEmpty">暂无记录，提交名片后将在此显示</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const dropZone     = document.getElementById('dropZone');
+  const fileInput    = document.getElementById('fileInput');
+  const cameraInput  = document.getElementById('cameraInput');
+  const cameraBtnWrap = document.getElementById('cameraBtnWrap');
+  const previewWrap  = document.getElementById('previewWrap');
+  const previewImg   = document.getElementById('previewImg');
+  const previewChange = document.getElementById('previewChange');
+  const fileName     = document.getElementById('fileName');
+  const salesInput   = document.getElementById('salesInput');
+  const submitBtn    = document.getElementById('submitBtn');
+  const btnText      = document.getElementById('btnText');
+  const btnIcon      = document.getElementById('btnIcon');
+  const toastSuccess = document.getElementById('toastSuccess');
+  const toastError   = document.getElementById('toastError');
+  const errorText    = document.getElementById('errorText');
+
+  const N8N_URL = 'https://n8n.yx11.fun/webhook/card-ocr';
+  const HISTORY_KEY = 'card_upload_history';
+  let selectedFile = null;
+  let selectedFileDataUrl = null;
+
+  // Show camera button on mobile
+  if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    cameraBtnWrap.style.display = 'flex';
+  }
+
+  // ── History helpers ──
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+    catch { return []; }
+  }
+  function saveHistory(list) {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+  }
+  function renderHistory() {
+    const list = loadHistory();
+    const countEl = document.getElementById('historyCount');
+    const listEl = document.getElementById('historyList');
+    const emptyEl = document.getElementById('historyEmpty');
+    countEl.textContent = list.length + ' 张';
+    if (list.length === 0) {
+      emptyEl.style.display = '';
+      return;
+    }
+    emptyEl.style.display = 'none';
+    const existing = listEl.querySelectorAll('.history-item');
+    existing.forEach(el => el.remove());
+    list.slice().reverse().forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      const timeStr = new Date(item.time).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' });
+      const c = item.card || {};
+      const primaryName = c.name || item.filename;
+      const metaParts = [];
+      if (c.company) metaParts.push(c.company);
+      if (c.title) metaParts.push(c.title);
+      const metaStr = metaParts.length ? metaParts.join(' · ') : (timeStr + (item.sales ? ' · ' + item.sales : ''));
+      const phoneHtml = c.phone
+        ? '<div class="history-info-phone">' + escHtml(c.phone) + (c.email ? '  ' + escHtml(c.email) : '') + '</div>'
+        : '';
+      div.innerHTML =
+        '<img class="history-thumb" src="' + (item.thumb || '') + '" alt="">' +
+        '<div class="history-info">' +
+          '<div class="history-info-name">' + escHtml(primaryName) + '</div>' +
+          '<div class="history-info-meta">' + escHtml(metaStr) + '</div>' +
+          phoneHtml +
+        '</div>' +
+        '<span class="history-badge">已入库</span>';
+      listEl.appendChild(div);
+    });
+  }
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function addHistory(filename, thumb, sales, card) {
+    const list = loadHistory();
+    list.push({ filename, thumb, sales: sales || '', card: card || null, time: Date.now() });
+    saveHistory(list);
+    renderHistory();
+  }
+
+  // ── File selection helpers ──
+  function setFile(file) {
+    if (!file) return;
+    selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      selectedFileDataUrl = e.target.result;
+      previewImg.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    previewWrap.classList.add('visible');
+    dropZone.classList.add('hidden');
+    if (cameraBtnWrap.style.display !== 'none') cameraBtnWrap.style.display = 'none';
+    fileName.textContent = file.name + '  (' + (file.size / 1024).toFixed(1) + ' KB)';
+    submitBtn.disabled = false;
+    btnText.textContent = '提交名片';
+    hideToasts();
+  }
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) setFile(fileInput.files[0]);
+  });
+  cameraInput.addEventListener('change', () => {
+    if (cameraInput.files[0]) setFile(cameraInput.files[0]);
+  });
+
+  // Replace image — show upload zone again
+  previewChange.addEventListener('click', () => {
+    fileInput.value = '';
+    previewWrap.classList.remove('visible');
+    dropZone.classList.remove('hidden');
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) cameraBtnWrap.style.display = 'flex';
+    selectedFile = null;
+    selectedFileDataUrl = null;
+    submitBtn.disabled = true;
+    btnText.textContent = '请先上传名片';
+    fileInput.click();
+  });
+
+  // Init history on load
+  renderHistory();
+
+  // ── Drag & drop ──
+  ['dragenter','dragover'].forEach(evt =>
+    dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.add('drag-over'); })
+  );
+  ['dragleave','drop'].forEach(evt =>
+    dropZone.addEventListener(evt, e => { e.preventDefault(); dropZone.classList.remove('drag-over'); })
+  );
+  dropZone.addEventListener('drop', e => {
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) setFile(f);
+  });
+
+  // ── Toast helpers ──
+  function hideToasts() {
+    toastSuccess.classList.remove('visible');
+    toastError.classList.remove('visible');
+  }
+  function showSuccess(nameHint) {
+    hideToasts();
+    const msgEl = toastSuccess.querySelector('span');
+    msgEl.textContent = nameHint
+      ? `识别完成 ${nameHint}，已写入线索库，可继续上传下一张。`
+      : '名片已识别并入库，可继续上传下一张。';
+    toastSuccess.classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function showError(msg) {
+    hideToasts();
+    errorText.textContent = msg || '提交失败，请检查网络后重试。';
+    toastError.classList.add('visible');
+  }
+
+  // ── Spinner state ──
+  const spinnerHTML = '<div class="spinner"></div>';
+  function setLoading(on) {
+    submitBtn.disabled = on;
+    if (on) {
+      btnIcon.style.display = 'none';
+      btnText.textContent = '识别中…';
+      const s = document.createElement('div');
+      s.className = 'spinner';
+      s.id = 'btnSpinner';
+      submitBtn.insertBefore(s, btnText);
+    } else {
+      const sp = document.getElementById('btnSpinner');
+      if (sp) sp.remove();
+      btnIcon.style.display = '';
+      btnText.textContent = '提交名片';
+    }
+  }
+
+  // ── Submit ──
+  submitBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+    hideToasts();
+    setLoading(true);
+
+    const fd = new FormData();
+    fd.append('名片照片', selectedFile, selectedFile.name);
+    const sales = salesInput.value.trim();
+    if (sales) fd.append('负责销售', sales);
+
+    try {
+      const res = await fetch(N8N_URL, { method: 'POST', body: fd });
+      if (res.ok) {
+        // Parse OCR result from response
+        let card = null;
+        try {
+          const data = await res.json();
+          if (data && data.card) card = data.card;
+        } catch(e) {}
+        addHistory(selectedFile.name, selectedFileDataUrl, salesInput.value.trim(), card);
+        // Show success with recognized name if available
+        const nameHint = card && card.name ? `「${card.name}」` : '';
+        showSuccess(nameHint);
+        // Reset
+        selectedFile = null;
+        selectedFileDataUrl = null;
+        fileInput.value = '';
+        cameraInput.value = '';
+        salesInput.value = '';
+        previewWrap.classList.remove('visible');
+        dropZone.classList.remove('hidden');
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) cameraBtnWrap.style.display = 'flex';
+        previewImg.src = '';
+        fileName.textContent = '—';
+        submitBtn.disabled = true;
+        btnText.textContent = '请先上传名片';
+      } else {
+        const txt = await res.text().catch(() => '');
+        showError('服务器返回 ' + res.status + (txt ? '：' + txt.slice(0, 60) : ''));
+      }
+    } catch (err) {
+      showError('网络错误：' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  });
+})();
+</script>
+</body>
+</html>

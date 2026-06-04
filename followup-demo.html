@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>定时跟进体验 · 智目科技</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-start: #0f1629;
+      --bg-end: #1e2d5a;
+      --accent: #4a7cf8;
+      --accent-2: #6c9dff;
+      --green: #16a34a;
+      --green-soft: #f0fdf4;
+      --green-border: #86efac;
+      --amber: #d97706;
+      --amber-soft: #fffbeb;
+      --amber-border: #fcd34d;
+      --red: #dc2626;
+      --red-soft: #fff1f2;
+      --red-border: #fca5a5;
+      --text-primary: #0f1629;
+      --text-secondary: #5a6480;
+      --text-muted: #9aa0b4;
+      --border: #e4e8f4;
+      --surface: #f8faff;
+      --radius-card: 18px;
+      --shadow-card: 0 24px 64px rgba(10,20,60,.22), 0 4px 16px rgba(10,20,60,.10);
+      --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      background: linear-gradient(155deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      background-attachment: fixed;
+    }
+    body {
+      min-height: 100dvh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 24px 16px 40px;
+    }
+
+    .bg-glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .glow-circle { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; }
+    .gc1 { width: 420px; height: 420px; background: #4a7cf8; top: -120px; right: -80px; }
+    .gc2 { width: 300px; height: 300px; background: #7c4af8; bottom: 60px; left: -80px; }
+    .gc3 { width: 200px; height: 200px; background: #4af8d0; top: 40%; left: 40%; }
+
+    .wrap {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 520px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+
+    .page-header {
+      text-align: center; padding: 8px 0 4px;
+    }
+    .page-title {
+      font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -.4px;
+      margin-bottom: 6px;
+    }
+    .page-sub { font-size: 13.5px; color: rgba(255,255,255,.5); line-height: 1.5; }
+
+    .cron-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+      border-radius: 99px; padding: 6px 14px;
+      font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,.65);
+      margin-top: 10px;
+    }
+    .cron-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #4af8a0;
+      box-shadow: 0 0 6px #4af8a0;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+
+    /* ── 线索卡 ── */
+    .lead-card {
+      background: #fff;
+      border-radius: var(--radius-card);
+      box-shadow: 0 4px 20px rgba(10,20,60,.12), 0 1px 4px rgba(10,20,60,.06);
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .lead-card:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(10,20,60,.16); }
+
+    .lc-header {
+      padding: 16px 18px 14px;
+      display: flex; align-items: center; gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .avatar {
+      width: 42px; height: 42px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .lc-info { flex: 1; min-width: 0; }
+    .lc-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+    .lc-meta { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+    .silence-badge {
+      font-size: 12px; font-weight: 700; padding: 4px 10px;
+      border-radius: 99px; flex-shrink: 0; white-space: nowrap;
+    }
+    .s-red { background: var(--red-soft); color: var(--red); border: 1px solid var(--red-border); }
+    .s-amber { background: var(--amber-soft); color: var(--amber); border: 1px solid var(--amber-border); }
+    .s-blue { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+
+    .lc-body { padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; }
+
+    .last-msg {
+      font-size: 13.5px; color: var(--text-secondary);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 10px 12px;
+      line-height: 1.5;
+    }
+    .last-msg-label { font-size: 11.5px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
+
+    /* 展开/收起草稿 */
+    .draft-toggle {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; font-weight: 600; color: var(--accent);
+      cursor: pointer; padding: 6px 0;
+      background: none; border: none; font-family: var(--font);
+      transition: opacity .15s;
+    }
+    .draft-toggle:hover { opacity: .75; }
+    .draft-toggle svg { width: 16px; height: 16px; transition: transform .25s; }
+    .draft-toggle.open svg { transform: rotate(180deg); }
+
+    .draft-panel {
+      display: none; flex-direction: column; gap: 10px;
+    }
+    .draft-panel.open { display: flex; }
+
+    .draft-box {
+      background: #f0f7ff; border: 1.5px solid #bfdbfe;
+      border-radius: 12px; padding: 14px 16px;
+      font-size: 13.5px; color: var(--text-primary);
+      line-height: 1.7; white-space: pre-line;
+    }
+    .draft-label {
+      font-size: 11.5px; font-weight: 700; color: #2563eb;
+      margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+    }
+    .draft-label::before {
+      content: ''; width: 7px; height: 7px;
+      border-radius: 50%; background: #2563eb;
+    }
+
+    .draft-actions { display: flex; gap: 8px; }
+    .da-btn {
+      flex: 1; padding: 11px 8px;
+      font-family: var(--font); font-size: 13.5px; font-weight: 700;
+      border: none; border-radius: 10px; cursor: pointer;
+      transition: all .18s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .da-confirm { background: var(--green); color: #fff; box-shadow: 0 4px 14px rgba(22,163,74,.25); }
+    .da-confirm:hover { background: #15803d; transform: translateY(-1px); }
+    .da-skip { background: var(--surface); color: var(--text-secondary); border: 1.5px solid var(--border); }
+    .da-skip:hover { background: #eef2ff; color: var(--accent); }
+    .da-btn svg { width: 14px; height: 14px; }
+
+    /* 已确认态 */
+    .done-row {
+      display: none; align-items: center; gap: 8px;
+      background: var(--green-soft); border: 1px solid var(--green-border);
+      border-radius: 10px; padding: 11px 14px;
+      font-size: 13.5px; font-weight: 600; color: var(--green);
+    }
+    .done-row.show { display: flex; }
+    .done-row svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* 说明卡 */
+    .info-card {
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 14px; padding: 16px 18px;
+      font-size: 13px; color: rgba(255,255,255,.55);
+      line-height: 1.7;
+    }
+    .info-card b { color: rgba(255,255,255,.8); }
+
+    .footer {
+      position: relative; z-index: 1;
+      margin-top: 4px;
+      font-size: 12px; color: rgba(255,255,255,.32);
+      text-align: center;
+    }
+    .footer a { color: rgba(255,255,255,.38); text-decoration: none; }
+    .footer a:hover { color: rgba(255,255,255,.65); }
+  </style>
+  <script>
+    (function(){
+      var co = new URLSearchParams(location.search).get('co') || '贵公司';
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+        document.title = document.title.replace('智目科技', co);
+      });
+    })();
+  </script>
+</head>
+<body>
+
+<div class="bg-glow">
+  <div class="glow-circle gc1"></div>
+  <div class="glow-circle gc2"></div>
+  <div class="glow-circle gc3"></div>
+</div>
+
+<div class="wrap">
+
+  <div class="page-header">
+    <div class="page-title">定时跟进 · 今日沉默线索</div>
+    <div class="page-sub">以下线索超过设定天数未回复，AI 已自动生成跟进话术，等待销售确认</div>
+    <div class="cron-badge">
+      <span class="cron-dot"></span>
+      每日 09:00 自动扫描 · 已发现 3 条沉默线索
+    </div>
+  </div>
+
+  <!-- 线索 1 -->
+  <div class="lead-card">
+    <div class="lc-header">
+      <div class="avatar" style="background:#fff0f0">🇦🇪</div>
+      <div class="lc-info">
+        <div class="lc-name">Ahmed Al-Rashid</div>
+        <div class="lc-meta">WhatsApp · 意向分 82 · 上次联系 14 天前</div>
+      </div>
+      <div class="silence-badge s-red">沉默 14 天</div>
+    </div>
+    <div class="lc-body">
+      <div class="last-msg">
+        <div class="last-msg-label">上次消息</div>
+        Hi, I'm interested in your LED flood lights. Can you give me the price for 500 units?
+      </div>
+      <button class="draft-toggle" id="t1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        查看 AI 跟进草稿
+      </button>
+      <div class="draft-panel" id="p1">
+        <div class="draft-box">
+          <div class="draft-label">AI 跟进话术草稿</div>Hi Ahmed,
+
+Hope you're doing well! I wanted to follow up on your inquiry about our LED flood lights.
+
+We have competitive pricing available for your 500-unit order, and I'd love to discuss the details with you. Are you still looking for a supplier? I can arrange a sample shipment if that would help.
+
+Looking forward to hearing from you!
+
+Best regards,
+[销售姓名]
+<span data-co>贵公司</span></div>
+        <div class="draft-actions" id="a1">
+          <button class="da-btn da-confirm" onclick="confirm1()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            确认发送
+          </button>
+          <button class="da-btn da-skip" onclick="skip1()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            暂不跟进
+          </button>
+        </div>
+        <div class="done-row" id="done1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          跟进话术已确认，系统将通过 WhatsApp 发送
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 线索 2 -->
+  <div class="lead-card">
+    <div class="lc-header">
+      <div class="avatar" style="background:#fff7ed">🇧🇷</div>
+      <div class="lc-info">
+        <div class="lc-name">Carlos Mendes</div>
+        <div class="lc-meta">WhatsApp · 意向分 65 · 上次联系 7 天前</div>
+      </div>
+      <div class="silence-badge s-amber">沉默 7 天</div>
+    </div>
+    <div class="lc-body">
+      <div class="last-msg">
+        <div class="last-msg-label">上次消息</div>
+        Olá, quero saber sobre os painéis solares de 400W. Qual é o prazo de entrega para o Brasil?
+      </div>
+      <button class="draft-toggle" id="t2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        查看 AI 跟进草稿
+      </button>
+      <div class="draft-panel" id="p2">
+        <div class="draft-box">
+          <div class="draft-label">AI 跟进话术草稿（葡萄牙语）</div>Olá Carlos,
+
+Espero que esteja bem! Queria dar continuidade à sua consulta sobre os nossos painéis solares de 400W.
+
+Temos ótimas condições para envio ao Brasil e posso fornecer informações detalhadas sobre prazo de entrega e preços para o seu volume. Você ainda tem interesse?
+
+Aguardo seu retorno!
+
+Atenciosamente,
+[Nome do Vendedor]
+<span data-co>贵公司</span></div>
+        <div class="draft-actions" id="a2">
+          <button class="da-btn da-confirm" onclick="confirm2()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            确认发送
+          </button>
+          <button class="da-btn da-skip" onclick="skip2()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            暂不跟进
+          </button>
+        </div>
+        <div class="done-row" id="done2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          跟进话术已确认，系统将通过 WhatsApp 发送
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 线索 3 -->
+  <div class="lead-card">
+    <div class="lc-header">
+      <div class="avatar" style="background:#eff6ff">🇩🇪</div>
+      <div class="lc-info">
+        <div class="lc-name">Klaus Weber</div>
+        <div class="lc-meta">Telegram · 意向分 58 · 上次联系 5 天前</div>
+      </div>
+      <div class="silence-badge s-blue">沉默 5 天</div>
+    </div>
+    <div class="lc-body">
+      <div class="last-msg">
+        <div class="last-msg-label">上次消息</div>
+        Hallo, ich interessiere mich für Ihre Industrieroboter-Komponenten. Gibt es eine Mindestbestellmenge?
+      </div>
+      <button class="draft-toggle" id="t3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        查看 AI 跟进草稿
+      </button>
+      <div class="draft-panel" id="p3">
+        <div class="draft-box">
+          <div class="draft-label">AI 跟进话术草稿（德语）</div>Hallo Klaus,
+
+ich hoffe, es geht Ihnen gut! Ich wollte kurz nachfassen bezüglich Ihrer Anfrage zu unseren Industrieroboter-Komponenten.
+
+Bezüglich der Mindestbestellmenge kann ich Ihnen gerne mehr Details mitteilen – wir sind auch bei kleineren Erstbestellungen flexibel. Haben Sie noch Interesse?
+
+Mit freundlichen Grüßen,
+[Vertriebsmitarbeiter]
+<span data-co>贵公司</span></div>
+        <div class="draft-actions" id="a3">
+          <button class="da-btn da-confirm" onclick="confirm3()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            确认发送
+          </button>
+          <button class="da-btn da-skip" onclick="skip3()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            暂不跟进
+          </button>
+        </div>
+        <div class="done-row" id="done3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          跟进话术已确认，系统将通过 Telegram 发送
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <b>真实场景说明：</b>每日 09:00 n8n 自动扫描飞书线索库，找出超过设定天数未回复的客户，为每条线索生成对应语言的跟进话术，并推送飞书卡片到销售群。销售点击「确认发送」后才真实发出——AI 提供话术，人决定发不发。
+  </div>
+
+  <div class="footer">
+    <a href="plan-whatsapp.html">← 查看完整方案</a>
+    &nbsp;·&nbsp;
+    <span data-co>贵公司</span> AI 赋能外贸询盘助手
+  </div>
+
+</div>
+
+<script>
+(function () {
+  // 展开/收起
+  ['1','2','3'].forEach(function(i) {
+    var toggle = document.getElementById('t' + i);
+    var panel  = document.getElementById('p' + i);
+    toggle.addEventListener('click', function () {
+      var open = panel.classList.toggle('open');
+      toggle.classList.toggle('open', open);
+      toggle.querySelector('span') && (toggle.childNodes[1].textContent = open ? '收起草稿' : '查看 AI 跟进草稿');
+    });
+  });
+
+  function handleConfirm(i) {
+    document.getElementById('a' + i).style.display = 'none';
+    document.getElementById('done' + i).classList.add('show');
+  }
+  function handleSkip(i) {
+    document.getElementById('p' + i).classList.remove('open');
+    document.getElementById('t' + i).classList.remove('open');
+  }
+
+  window.confirm1 = function(){ handleConfirm('1'); };
+  window.confirm2 = function(){ handleConfirm('2'); };
+  window.confirm3 = function(){ handleConfirm('3'); };
+  window.skip1    = function(){ handleSkip('1'); };
+  window.skip2    = function(){ handleSkip('2'); };
+  window.skip3    = function(){ handleSkip('3'); };
+})();
+</script>
+</body>
+</html>

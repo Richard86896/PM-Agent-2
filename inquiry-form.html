@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>询盘体验 · 智目科技</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-start: #0f1629;
+      --bg-end: #1e2d5a;
+      --card-bg: #ffffff;
+      --accent: #4a7cf8;
+      --accent-2: #6c9dff;
+      --accent-dark: #2f5ce0;
+      --text-primary: #0f1629;
+      --text-secondary: #5a6480;
+      --text-muted: #9aa0b4;
+      --border: #e4e8f4;
+      --success-bg: #f0fdf4;
+      --success-border: #86efac;
+      --success-text: #15803d;
+      --error-bg: #fff1f2;
+      --error-border: #fda4af;
+      --error-text: #be123c;
+      --radius-card: 24px;
+      --radius-btn: 16px;
+      --radius-input: 14px;
+      --shadow-card: 0 24px 64px rgba(10,20,60,.22), 0 4px 16px rgba(10,20,60,.10);
+      --shadow-btn: 0 8px 24px rgba(74,124,248,.38);
+      --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      background: linear-gradient(155deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      background-attachment: fixed;
+    }
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 40px;
+    }
+
+    .bg-glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .glow-circle { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; }
+    .gc1 { width: 420px; height: 420px; background: #4a7cf8; top: -120px; right: -80px; }
+    .gc2 { width: 300px; height: 300px; background: #7c4af8; bottom: 60px; left: -80px; }
+    .gc3 { width: 200px; height: 200px; background: #4af8d0; top: 40%; left: 40%; }
+
+    .card {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 460px;
+      background: var(--card-bg);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1a2550 0%, #2a3d7a 50%, #1e3060 100%);
+      padding: 36px 28px 32px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 60% 20%, rgba(74,124,248,.25) 0%, transparent 60%);
+    }
+    .hero-icon-wrap {
+      position: relative; z-index: 1;
+      width: 80px; height: 80px;
+      margin: 0 auto 20px;
+      background: rgba(255,255,255,.10);
+      border: 1.5px solid rgba(255,255,255,.20);
+      border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+    .hero-icon-wrap svg { width: 44px; height: 44px; }
+    .hero h1 {
+      position: relative; z-index: 1;
+      font-size: 20px; font-weight: 800;
+      color: #fff; letter-spacing: -0.3px;
+      margin-bottom: 8px; text-wrap: pretty;
+    }
+    .hero p {
+      position: relative; z-index: 1;
+      font-size: 13.5px; color: rgba(255,255,255,.62);
+      line-height: 1.5;
+    }
+
+    .body { padding: 28px 24px 24px; display: flex; flex-direction: column; gap: 18px; }
+
+    .toast {
+      border-radius: 14px; padding: 14px 16px;
+      font-size: 13.5px; font-weight: 500; line-height: 1.5;
+      display: none; gap: 10px; align-items: flex-start;
+    }
+    .toast.visible { display: flex; }
+    .toast svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; }
+    .toast.success { background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success-text); }
+    .toast.error { background: var(--error-bg); border: 1px solid var(--error-border); color: var(--error-text); }
+
+    .field label {
+      display: block;
+      font-size: 13px; font-weight: 600; color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .field label .opt { font-weight: 400; color: var(--text-muted); margin-left: 4px; }
+    .input-wrap { position: relative; }
+    .input-wrap svg {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; color: var(--text-muted); pointer-events: none;
+    }
+    .field input[type="text"] {
+      width: 100%;
+      padding: 13px 16px 13px 42px;
+      font-family: var(--font);
+      font-size: 14.5px; font-weight: 500; color: var(--text-primary);
+      background: #f8faff; border: 1.5px solid var(--border);
+      border-radius: var(--radius-input); outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field input[type="text"]::placeholder { color: var(--text-muted); font-weight: 400; }
+    .field input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(74,124,248,.12);
+      background: #fff;
+    }
+
+    .seg-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
+    .seg-group { display: flex; gap: 10px; }
+    .seg-btn {
+      flex: 1; padding: 11px 8px;
+      font-family: var(--font); font-size: 14px; font-weight: 600;
+      color: var(--text-secondary);
+      background: #f8faff; border: 1.5px solid var(--border);
+      border-radius: 12px; cursor: pointer;
+      transition: all .18s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .seg-btn:hover { border-color: var(--accent-2); color: var(--accent); }
+    .seg-btn.active {
+      background: #eef3ff; border-color: var(--accent);
+      color: var(--accent);
+    }
+    .seg-btn svg { width: 16px; height: 16px; }
+
+    .field textarea {
+      width: 100%;
+      padding: 13px 16px;
+      font-family: var(--font);
+      font-size: 14px; font-weight: 400; color: var(--text-primary);
+      background: #f8faff; border: 1.5px solid var(--border);
+      border-radius: var(--radius-input); outline: none;
+      resize: vertical; min-height: 120px; line-height: 1.6;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field textarea::placeholder { color: var(--text-muted); }
+    .field textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(74,124,248,.12);
+      background: #fff;
+    }
+
+    .hint {
+      font-size: 12px; color: var(--text-muted);
+      background: #f8faff; border: 1px solid var(--border);
+      border-radius: 10px; padding: 11px 14px;
+      line-height: 1.6;
+    }
+    .hint b { color: var(--text-secondary); }
+
+    .submit-btn {
+      width: 100%; padding: 16px;
+      font-family: var(--font); font-size: 16px; font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent) 0%, #5e8fff 50%, var(--accent-dark) 100%);
+      background-size: 200% 200%;
+      border: none; border-radius: var(--radius-btn);
+      cursor: pointer; box-shadow: var(--shadow-btn);
+      transition: transform .15s, box-shadow .15s, background-position .4s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(74,124,248,.46);
+      background-position: right center;
+    }
+    .submit-btn:active:not(:disabled) { transform: scale(0.98); }
+    .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+    .submit-btn svg { width: 18px; height: 18px; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .footer {
+      position: relative; z-index: 1;
+      margin-top: 20px;
+      font-size: 12px; color: rgba(255,255,255,.32);
+      text-align: center; letter-spacing: 0.3px;
+    }
+    .footer span { color: rgba(255,255,255,.50); font-weight: 600; }
+    .footer a { color: rgba(255,255,255,.38); text-decoration: none; }
+    .footer a:hover { color: rgba(255,255,255,.65); }
+  </style>
+  <script>
+    (function(){
+      var co = new URLSearchParams(location.search).get('co') || '贵公司';
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+        document.title = document.title.replace('智目科技', co);
+      });
+    })();
+  </script>
+</head>
+<body>
+
+<div class="bg-glow">
+  <div class="glow-circle gc1"></div>
+  <div class="glow-circle gc2"></div>
+  <div class="glow-circle gc3"></div>
+</div>
+
+<div class="card">
+
+  <div class="hero">
+    <div class="hero-icon-wrap">
+      <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="10" width="32" height="28" rx="4" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.9)" stroke-width="2"/>
+        <path d="M8 18h32" stroke="rgba(255,255,255,.25)" stroke-width="1.2"/>
+        <rect x="14" y="23" width="12" height="2" rx="1" fill="rgba(255,255,255,.7)"/>
+        <rect x="14" y="27" width="8" height="1.5" rx=".75" fill="rgba(255,255,255,.4)"/>
+        <rect x="14" y="31" width="10" height="1.5" rx=".75" fill="rgba(255,255,255,.3)"/>
+        <circle cx="34" cy="14" r="6" fill="#4af8a0" opacity=".9"/>
+        <path d="M31.5 14l2 2 3-3" stroke="#0f4f2a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1>模拟发送询盘</h1>
+    <p>填写下方表单，体验询盘进入后 AI 如何自动识别、起草回复并推送给销售审核</p>
+  </div>
+
+  <div class="body">
+
+    <div class="toast success" id="toastSuccess">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      <span>询盘已触发！AI 正在识别意图并起草回复，飞书审核卡片将在 1 分钟内推送给销售。</span>
+    </div>
+    <div class="toast error" id="toastError">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+      <span id="errorText">提交失败，请重试。</span>
+    </div>
+
+    <div class="field">
+      <label for="nameInput">客户姓名 <span class="opt">（选填）</span></label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <input type="text" id="nameInput" placeholder="e.g. Ahmed Al-Rashid">
+      </div>
+    </div>
+
+    <div>
+      <div class="seg-label">来源渠道</div>
+      <div class="seg-group" id="channelGroup">
+        <button type="button" class="seg-btn active" data-val="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="color:#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M11.999 2C6.477 2 2 6.484 2 12.017c0 1.99.519 3.859 1.422 5.484L2.003 22l4.604-1.407C8.107 21.444 10.014 22 11.999 22 17.523 22 22 17.516 22 11.983 22 6.478 17.523 2 11.999 2z"/></svg>
+          WhatsApp
+        </button>
+        <button type="button" class="seg-btn" data-val="Telegram">
+          <svg viewBox="0 0 24 24" fill="currentColor" style="color:#229ED9"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.93 6.686l-1.68 7.916c-.124.558-.459.693-.931.431l-2.57-1.895-1.24 1.195c-.137.137-.252.252-.517.252l.185-2.62 4.77-4.307c.207-.185-.046-.288-.32-.103l-5.897 3.714-2.539-.793c-.552-.173-.563-.552.116-.817l9.91-3.82c.46-.167.863.113.714.847z"/></svg>
+          Telegram
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="msgInput">询盘内容</label>
+      <textarea id="msgInput" placeholder="在此输入模拟询盘，例如：&#10;Hi, I'm interested in your LED flood lights. Can you give me the price for 500 units? We need delivery within 30 days. Best regards, Ahmed"></textarea>
+    </div>
+
+    <div class="hint">
+      <b>体验说明：</b>提交后，n8n 工作流将自动解析意图、识别语言、生成对应语言回复草稿，并将线索写入飞书多维表格，同时推送审核卡片到销售群——全程 AI 辅助，销售确认后才真实发出。
+    </div>
+
+    <button type="button" class="submit-btn" id="submitBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="btnIcon">
+        <line x1="22" y1="2" x2="11" y2="13"/>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+      <span id="btnText">发送询盘</span>
+    </button>
+
+  </div>
+</div>
+
+<div class="footer">
+  <span data-co>贵公司</span> · AI 赋能外贸询盘助手 ·
+  <a href="plan-whatsapp.html">查看完整方案 →</a>
+</div>
+
+<script>
+(function () {
+  // 替换为真实 n8n webhook URL
+  const N8N_URL = '';
+
+  const nameInput  = document.getElementById('nameInput');
+  const msgInput   = document.getElementById('msgInput');
+  const submitBtn  = document.getElementById('submitBtn');
+  const btnText    = document.getElementById('btnText');
+  const btnIcon    = document.getElementById('btnIcon');
+  const toastOK    = document.getElementById('toastSuccess');
+  const toastErr   = document.getElementById('toastError');
+  const errorText  = document.getElementById('errorText');
+  let channel = 'WhatsApp';
+
+  document.getElementById('channelGroup').addEventListener('click', function(e) {
+    const btn = e.target.closest('.seg-btn');
+    if (!btn) return;
+    document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    channel = btn.dataset.val;
+  });
+
+  function hide() { toastOK.classList.remove('visible'); toastErr.classList.remove('visible'); }
+  function showOK() { hide(); toastOK.classList.add('visible'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function showErr(m) { hide(); errorText.textContent = m || '提交失败，请重试。'; toastErr.classList.add('visible'); }
+
+  function setLoading(on) {
+    submitBtn.disabled = on;
+    const sp = document.getElementById('btnSpinner');
+    if (on) {
+      btnIcon.style.display = 'none';
+      btnText.textContent = '发送中…';
+      if (!sp) {
+        const s = document.createElement('div');
+        s.className = 'spinner'; s.id = 'btnSpinner';
+        submitBtn.insertBefore(s, btnText);
+      }
+    } else {
+      if (sp) sp.remove();
+      btnIcon.style.display = '';
+      btnText.textContent = '发送询盘';
+    }
+  }
+
+  submitBtn.addEventListener('click', async function () {
+    const msg = msgInput.value.trim();
+    if (!msg) { msgInput.focus(); return; }
+    hide();
+
+    if (!N8N_URL) {
+      // 演示模式：模拟延迟后显示成功
+      setLoading(true);
+      await new Promise(r => setTimeout(r, 1400));
+      setLoading(false);
+      showOK();
+      msgInput.value = '';
+      nameInput.value = '';
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const fd = new FormData();
+      fd.append('客户姓名', nameInput.value.trim() || '体验用户');
+      fd.append('渠道', channel);
+      fd.append('询盘内容', msg);
+
+      const res = await fetch(N8N_URL, { method: 'POST', body: fd });
+      if (res.ok) {
+        showOK();
+        msgInput.value = '';
+        nameInput.value = '';
+      } else {
+        showErr('服务器返回 ' + res.status);
+      }
+    } catch (err) {
+      showErr('网络错误：' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  });
+})();
+</script>
+</body>
+</html>
