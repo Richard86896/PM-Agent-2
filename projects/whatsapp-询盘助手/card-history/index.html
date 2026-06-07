@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>已录入名片 · 智目科技</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-start: #0f1629;
+      --bg-end: #1e2d5a;
+      --accent: #4a7cf8;
+      --accent-2: #6c9dff;
+      --font: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    html, body {
+      min-height: 100%;
+      font-family: var(--font);
+      background: linear-gradient(155deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      background-attachment: fixed;
+    }
+
+    body {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+    }
+
+    /* ─── Background particles ─── */
+    .bg-glow { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .glow-circle { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18; }
+    .gc1 { width: 420px; height: 420px; background: #4a7cf8; top: -120px; right: -80px; }
+    .gc2 { width: 300px; height: 300px; background: #7c4af8; bottom: 60px; left: -80px; }
+    .gc3 { width: 200px; height: 200px; background: #4af8d0; top: 40%; left: 40%; }
+
+    /* ─── Top bar ─── */
+    .top-bar {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 440px;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600;
+      color: rgba(255,255,255,0.60);
+      text-decoration: none;
+      padding: 7px 0;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: rgba(255,255,255,0.90); }
+    .back-link svg { width: 15px; height: 15px; }
+    .clear-btn {
+      font-family: var(--font);
+      font-size: 12px; font-weight: 600;
+      color: rgba(255,100,100,0.65);
+      background: none; border: none; cursor: pointer;
+      padding: 7px 0;
+      transition: color 0.2s;
+    }
+    .clear-btn:hover { color: rgba(255,100,100,1); }
+
+    /* ─── Header card ─── */
+    .header-card {
+      position: relative; z-index: 1;
+      width: 100%; max-width: 440px;
+      background: linear-gradient(135deg, #1a2550 0%, #2a3d7a 50%, #1e3060 100%);
+      border-radius: 20px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 16px;
+      overflow: hidden;
+    }
+    .header-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(74,124,248,0.22) 0%, transparent 60%);
+    }
+    .header-icon {
+      position: relative; z-index: 1;
+      width: 52px; height: 52px; flex-shrink: 0;
+      background: rgba(255,255,255,0.10);
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-icon svg { width: 28px; height: 28px; }
+    .header-info { position: relative; z-index: 1; }
+    .header-title {
+      font-size: 17px; font-weight: 800;
+      color: #fff; margin-bottom: 4px;
+    }
+    .header-sub {
+      font-size: 12.5px; color: rgba(255,255,255,0.50);
+    }
+    .header-count {
+      position: relative; z-index: 1;
+      margin-left: auto; flex-shrink: 0;
+      font-size: 28px; font-weight: 800;
+      color: rgba(255,255,255,0.90);
+      line-height: 1;
+    }
+    .header-count span {
+      display: block;
+      font-size: 11px; font-weight: 500;
+      color: rgba(255,255,255,0.40);
+      text-align: right; margin-top: 3px;
+    }
+
+    /* ─── History list ─── */
+    .history-list {
+      width: 100%; max-width: 440px;
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .history-item {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 16px;
+      padding: 12px 14px;
+      backdrop-filter: blur(8px);
+      animation: fadeInUp 0.25s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .history-item-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 10px;
+    }
+    .history-thumb {
+      width: 56px; height: 38px; border-radius: 8px;
+      object-fit: cover; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .history-item-name {
+      flex: 1; min-width: 0;
+      font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.92);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .history-item-time {
+      font-size: 11px; color: rgba(255,255,255,0.35);
+      flex-shrink: 0;
+    }
+    .history-badge {
+      flex-shrink: 0;
+      background: rgba(74,124,248,0.20);
+      border: 1px solid rgba(74,124,248,0.35);
+      color: #8db4ff;
+      font-size: 11px; font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+    .history-fields {
+      display: flex; flex-direction: column;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .history-field {
+      display: flex; align-items: baseline;
+      gap: 8px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .history-field:last-child { border-bottom: none; }
+    .history-field-label {
+      font-size: 11px; font-weight: 600;
+      color: rgba(255,255,255,0.35);
+      flex-shrink: 0; min-width: 52px;
+    }
+    .history-field-value {
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.82);
+      word-break: break-all;
+    }
+
+    /* ─── Empty state ─── */
+    .empty-state {
+      width: 100%; max-width: 440px;
+      position: relative; z-index: 1;
+      text-align: center;
+      padding: 48px 24px;
+      color: rgba(255,255,255,0.30);
+    }
+    .empty-state svg { width: 48px; height: 48px; margin: 0 auto 14px; display: block; opacity: 0.3; }
+    .empty-state p { font-size: 14px; }
+
+    /* ─── Footer ─── */
+    .footer {
+      position: relative; z-index: 1;
+      margin-top: 24px;
+      font-size: 12px; color: rgba(255,255,255,0.25);
+      text-align: center;
+    }
+  </style>
+  <script>
+    (function(){
+      var co = new URLSearchParams(location.search).get('co') || '贵公司';
+      document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('[data-co]').forEach(function(el){ el.textContent = co; });
+        document.title = document.title.replace('智目科技', co);
+        // Carry co param to back link
+        var backLink = document.getElementById('backLink');
+        backLink.href = '../card-upload' + (co !== '贵公司' ? '?co=' + encodeURIComponent(co) : '');
+      });
+    })();
+  </script>
+</head>
+<body>
+
+<div class="bg-glow">
+  <div class="glow-circle gc1"></div>
+  <div class="glow-circle gc2"></div>
+  <div class="glow-circle gc3"></div>
+</div>
+
+<div class="top-bar">
+  <a class="back-link" id="backLink" href="../card-upload">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    返回录入
+  </a>
+  <button class="clear-btn" id="clearBtn">清空记录</button>
+</div>
+
+<div class="header-card">
+  <div class="header-icon">
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="6" y="13" width="36" height="22" rx="3.5" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2.2"/>
+      <rect x="6" y="13" width="36" height="22" rx="3.5" fill="rgba(255,255,255,0.06)"/>
+      <line x1="6" y1="20" x2="42" y2="20" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+      <rect x="12" y="23" width="14" height="2" rx="1" fill="rgba(255,255,255,0.7)"/>
+      <rect x="12" y="27" width="9" height="1.5" rx="0.75" fill="rgba(255,255,255,0.4)"/>
+    </svg>
+  </div>
+  <div class="header-info">
+    <div class="header-title">已录入名片</div>
+    <div class="header-sub"><span data-co>贵公司</span> · 展会线索库</div>
+  </div>
+  <div class="header-count" id="totalCount">0<span>张</span></div>
+</div>
+
+<div class="history-list" id="historyList"></div>
+
+<div class="empty-state" id="emptyState" style="display:none">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="16" y1="13" x2="8" y2="13"/>
+    <line x1="16" y1="17" x2="8" y2="17"/>
+  </svg>
+  <p>暂无录入记录</p>
+</div>
+
+<div class="footer">数据存储于本设备浏览器</div>
+
+<script>
+(function () {
+  const HISTORY_KEY = 'card_upload_history';
+  const LABELS = {
+    company: '公司', title: '职位', phone: '电话', mobile: '手机',
+    tel: '座机', fax: '传真', email: '邮箱', wechat: '微信',
+    linkedin: 'LinkedIn', website: '官网', address: '地址',
+    department: '部门', country: '国家'
+  };
+  const ORDER = ['company','title','phone','mobile','tel','fax','email','wechat','linkedin','website','address','department','country'];
+  const SKIP = new Set(['name']);
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]'); }
+    catch { return []; }
+  }
+
+  function renderHistory() {
+    const list = loadHistory();
+    const listEl = document.getElementById('historyList');
+    const emptyEl = document.getElementById('emptyState');
+    const countEl = document.getElementById('totalCount');
+
+    countEl.innerHTML = list.length + '<span>张</span>';
+    listEl.innerHTML = '';
+
+    if (list.length === 0) {
+      emptyEl.style.display = '';
+      return;
+    }
+    emptyEl.style.display = 'none';
+
+    list.slice().reverse().forEach(item => {
+      const c = item.card || {};
+      const primaryName = c.name || item.filename;
+      const timeStr = new Date(item.time).toLocaleString('zh-CN', {
+        month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+      });
+
+      const shown = new Set();
+      let fieldsHtml = '';
+
+      function rowHtml(label, val) {
+        if (!val) return '';
+        return '<div class="history-field"><span class="history-field-label">' +
+               escHtml(label) + '</span><span class="history-field-value">' +
+               escHtml(String(val)) + '</span></div>';
+      }
+
+      ORDER.forEach(k => {
+        if (c[k]) { fieldsHtml += rowHtml(LABELS[k] || k, c[k]); shown.add(k); }
+      });
+      Object.keys(c).forEach(k => {
+        if (!shown.has(k) && !SKIP.has(k) && c[k]) {
+          fieldsHtml += rowHtml(LABELS[k] || k, c[k]);
+        }
+      });
+      if (item.sales) fieldsHtml += rowHtml('负责销售', item.sales);
+
+      const div = document.createElement('div');
+      div.className = 'history-item';
+      div.innerHTML =
+        '<div class="history-item-header">' +
+          '<img class="history-thumb" src="' + (item.thumb || '') + '" alt="">' +
+          '<span class="history-item-name">' + escHtml(primaryName) + '</span>' +
+          '<span class="history-item-time">' + timeStr + '</span>' +
+          '<span class="history-badge">已入库</span>' +
+        '</div>' +
+        '<div class="history-fields">' + fieldsHtml + '</div>';
+      listEl.appendChild(div);
+    });
+  }
+
+  document.getElementById('clearBtn').addEventListener('click', function () {
+    if (loadHistory().length === 0) return;
+    if (confirm('确定清空本设备上所有录入记录？此操作不可撤销。')) {
+      localStorage.removeItem(HISTORY_KEY);
+      renderHistory();
+    }
+  });
+
+  renderHistory();
+})();
+</script>
+</body>
+</html>
